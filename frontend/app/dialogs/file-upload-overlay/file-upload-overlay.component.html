@@ -1,35 +1,70 @@
 <div class="overlay-backdrop">
-    <div class="overlay-panel">
-        <!-- "X" zum Abbrechen/Schließen -->
-        <button class="close-button" (click)="onCancel()">X</button>
+  <div class="overlay-panel">
+    <button class="close-button" (click)="onCancel()" aria-label="Dialog schließen">×</button>
 
-        <h2>Dateien hochladen</h2>
+    <header class="panel-header">
+      <h2>Dateien hochladen</h2>
+      <p class="panel-description">
+        Bitte wählen Sie die Dateien für Struktur und Inhalte aus. Beide Dateien werden benötigt,
+        bevor der Import gestartet werden kann.
+      </p>
+    </header>
 
-        <!-- Schaltfläche 1: Helptext.json -->
-        <button (click)="selectJsonFile()">Helptext.json wählen</button>
-        <input #jsonFileInput type="file" accept=".json" style="display: none" (change)="onJsonFileSelected($event)" />
-
-        <!-- Anzeige des ausgewählten Dateinamens -->
-        <div *ngIf="jsonFileName">
-            <strong>Ausgewählte Struktur-Datei:</strong> {{ jsonFileName }}
+    <div class="upload-grid">
+      <section class="upload-card">
+        <div class="upload-card__header">
+          <div class="upload-icon" aria-hidden="true">📁</div>
+          <div>
+            <h3>Helptext.json</h3>
+            <p>Struktur-Definition hochladen</p>
+          </div>
         </div>
-
-        <!-- Schaltfläche 2: Helptext.qtf -->
-        <button (click)="selectQtfFile()">Helptext.qtf wählen</button>
-        <input #qtfFileInput type="file" accept=".qtf" style="display: none" (change)="onQtfFileSelected($event)" />
-
-        <!-- Anzeige des ausgewählten Dateinamens -->
-        <div *ngIf="qtfFileName">
-            <strong>Ausgewählte QTF-Datei:</strong> {{ qtfFileName }}
+        <button class="select-button" (click)="selectJsonFile()">Datei auswählen</button>
+        <input
+          #jsonFileInput
+          type="file"
+          accept=".json"
+          class="hidden-input"
+          (change)="onJsonFileSelected($event)"
+        />
+        <div class="file-name" *ngIf="jsonFileName">
+          <span class="status-dot status-dot--ready"></span>
+          {{ jsonFileName }}
         </div>
+      </section>
 
-        <div *ngIf="errorMessage" class="error-message">
-            {{ errorMessage }}
+      <section class="upload-card">
+        <div class="upload-card__header">
+          <div class="upload-icon" aria-hidden="true">📄</div>
+          <div>
+            <h3>Helptext.qtf</h3>
+            <p>Inhalts-Datei hochladen</p>
+          </div>
         </div>
-
-        <!-- OK-Schaltfläche, nur klickbar, wenn beide Dateien vorhanden -->
-        <button [disabled]="!isOkEnabled()" (click)="onOk()">
-            OK
-        </button>
+        <button class="select-button" (click)="selectQtfFile()">Datei auswählen</button>
+        <input
+          #qtfFileInput
+          type="file"
+          accept=".qtf"
+          class="hidden-input"
+          (change)="onQtfFileSelected($event)"
+        />
+        <div class="file-name" *ngIf="qtfFileName">
+          <span class="status-dot status-dot--ready"></span>
+          {{ qtfFileName }}
+        </div>
+      </section>
     </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div class="actions">
+      <button class="ghost-button" (click)="onCancel()">Abbrechen</button>
+      <button class="primary-button" [disabled]="!isOkEnabled()" (click)="onOk()">
+        Import starten
+      </button>
+    </div>
+  </div>
 </div>
