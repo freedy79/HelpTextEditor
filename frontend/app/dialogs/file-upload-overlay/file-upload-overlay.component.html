@@ -23,6 +23,10 @@
             <strong>Ausgewählte QTF-Datei:</strong> {{ qtfFileName }}
         </div>
 
+        <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+        </div>
+
         <!-- OK-Schaltfläche, nur klickbar, wenn beide Dateien vorhanden -->
         <button [disabled]="!isOkEnabled()" (click)="onOk()">
             OK
