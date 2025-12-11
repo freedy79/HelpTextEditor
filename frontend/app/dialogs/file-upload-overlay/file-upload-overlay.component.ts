@@ -22,6 +22,8 @@ export class FileUploadOverlayComponent {
   jsonFileName: string = '';
   qtfFileName: string = '';
 
+  errorMessage: string = '';
+
   constructor() {}
 
   selectJsonFile() {
@@ -37,13 +39,15 @@ export class FileUploadOverlayComponent {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.jsonFileName = file.name;  // Dateiname merken
+      this.errorMessage = '';
       this.readFile(file)
         .then(parsedData => {
           this.jsonData = parsedData;
         })
         .catch(err => {
           console.error('Fehler beim Lesen der JSON-Datei:', err);
-          // Fehler-Handling, z. B. Fehlermeldung für den Nutzer
+          this.errorMessage = 'Die ausgewählte JSON-Datei konnte nicht gelesen werden.';
+          this.jsonData = null;
         });
     }
   }
@@ -53,13 +57,15 @@ export class FileUploadOverlayComponent {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.qtfFileName = file.name;  // Dateiname merken
+      this.errorMessage = '';
       this.readFile(file)
         .then(parsedData => {
           this.qtfData = parsedData;
         })
         .catch(err => {
           console.error('Fehler beim Lesen der QTF-Datei:', err);
-          // Fehler-Handling, z. B. Fehlermeldung für den Nutzer
+          this.errorMessage = 'Die ausgewählte QTF-Datei konnte nicht gelesen werden.';
+          this.qtfData = null;
         });
     }
   }
