@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, ElementRef, HostListener, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FileIOService } from '~shared/services/file-io.service';
-import { HelpTextRoot, MainHelpSection, HelpTextSection, parseMainHelpSection, HelpTextRootKey, HelpContentType } from '~/app/models/help-text-structure.model';
+import { HelpTextRoot, MainHelpSection, HelpTextSection, parseHelpTextRoot, parseMainHelpSection, HelpTextRootKey, HelpContentType } from '~/app/models/help-text-structure.model';
 import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from '../../models/qtf-file.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { TranslateService } from '@ngx-translate/core';
@@ -505,7 +505,7 @@ export class MainComponent implements OnInit {
     this.showOverlayFileOpen = false;
 
     if (!data.cancelled && data.files) {
-      this.helpTextRoot = data.files.jsonData;
+      this.helpTextRoot = parseHelpTextRoot(data.files.jsonData);
       const keys = this.getRootKeys();
       if (keys.length > 0) {
         this.selectedTopLevelKey = keys[0];
@@ -623,7 +623,7 @@ export class MainComponent implements OnInit {
     var deletedItems = 0;
     var breakClean: boolean = false;
     for (key in this.qtfFile.TEXTS) {
-      if (!this.keywordInList(key) && !this.helpTextRoot.idExists(key)) {
+      if (!this.keywordInList(key) && !this.helpTextRootIdExists(key)) {
         console.log("Id ", key, " seems not to be used in helpText. Removing...");
 
         const result = await this.confirmDialogService.openConfirmDialog(key);
@@ -648,6 +648,24 @@ export class MainComponent implements OnInit {
     if (deletedItems > 0) {
       this.isDirty = true;
     }
+  }
+
+  private helpTextRootIdExists(key: string): boolean {
+    const root = this.ensureParsedHelpTextRoot();
+    return !!(root && typeof root.idExists === 'function' && root.idExists(key));
+  }
+
+  private ensureParsedHelpTextRoot(): HelpTextRoot | null {
+    if (!this.helpTextRoot) {
+      return null;
+    }
+
+    if (typeof (this.helpTextRoot as any).idExists === 'function') {
+      return this.helpTextRoot;
+    }
+
+    this.helpTextRoot = parseHelpTextRoot(this.helpTextRoot as any);
+    return this.helpTextRoot;
   }
 
   keywordInList(keyword: string): boolean {
