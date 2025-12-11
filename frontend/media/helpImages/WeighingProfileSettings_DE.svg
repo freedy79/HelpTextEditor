@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generiert durch Microsoft Visio, SVG Export WeighingProfileSettings_DE.svg Zeichenblatt-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="5.24664in" height="1.62459in"
+		viewBox="0 0 377.758 116.97" xml:space="preserve" color-interpolation-filters="sRGB" class="st5">
+	<v:documentProperties v:langID="1031" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:#000000;font-family:Arial;font-size:0.666664em}
+		.st3 {font-size:1em}
+		.st4 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st5 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Zeichenblatt-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Verbinder" v:index="0"/>
+		<g id="shape2-1" v:mID="2" v:groupContext="shape" transform="translate(157.698,-79.7451)">
+			<title>Rechteck</title>
+			<desc>Einstellungen in den Wägeprofilen</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="98.5453" width="62.37" height="36.8504"/>
+			<rect x="0" y="80.1201" width="62.3622" height="36.8504" class="st1"/>
+			<text x="7.16" y="91.35" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Einstellungen <tspan
+						x="20.28" dy="1.2em" class="st3">in den </tspan><tspan x="7.61" dy="1.2em" class="st3">Wägeprofilen</tspan></text>		</g>
+		<g id="shape11-6" v:mID="11" v:groupContext="shape" transform="translate(0.375,-0.375)">
+			<title>Rechteck.11</title>
+			<desc>Wägen: - Umgebungsbedingungen - Anwendungsfilter - Stillstand...</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197" v:verticalAlign="0"/>
+			<v:textRect cx="53.8583" cy="88.624" width="107.72" height="56.6929"/>
+			<rect x="0" y="60.2776" width="107.717" height="56.6929" class="st1"/>
+			<text x="4" y="71.48" class="st2" v:langID="1031"><v:paragraph/><v:tabList/>Wägen:<v:lf/><tspan x="4" dy="1.2em"
+						class="st3">-</tspan> Umgebungsbedingungen<v:lf/><tspan x="4" dy="1.2em" class="st3">-</tspan> Anwendungsfilter<v:lf/><tspan
+						x="4" dy="1.2em" class="st3">-</tspan> Stillstand<v:lf/><tspan x="4" dy="1.2em" class="st3">-</tspan> Stillstandverzögerung</text>		</g>
+		<g id="shape12-13" v:mID="12" v:groupContext="shape" transform="translate(135.021,-0.375)">
+			<title>Rechteck.12</title>
+			<desc>Null/Tara Funktionen: - Nullstellen/Tarieren - Autom.Nullstel...</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197" v:verticalAlign="0"/>
+			<v:textRect cx="53.8583" cy="88.624" width="107.72" height="56.6929"/>
+			<rect x="0" y="60.2776" width="107.717" height="56.6929" class="st1"/>
+			<text x="4" y="71.48" class="st2" v:langID="1031"><v:paragraph/><v:tabList/>Null/Tara Funktionen:<v:lf/><tspan x="4"
+						dy="1.2em" class="st3">-</tspan> Nullstellen/Tarieren<v:lf/><tspan x="4" dy="1.2em" class="st3">-</tspan> Autom.Nullstellen<v:lf/><tspan
+						x="4" dy="1.2em" class="st3">-</tspan> Hand-Tara 1  </text>		</g>
+		<g id="shape33-19" v:mID="33" v:groupContext="shape" v:layerMember="0" transform="translate(188.879,-79.7451)">
+			<title>Universeller Verbinder</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 116.97 L0 129.92 L-67.32 129.92 L-134.65 129.92 L-134.65 139.65" class="st4"/>
+		</g>
+		<g id="shape34-22" v:mID="34" v:groupContext="shape" v:layerMember="0" transform="translate(188.879,-79.7451)">
+			<title>Universeller Verbinder.34</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 116.97 L0 130.05 L0 139.65" class="st4"/>
+		</g>
+		<g id="shape48-25" v:mID="48" v:groupContext="shape" transform="translate(269.666,-0.375)">
+			<title>Rechteck.48</title>
+			<desc>Einheiten/Auflösung: - Verfügbare Einheiten - Verfügbare Aufl...</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197" v:verticalAlign="0"/>
+			<v:textRect cx="53.8583" cy="88.624" width="107.72" height="56.6929"/>
+			<rect x="0" y="60.2776" width="107.717" height="56.6929" class="st1"/>
+			<text x="4" y="71.48" class="st2" v:langID="1031"><v:paragraph/><v:tabList/>Einheiten/Auflösung:<v:lf/><tspan x="4"
+						dy="1.2em" class="st3">-</tspan> Verfügbare Einheiten<v:lf/><tspan x="4" dy="1.2em" class="st3">-</tspan> Verfügbare Auflösungen  </text>		</g>
+		<g id="shape51-30" v:mID="51" v:groupContext="shape" v:layerMember="0" transform="translate(188.879,-79.7451)">
+			<title>Universeller Verbinder.51</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 116.97 L0 129.92 L67.32 129.92 L134.65 129.92 L134.65 139.65" class="st4"/>
+		</g>
+	</g>
+</svg>

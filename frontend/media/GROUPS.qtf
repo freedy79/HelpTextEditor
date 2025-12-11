@@ -1,0 +1,88 @@
+{
+  "GROUPS": {
+    "FILE_NAME": {
+      "header": "FILE_NAME",
+      "length": 30,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "File name text"
+    },
+    "COVER_TITLE": {
+      "header": "Cover title",
+      "length": 100,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "Cover title text"
+    },
+    "COVER_INTRODUCTION": {
+      "header": "Cover introduction",
+      "length": 2000,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "Cover introduction text"
+    },
+    "HELP_TITLE": {
+      "header": "Help title",
+      "length": 60,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "Help title text"
+    },
+    "HELP_HEADLINE": {
+      "header": "Help headline",
+      "length": 200,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "Help headline text"
+    },
+    "HELP_INSTRUCTION_CAPTION": {
+        "header": "Help instruction",
+        "length": 200,
+        "pixelWidth": 0,
+        "font": "",
+        "comment": "Help instruction text"
+      },
+    "HELP_INSTRUCTION": {
+      "header": "Help instruction",
+      "length": 2000,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "Help instruction text"
+    },
+    "HELP_CAPTION": {
+      "header": "Help image caption",
+      "length": 200,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "Help image caption text"
+    },
+    "HELP_LINK": {
+      "header": "Help link",
+      "length": 200,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "Help link text"
+    },
+    "HELP_EXAMPLE": {
+      "header": "Help example",
+      "length": 2000,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "Help example, how to text"
+    },
+    "HELP_ABBR_SHORT": {
+      "header": "Help abbreviation short",
+      "length": 40,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "Abbreviation, short description"
+    },
+    "HELP_ABBR_LONG": {
+      "header": "Help abbreviation long",
+      "length": 200,
+      "pixelWidth": 0,
+      "font": "",
+      "comment": "Abbreviation, long description"
+    }
+  }
+}

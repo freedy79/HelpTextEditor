@@ -1,0 +1,27 @@
+.overlay-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); // Abdunkelung
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; // über anderen Elementen
+  }
+  
+  .overlay-panel {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 4px;
+    position: relative;
+    min-width: 300px;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+  

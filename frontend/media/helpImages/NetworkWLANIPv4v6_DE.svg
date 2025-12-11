@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generiert durch Microsoft Visio, SVG Export NetworkWLANIPv4v6_DE.svg Zeichenblatt-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="7.17577in" height="2.09703in"
+		viewBox="0 0 516.656 150.986" xml:space="preserve" color-interpolation-filters="sRGB" class="st5">
+	<v:documentProperties v:langID="1031" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:#000000;font-family:Arial;font-size:0.666664em}
+		.st3 {font-size:1em}
+		.st4 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st5 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Zeichenblatt-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Verbinder" v:index="0"/>
+		<g id="shape2-1" v:mID="2" v:groupContext="shape" transform="translate(223.32,-113.761)">
+			<title>Rechteck</title>
+			<desc>Wi-Fi (WLAN)</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="21.85" y="130.16" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Wi-Fi<v:lf/><tspan
+						x="16.96" dy="1.2em" class="st3">(</tspan>WLAN)</text>		</g>
+		<g id="shape11-5" v:mID="11" v:groupContext="shape" transform="translate(91.0837,-58.4852)">
+			<title>Rechteck.11</title>
+			<desc>IPv4</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="23.18" y="134.96" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>IPv4</text>		</g>
+		<g id="shape12-8" v:mID="12" v:groupContext="shape" transform="translate(363.21,-58.4852)">
+			<title>Rechteck.12</title>
+			<desc>IPv6</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="23.18" y="134.96" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>IPv6</text>		</g>
+		<g id="shape13-11" v:mID="13" v:groupContext="shape" transform="translate(91.0837,-0.375)">
+			<title>Rechteck.13</title>
+			<desc>Manuell, feste IP-Adresse</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="16.06" y="125.36" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Manuell,<v:lf/><tspan
+						x="22.51" dy="1.2em" class="st3">feste<v:lf/></tspan><tspan x="11.4" dy="1.2em" class="st3">IP</tspan>-Adresse</text>		</g>
+		<g id="shape14-16" v:mID="14" v:groupContext="shape" transform="translate(272.501,-0.375)">
+			<title>Rechteck.14</title>
+			<desc>Automatisch, autom. IP-Adresse</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="8.06" y="125.36" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Automatisch,<v:lf/><tspan
+						x="18.95" dy="1.2em" class="st3">autom</tspan>.<v:lf/><tspan x="11.4" dy="1.2em" class="st3">IP</tspan>-Adresse</text>		</g>
+		<g id="shape21-21" v:mID="21" v:groupContext="shape" transform="translate(181.792,-0.375)">
+			<title>Rechteck.21</title>
+			<desc>Aus, keine Verbindung</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="23.18" y="125.36" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Aus,<v:lf/><tspan
+						x="21.62" dy="1.2em" class="st3">keine </tspan><tspan x="10.72" dy="1.2em" class="st3">Verbindung</tspan></text>		</g>
+		<g id="shape27-26" v:mID="27" v:groupContext="shape" transform="translate(363.21,-0.375)">
+			<title>Rechteck.27</title>
+			<desc>Manuell, feste IP-Adresse</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="16.06" y="125.36" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Manuell,<v:lf/><tspan
+						x="22.51" dy="1.2em" class="st3">feste <v:lf/></tspan><tspan x="11.4" dy="1.2em" class="st3">IP</tspan>-Adresse</text>		</g>
+		<g id="shape33-31" v:mID="33" v:groupContext="shape" v:layerMember="0" transform="translate(254.501,-113.761)">
+			<title>Universeller Verbinder</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 150.99 L0 162.32 L-66.12 162.32 L-132.24 162.32 L-132.24 169.41" class="st4"/>
+		</g>
+		<g id="shape34-34" v:mID="34" v:groupContext="shape" v:layerMember="0" transform="translate(254.501,-113.761)">
+			<title>Universeller Verbinder.34</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 150.99 L0 162.32 L69.94 162.32 L139.89 162.32 L139.89 169.41" class="st4"/>
+		</g>
+		<g id="shape35-37" v:mID="35" v:groupContext="shape" v:layerMember="0" transform="translate(122.265,-58.4852)">
+			<title>Universeller Verbinder.35</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 150.99 L0 161.62 L-0 172.25" class="st4"/>
+		</g>
+		<g id="shape36-40" v:mID="36" v:groupContext="shape" v:layerMember="0" transform="translate(122.265,-58.4852)">
+			<title>Universeller Verbinder.36</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 150.99 L0 161.62 L45.35 161.62 L90.71 161.62 L90.71 172.25" class="st4"/>
+		</g>
+		<g id="shape37-43" v:mID="37" v:groupContext="shape" v:layerMember="0" transform="translate(394.391,-58.4852)">
+			<title>Universeller Verbinder.37</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 150.99 L0 161.62 L-45.35 161.62 L-90.71 161.62 L-90.71 172.25" class="st4"/>
+		</g>
+		<g id="shape38-46" v:mID="38" v:groupContext="shape" v:layerMember="0" transform="translate(394.391,-58.4852)">
+			<title>Universeller Verbinder.38</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 150.99 L0 161.62 L0 172.25" class="st4"/>
+		</g>
+		<g id="shape40-49" v:mID="40" v:groupContext="shape" transform="translate(0.375,-0.375)">
+			<title>Rechteck.40</title>
+			<desc>DHCP, autom. IP-Adresse</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="18.74" y="125.36" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>DHCP,<v:lf/><tspan
+						x="18.95" dy="1.2em" class="st3">autom</tspan>.<v:lf/><tspan x="11.4" dy="1.2em" class="st3">IP</tspan>-Adresse</text>		</g>
+		<g id="shape41-54" v:mID="41" v:groupContext="shape" transform="translate(453.918,-0.375)">
+			<title>Rechteck.41</title>
+			<desc>Aus, keine Verbindung</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="23.18" y="125.36" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Aus,<v:lf/><tspan
+						x="21.62" dy="1.2em" class="st3">keine </tspan><tspan x="10.72" dy="1.2em" class="st3">Verbindung</tspan></text>		</g>
+		<g id="shape42-59" v:mID="42" v:groupContext="shape" v:layerMember="0" transform="translate(122.265,-58.4852)">
+			<title>Universeller Verbinder.42</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 150.99 L0 161.62 L-45.35 161.62 L-90.71 161.62 L-90.71 172.25" class="st4"/>
+		</g>
+		<g id="shape43-62" v:mID="43" v:groupContext="shape" v:layerMember="0" transform="translate(394.391,-58.4852)">
+			<title>Universeller Verbinder.43</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 150.99 L0 161.62 L45.35 161.62 L90.71 161.62 L90.71 172.25" class="st4"/>
+		</g>
+		<g id="shape44-65" v:mID="44" v:groupContext="shape" transform="translate(453.918,-58.4852)">
+			<title>Rechteck.44</title>
+			<desc>DNS 1 DNS 2</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="19.4" y="130.16" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>DNS 1<v:lf/><tspan
+						x="19.4" dy="1.2em" class="st3">DNS </tspan>2</text>		</g>
+		<g id="shape46-69" v:mID="46" v:groupContext="shape" v:layerMember="0" transform="translate(254.501,-113.761)">
+			<title>Universeller Verbinder.46</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 150.99 L0 162.32 L115.3 162.32 L230.6 162.32 L230.6 169.41" class="st4"/>
+		</g>
+		<g id="shape50-72" v:mID="50" v:groupContext="shape" transform="translate(0.375,-58.4852)">
+			<title>Rechteck.50</title>
+			<desc>SSID Passwort</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="132.561" width="62.37" height="36.8504"/>
+			<rect x="0" y="114.136" width="62.3622" height="36.8504" class="st1"/>
+			<text x="21.85" y="130.16" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>SSID<v:lf/><tspan
+						x="14.73" dy="1.2em" class="st3">Passwort</tspan></text>		</g>
+		<g id="shape51-76" v:mID="51" v:groupContext="shape" v:layerMember="0" transform="translate(254.501,-113.761)">
+			<title>Universeller Verbinder.51</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 150.99 L0 162.32 L-111.47 162.32 L-222.94 162.32 L-222.94 169.41" class="st4"/>
+		</g>
+	</g>
+</svg>

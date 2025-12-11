@@ -1,0 +1,94 @@
+<div [ngClass]="{'selected': isSelected(section)}">
+    <p [attr.id]="section.linkId" id="{{section.value}}" [class]="'sectionHeader' + sectionLevel"
+        (click)="contentClick(section.value)">
+        {{sectionNumber}} {{section.value | qtfTranslate}}</p>
+</div>
+
+<div *ngFor="let content of section.content">
+    <ng-container [ngSwitch]="content.type">
+        <ng-template [ngSwitchCase]="'INSTRUCTION'">
+            <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
+                (click)="contentClick(content.value)">
+                <p [innerHTML]="content.value | qtfTranslate" class="help-instruction"></p>
+            </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'INSTRUCTION_BOLD'">
+            <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
+                (click)="contentClick(content.value)">
+                <p [innerHTML]="content.value | qtfTranslate" class="help-instruction-bold"></p>
+            </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'IMAGE'">
+            <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
+                (click)="contentClick(content.value)">
+                <figure>
+                    <img [src]="'./media/helpImages/' + content.value + '_' + language + '.svg'"
+                        [default]="'./media/helpImages/' + content.value + '_' + language + '.png'" class="image"
+                        [style.width]="content.width" [style.height]="content.height">
+                    <figcaption [innerHTML]="content.imageDescription | qtfTranslate" class="imageDesc"></figcaption>
+                </figure>
+            </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'SPLITIMAGE'">
+            <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
+                (click)="contentClick(content.value)">
+                <figure>
+                    <img [src]="'./media/helpImages/' + content.value + '_' + language + '.png'" class="image">
+                    <figcaption [innerHTML]="content.imageDescription | qtfTranslate" class="imageDesc"></figcaption>
+                </figure>
+            </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'ENUMERATION'">
+            <div class="OrderedList">
+                <div *ngFor="let step of content.steps; let k = index">
+                    <div id="{{step.value}}" (click)="contentClick(step.value)" class="Enum_list_item"
+                        [ngClass]="{'selected': isSelected(step)}">
+                        <div [innerHTML]="(k + 1 ) + '.'" class="Enum_list_numberfield"></div>
+                        <div [innerHTML]="(step.value  | qtfTranslate)"></div>
+                    </div>
+                    <ol class="subSecList">
+                        <li *ngFor="let substep of step.substeps">
+                            <div (click)="contentClick(substep.value)" id="{{substep.value}}"
+                                [ngClass]="{'selected': isSelected(substep)}"
+                                [innerHTML]="substep.value | qtfTranslate">
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'BULLET_ENUMERATION'">
+            <div *ngFor="let bulletPoint of content.steps">
+                <li class="subSecBulletList">
+                    <div (click)="contentClick(bulletPoint.value)" id="{{bulletPoint.value}}"
+                        [ngClass]="{'selected': isSelected(bulletPoint), 'list_inline_edge': isIeOrEdge()}"
+                        [innerHTML]="bulletPoint.value | qtfTranslate"></div>
+                </li>
+            </div>
+        </ng-template>
+
+        <ng-template [ngSwitchCase]="'TABLE'">
+            <div class="help-table-container">
+                <table class="help-table">
+                    <tr>
+                        <th *ngFor="let header of content.header" (click)="contentClick(header)" [innerHTML]="header | qtfTranslate"></th>
+                    </tr>
+                    <tr *ngFor="let row of content.rows; let i = index" class="help-table"
+                        [ngClass]="{'table-even-row': (i % 2 == 0), 'table-odd-row': (i % 2 == 1)}">
+                        <td *ngFor="let rowValue of row.rowValues" (click)="contentClick(rowValue)" [innerHTML]="rowValue | qtfTranslate"></td>
+                    </tr>
+                </table>
+            </div>
+        </ng-template>
+
+        <ng-template ngSwitchDefault>
+            <div style="color: red">UNSUPPORTED TYPE: {{content | json}}</div>
+        </ng-template>
+    </ng-container>
+</div>
+
+<div *ngFor="let subSection of section.subsections; let i = index">
+    <app-help-section [section]="subSection" [sectionNumber]="(sectionNumber + '.') + (i + 1)"
+        [sectionLevel]="(sectionLevel + 1)" (onSelectContent)="forwardSectionClick($event)"
+        [selectedHelpSection]="selectedHelpSection"></app-help-section>
+</div>

@@ -1,0 +1,127 @@
+.editor {
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    height: 68px;
+    width: 100vw;
+    //position: fixed; /* Set the navbar to fixed position */
+    top: 0;
+    /* Position the navbar at the top of the page */
+}
+
+.editor-columns {
+    //position: relative;
+    display: flex;
+    height: calc(100vh - 68px);
+    width: 100vw;
+    overflow: hidden;
+
+    .column {
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    .left {
+        width: 20%;
+        border-right: 1px solid #ccc;
+
+        background-color: #eeeeee;
+        display: flex;
+        flex-flow: column;
+
+        .structure-header {
+            display: inline-table;
+            overflow-y: auto;
+        }
+
+        .structure-treeview {
+            border: 1px solid #888;
+            overflow-y: hidden;
+            display: inline-flex;
+            flex: auto;
+        }
+    }
+
+    .main {
+        width: 60%;
+        border-right: 1px solid #ccc;
+    }
+
+    .right {
+        width: 20%;
+    }
+}
+
+.previewHtmlBox {
+    border: 1px solid #aaa;
+    padding: 10px;
+    min-height: 400px;
+    height: 80%;
+    overflow-y: scroll;
+}
+
+input {
+    width: 98%;
+    margin-top: 2px;
+
+    &:focus {
+        outline: #fadd37 solid 2px;
+        outline-offset: 1px;
+        border: none;
+        margin-top: 3px;
+        margin-bottom: 2px;
+        padding-top: 2px;
+        padding-left: 3px;
+    }
+}
+
+textarea {
+    width: 98%;
+    margin-top: 2px;
+
+    &:focus {
+        outline: #fadd37 solid 2px;
+        outline-offset: 1px;
+        border: none;
+        margin-top: 3px;
+        padding-top: 2px;
+        padding-left: 3px;
+        margin-bottom: 2px;
+    }
+}
+
+.PageOutline__Button {
+    position: fixed;
+    //display: inline-block;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    overflow: hidden auto;
+    max-height: calc(-217px + 100vh);
+    transform: translateX(0px);
+    border: 1px solid #f1f1f1;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    right: 0px;
+    z-index: 98;
+    //top: -28px;
+  }
+
+  .bctYv {
+    transition: 0.15s ease-in-out;
+    padding: 8px 16px;
+    border-radius: 3px 3px 0px 0px;
+    display: flex;
+    cursor: pointer;
+  }
+
+  
+.PropertyAction {
+    text-decoration: underline;
+    color: #008796;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #DDDDDD;
+    }
+}

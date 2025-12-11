@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generiert durch Microsoft Visio, SVG Export ExportDependencies_DE.svg Zeichenblatt-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="5.66002in" height="3.66769in"
+		viewBox="0 0 407.522 264.074" xml:space="preserve" color-interpolation-filters="sRGB" class="st11">
+	<v:documentProperties v:langID="1031" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:#000000;font-family:Arial;font-size:0.666664em}
+		.st3 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st4 {font-size:1em}
+		.st5 {fill:#ffffff}
+		.st6 {stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st7 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st8 {fill:#ffffff;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st9 {fill:#ffffff;stroke:none;stroke-linecap:butt;stroke-width:7.2}
+		.st10 {fill:#000000;font-family:Calibri;font-size:0.666664em}
+		.st11 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Zeichenblatt-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Verbinder" v:index="0"/>
+		<g id="shape2-1" v:mID="2" v:groupContext="shape" transform="translate(232.816,-147.777)">
+			<title>Rechteck</title>
+			<desc>Task</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="245.648" width="62.37" height="36.8504"/>
+			<rect x="0" y="227.223" width="62.3622" height="36.8504" class="st1"/>
+			<text x="22.51" y="248.05" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Task</text>		</g>
+		<g id="shape11-4" v:mID="11" v:groupContext="shape" transform="translate(268.249,-74.0758)">
+			<title>Rechteck.11</title>
+			<desc>Wägeprofil</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="245.648" width="62.37" height="36.8504"/>
+			<rect x="0" y="227.223" width="62.3622" height="36.8504" class="st1"/>
+			<text x="12.06" y="248.05" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Wägeprofil</text>		</g>
+		<g id="shape12-7" v:mID="12" v:groupContext="shape" transform="translate(336.281,-0.375)">
+			<title>Rechteck.12</title>
+			<desc>Konnektor</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="245.648" width="62.37" height="36.8504"/>
+			<rect x="0" y="227.223" width="62.3622" height="36.8504" class="st1"/>
+			<text x="12.95" y="248.05" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Konnektor</text>		</g>
+		<g id="shape13-10" v:mID="13" v:groupContext="shape" transform="translate(336.281,-74.0758)">
+			<title>Rechteck.13</title>
+			<desc>Druckrofil</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="245.648" width="62.37" height="36.8504"/>
+			<rect x="0" y="227.223" width="62.3622" height="36.8504" class="st1"/>
+			<text x="14.29" y="248.05" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Druckrofil</text>		</g>
+		<g id="shape14-13" v:mID="14" v:groupContext="shape" transform="translate(132.186,-74.0758)">
+			<title>Rechteck.14</title>
+			<desc>Rolle</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="245.648" width="62.37" height="36.8504"/>
+			<rect x="0" y="227.223" width="62.3622" height="36.8504" class="st1"/>
+			<text x="22.07" y="248.05" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Rolle</text>		</g>
+		<g id="shape21-16" v:mID="21" v:groupContext="shape" transform="translate(132.186,-147.777)">
+			<title>Rechteck.21</title>
+			<desc>Benutzer</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="245.648" width="62.37" height="36.8504"/>
+			<rect x="0" y="227.223" width="62.3622" height="36.8504" class="st1"/>
+			<text x="15.17" y="248.05" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Benutzer</text>		</g>
+		<g id="shape33-19" v:mID="33" v:groupContext="shape" v:layerMember="0" transform="translate(263.997,-147.777)">
+			<title>Universeller Verbinder</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 264.07 L0 281.08 L48.19 281.08 L96.38 281.08 L96.38 300.92" class="st3"/>
+		</g>
+		<g id="shape34-22" v:mID="34" v:groupContext="shape" v:layerMember="0" transform="translate(367.462,-74.0758)">
+			<title>Universeller Verbinder.34</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 264.07 L0 282.5 L0 300.92" class="st3"/>
+		</g>
+		<g id="shape35-25" v:mID="35" v:groupContext="shape" v:layerMember="0" transform="translate(263.997,-147.777)">
+			<title>Universeller Verbinder.35</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 264.07 L0 281.08 L17.72 281.08 L35.43 281.08 L35.43 300.92" class="st3"/>
+		</g>
+		<g id="shape37-28" v:mID="37" v:groupContext="shape" v:layerMember="0" transform="translate(263.997,-147.777)">
+			<title>Universeller Verbinder.37</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 264.07 L0 281.08 L-46.77 281.08 L-93.54 281.08 L-93.54 300.92" class="st3"/>
+		</g>
+		<g id="shape44-31" v:mID="44" v:groupContext="shape" v:layerMember="0" transform="translate(156.281,-147.777)">
+			<title>Dynamischer Verbinder</title>
+			<path d="M7.09 264.07 L7.09 300.92" class="st3"/>
+		</g>
+		<g id="shape45-34" v:mID="45" v:groupContext="shape" transform="translate(200.218,-74.0758)">
+			<title>Rechteck.45</title>
+			<desc>QAPP</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="245.648" width="62.37" height="36.8504"/>
+			<rect x="0" y="227.223" width="62.3622" height="36.8504" class="st1"/>
+			<text x="20.07" y="248.05" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>QAPP</text>		</g>
+		<g id="shape46-37" v:mID="46" v:groupContext="shape" v:layerMember="0" transform="translate(263.997,-147.777)">
+			<title>Dynamischer Verbinder.46</title>
+			<path d="M0 264.07 L0 281.08 L-32.6 281.08 L-32.6 300.92" class="st3"/>
+		</g>
+		<g id="shape47-40" v:mID="47" v:groupContext="shape" transform="translate(132.186,-221.477)">
+			<title>Rechteck.47</title>
+			<desc>Startverhalten</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="245.648" width="62.37" height="36.8504"/>
+			<rect x="0" y="227.223" width="62.3622" height="36.8504" class="st1"/>
+			<text x="6.28" y="248.05" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Startverhalten</text>		</g>
+		<g id="shape48-43" v:mID="48" v:groupContext="shape" v:layerMember="0" transform="translate(163.367,-184.627)">
+			<title>Universeller Verbinder.48</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 264.07 L0 245.65 L0 227.22" class="st3"/>
+		</g>
+		<g id="shape49-46" v:mID="49" v:groupContext="shape" transform="translate(31.5561,-147.777)">
+			<title>Rechteck.49</title>
+			<desc>LDAP Server- Konfiguration</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="245.648" width="62.37" height="36.8504"/>
+			<rect x="0" y="227.223" width="62.3622" height="36.8504" class="st1"/>
+			<text x="6.51" y="243.25" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>LDAP Server- <tspan
+						x="7.61" dy="1.2em" class="st4">Konfiguration</tspan></text>		</g>
+		<g id="shape50-50" v:mID="50" v:groupContext="shape" v:layerMember="0" transform="translate(156.281,-110.926)">
+			<title>Universeller Verbinder.50</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 264.07 L0 244.23 L-46.77 244.23 L-93.54 244.23 L-93.54 227.22" class="st3"/>
+		</g>
+		<g id="shape51-53" v:mID="51" v:groupContext="shape" transform="translate(344.784,-147.777)">
+			<title>Rechteck.51</title>
+			<desc>Kalibierbericht</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="245.648" width="62.37" height="36.8504"/>
+			<rect x="0" y="227.223" width="62.3622" height="36.8504" class="st1"/>
+			<text x="5.84" y="248.05" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Kalibierbericht</text>		</g>
+		<g id="shape52-56" v:mID="52" v:groupContext="shape" v:layerMember="0" transform="translate(375.966,-147.777)">
+			<title>Universeller Verbinder.52</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 264.07 L0 282.5 L0 282.5 L0 282.5 L0 300.92" class="st3"/>
+		</g>
+		<g id="group53-59" transform="translate(264.449,2.91118) rotate(90)" v:mID="53" v:groupContext="group">
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<title>1D-Pfeil, offen</title>
+			<desc>benötigte Abhängigkeit</desc>
+			<g id="shape54-60" v:mID="54" v:groupContext="shape">
+				<title>Tabelle.54</title>
+				<path d="M-2.25 258.4 L249.45 258.4 L249.45 264.07 L255.12 252.74 L249.45 241.4 L249.45 247.07 L-2.25 247.07 L-2.25
+							 258.4 Z" class="st5"/>
+				<path d="M-2.25 258.4 L249.45 258.4 L249.45 264.07 L255.12 252.74 L249.45 241.4 L249.45 247.07 L-2.25 247.07"
+						class="st6"/>
+			</g>
+			<g id="shape55-63" v:mID="55" v:groupContext="shape">
+				<title>Tabelle.55</title>
+				<path d="M0 258.4 L249.45 258.4 L249.45 264.07 L255.12 252.74 L249.45 241.4 L249.45 247.07 L0 247.07" class="st7"/>
+			</g>
+			<g id="shape56-66" v:mID="56" v:groupContext="shape" transform="translate(-2.79118,-5.90929)">
+				<title>Tabelle.56</title>
+				<rect x="0" y="253.215" width="0.48" height="10.8586" class="st8"/>
+			</g>
+			<g id="shape53-68" v:mID="53" v:groupContext="groupContent">
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="127.559" cy="252.735" width="255.12" height="22.6772" transform="rotate(-180)"/>
+				<rect v:rectContext="textBkgnd" x="-165.521" y="-257.535" width="75.9243" height="9.59985" transform="rotate(180)"
+						class="st9"/>
+				<text x="-165.52" y="-250.33" transform="rotate(180)" class="st10" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>benötigte Abhängigkeit</text>			</g>
+		</g>
+		<g id="shape57-71" v:mID="57" v:groupContext="shape" v:layerMember="0" transform="translate(163.367,-221.477)">
+			<title>Dynamischer Verbinder.57</title>
+			<path d="M0 264.07 L0 281.08 L100.63 281.08 L100.63 300.92" class="st3"/>
+		</g>
+	</g>
+</svg>

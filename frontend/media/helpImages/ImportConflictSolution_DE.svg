@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generiert durch Microsoft Visio, SVG Export ImportConflictSolution_DE.svg Zeichenblatt-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="6.81266in" height="2.06164in"
+		viewBox="0 0 490.511 148.438" xml:space="preserve" color-interpolation-filters="sRGB" class="st12">
+	<v:documentProperties v:langID="1031" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:#ffed00;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:#000000;font-family:Arial;font-size:0.666664em}
+		.st3 {font-size:1em}
+		.st4 {fill:#31b8bc;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st5 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st6 {fill:#000000;font-family:Calibri;font-size:0.75em}
+		.st7 {fill:#000000;font-family:Calibri;font-size:0.833336em}
+		.st8 {marker-end:url(#mrkr3-24);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st9 {fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:0.22935779816514}
+		.st10 {fill:#000000;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st11 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st12 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<defs id="Markers">
+		<g id="lend3">
+			<path d="M 2 1 L 0 0 L 2 -1 " style="stroke-linecap:round;stroke-linejoin:round;fill:none"/>
+		</g>
+		<marker id="mrkr3-24" class="st9" v:arrowType="3" v:arrowSize="2" orient="auto" markerUnits="strokeWidth"
+				overflow="visible">
+			<use xlink:href="#lend3" transform="scale(-4.36,-4.36) "/>
+		</marker>
+	</defs>
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Zeichenblatt-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Verbinder" v:index="0"/>
+		<g id="shape49-1" v:mID="49" v:groupContext="shape" transform="translate(0.375001,-85.3356)">
+			<title>Rechteck.49</title>
+			<desc>&#60;&#60;Benutzer&#62;&#62; Bob</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="130.013" width="62.37" height="36.8504"/>
+			<rect x="0" y="111.587" width="62.3622" height="36.8504" class="st1"/>
+			<text x="5.83" y="127.61" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>&#60;&#60;Benutzer&#62;&#62;<v:lf/><tspan
+						x="24.06" dy="1.2em" class="st3">Bob</tspan></text>		</g>
+		<g id="shape58-5" v:mID="58" v:groupContext="shape" transform="translate(0.375001,-0.375)">
+			<title>Rechteck.58</title>
+			<desc>&#60;&#60;Benutzer&#62;&#62; Bob</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="130.013" width="62.37" height="36.8504"/>
+			<rect x="0" y="111.587" width="62.3622" height="36.8504" class="st4"/>
+			<text x="5.83" y="127.61" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>&#60;&#60;Benutzer&#62;&#62;<v:lf/><tspan
+						x="24.06" dy="1.2em" class="st3">Bob</tspan></text>		</g>
+		<g id="shape59-9" v:mID="59" v:groupContext="shape" transform="translate(0.375,-34.3907)">
+			<title>Tabelle.59</title>
+			<desc>Import</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="46.7717" cy="138.438" width="93.55" height="20"/>
+			<rect x="0" y="128.438" width="93.5433" height="20" class="st5"/>
+			<text x="4" y="141.14" class="st6" v:langID="1031"><v:paragraph/><v:tabList/>Import</text>		</g>
+		<g id="shape60-12" v:mID="60" v:groupContext="shape" transform="translate(0.375001,-119.43)">
+			<title>Tabelle.60</title>
+			<desc>Gerät</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="46.7717" cy="138.438" width="93.55" height="20"/>
+			<rect x="0" y="128.438" width="93.5433" height="20" class="st5"/>
+			<text x="4" y="141.14" class="st6" v:langID="1031"><v:paragraph/><v:tabList/>Gerät</text>		</g>
+		<g id="shape62-15" v:mID="62" v:groupContext="shape" transform="translate(85.4144,-85.3356)">
+			<title>Tabelle.62</title>
+			<desc>Konflikt durch Namen</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="36.8504" cy="138.438" width="73.71" height="20"/>
+			<rect x="0" y="128.438" width="73.7008" height="20" class="st5"/>
+			<text x="8.35" y="135.44" class="st7" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Konflikt durch <tspan
+						x="22.12" dy="1.2em" class="st3">Namen</tspan></text>		</g>
+		<g id="shape64-19" v:mID="64" v:groupContext="shape" v:layerMember="0" transform="translate(62.7372,-103.761)">
+			<title>Dynamischer Verbinder</title>
+			<path d="M0 148.44 L50.22 190.8" class="st8"/>
+		</g>
+		<g id="shape65-25" v:mID="65" v:groupContext="shape" v:layerMember="0" transform="translate(62.7372,-18.8002)">
+			<title>Dynamischer Verbinder.65</title>
+			<path d="M0 148.44 L50.22 105.84" class="st8"/>
+		</g>
+		<g id="shape66-30" v:mID="66" v:groupContext="shape" transform="translate(258.328,-85.4144)">
+			<title>Rechteck.66</title>
+			<desc>&#60;&#60;Benutzer&#62;&#62; Bob</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="130.013" width="62.37" height="36.8504"/>
+			<rect x="0" y="111.587" width="62.3622" height="36.8504" class="st1"/>
+			<text x="5.83" y="127.61" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>&#60;&#60;Benutzer&#62;&#62;<v:lf/><tspan
+						x="24.06" dy="1.2em" class="st3">Bob</tspan></text>		</g>
+		<g id="shape67-34" v:mID="67" v:groupContext="shape" transform="translate(258.328,-42.8947)">
+			<title>Rechteck.67</title>
+			<desc>&#60;&#60;Benutzer&#62;&#62; Bob</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="130.013" width="62.37" height="36.8504"/>
+			<rect x="0" y="111.587" width="62.3622" height="36.8504" class="st4"/>
+			<text x="5.83" y="127.61" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>&#60;&#60;Benutzer&#62;&#62;<v:lf/><tspan
+						x="24.06" dy="1.2em" class="st3">Bob</tspan></text>		</g>
+		<g id="shape68-38" v:mID="68" v:groupContext="shape" transform="translate(258.328,-0.375)">
+			<title>Rechteck.68</title>
+			<desc>&#60;&#60;Benutzer&#62;&#62; Bob_1</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="130.013" width="62.37" height="36.8504"/>
+			<rect x="0" y="111.587" width="62.3622" height="36.8504" class="st4"/>
+			<text x="5.83" y="127.61" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>&#60;&#60;Benutzer&#62;&#62;<v:lf/><tspan
+						x="19.61" dy="1.2em" class="st3">Bob_1</tspan></text>		</g>
+		<g id="shape69-42" v:mID="69" v:groupContext="shape" v:layerMember="0" transform="translate(132.953,-61.3986)">
+			<title>Dynamischer Verbinder.69</title>
+			<path d="M0 148.44 L125.38 106" class="st8"/>
+		</g>
+		<g id="shape70-47" v:mID="70" v:groupContext="shape" v:layerMember="0" transform="translate(132.953,-68.4459)">
+			<title>Dynamischer Verbinder.70</title>
+			<path d="M0 155.48 L125.38 155.56" class="st8"/>
+		</g>
+		<g id="shape71-52" v:mID="71" v:groupContext="shape" v:layerMember="0" transform="translate(132.953,-61.3986)">
+			<title>Dynamischer Verbinder.71</title>
+			<path d="M0 148.44 L125.38 191.04" class="st8"/>
+		</g>
+		<g id="shape72-57" v:mID="72" v:groupContext="shape" transform="translate(121.721,-61.4301) rotate(-19)">
+			<title>Tabelle.72</title>
+			<desc>Existierende</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="36.8504" cy="138.438" width="73.71" height="20"/>
+			<rect x="0" y="128.438" width="73.7008" height="20" class="st5"/>
+			<text x="11.86" y="141.44" class="st7" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Existierende</text>		</g>
+		<g id="shape73-60" v:mID="73" v:groupContext="shape" transform="translate(195.554,-32.7268) rotate(19)">
+			<title>Tabelle.73</title>
+			<desc>Umbenennen</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="51.1008" cy="138.438" width="102.21" height="20"/>
+			<rect x="0" y="128.438" width="102.202" height="20" class="st5"/>
+			<text x="23.3" y="141.44" class="st7" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Umbenennen</text>		</g>
+		<g id="shape74-63" v:mID="74" v:groupContext="shape" transform="translate(167.703,-55.7293)">
+			<title>Tabelle.74</title>
+			<desc>Überschreiben</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="42.4361" cy="138.438" width="84.88" height="20"/>
+			<rect x="0" y="128.438" width="84.8723" height="20" class="st5"/>
+			<text x="12.55" y="141.44" class="st7" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Überschreiben</text>		</g>
+		<g id="shape75-66" v:mID="75" v:groupContext="shape" transform="translate(326.443,-93.8396)">
+			<title>Tabelle.75</title>
+			<desc>Benutzt die existierende Instanz und auch die Verknüpfung zur...</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="80.7456" cy="138.438" width="161.5" height="20"/>
+			<rect x="0" y="128.438" width="161.491" height="20" class="st5"/>
+			<text x="4" y="135.44" class="st7" v:langID="1031"><v:paragraph/><v:tabList/>Benutzt die existierende Instanz und <tspan
+						x="4" dy="1.2em" class="st3">auch die Verknüpfung zur Rolle.</tspan></text>		</g>
+		<g id="shape76-70" v:mID="76" v:groupContext="shape" transform="translate(326.443,-52.5797)">
+			<title>Tabelle.76</title>
+			<desc>Überschreibt die existierende Instanz mit den importierten Da...</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="80.7456" cy="138.438" width="161.5" height="20"/>
+			<rect x="0" y="128.438" width="161.491" height="20" class="st5"/>
+			<text x="4" y="135.44" class="st7" v:langID="1031"><v:paragraph/><v:tabList/>Überschreibt die existierende Instanz <tspan
+						x="4" dy="1.2em" class="st3">mit den importierten Daten.</tspan></text>		</g>
+		<g id="shape77-74" v:mID="77" v:groupContext="shape" transform="translate(328.645,-8.8002)">
+			<title>Tabelle.77</title>
+			<desc>Erstellt eine neue Instanz und benennt diese eindeutig um.</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="80.7456" cy="138.438" width="161.5" height="20"/>
+			<rect x="0" y="128.438" width="161.491" height="20" class="st5"/>
+			<text x="4" y="135.44" class="st7" v:langID="1031"><v:paragraph/><v:tabList/>Erstellt eine neue Instanz und <tspan
+						x="4" dy="1.2em" class="st3">benennt diese eindeutig um.</tspan></text>		</g>
+		<g id="shape78-78" v:mID="78" v:groupContext="shape" transform="translate(208.763,-126.438)">
+			<title>Tabelle.78</title>
+			<desc>Instanz wird als Referenz für die weiteren Abhängigkeiten gen...</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="80.7456" cy="138.438" width="161.5" height="20"/>
+			<rect x="0" y="128.438" width="161.491" height="20" class="st5"/>
+			<text x="15.78" y="135.44" class="st7" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Instanz wird als Referenz für die <tspan
+						x="11.85" dy="1.2em" class="st3">weiteren Abhängigkeiten genutzt. </tspan> </text>		</g>
+		<g id="shape79-82" v:mID="79" v:groupContext="shape" transform="translate(17.9912,2.12176) rotate(-45)">
+			<title>Kreuz.79</title>
+			<v:userDefs>
+				<v:ud v:nameU="ScaleFactor" v:val="VT0(1):26"/>
+				<v:ud v:nameU="ControlX1" v:val="VT0(0):26"/>
+				<v:ud v:nameU="ControlY1" v:val="VT0(0.66929133858268):24"/>
+				<v:ud v:nameU="ControlX2" v:val="VT0(0.66929133858268):24"/>
+				<v:ud v:nameU="ControlY2" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				<v:ud v:nameU="LockBars" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="ControlY1" v:prompt="" v:val="VT0(0.15748031961358):1"/>
+				<v:ud v:nameU="ControlX2" v:prompt="" v:val="VT0(0.15748031961358):1"/>
+			</v:userDefs>
+			<path d="M0 137.1 L11.34 137.1 L11.34 148.44 L17.01 148.44 L17.01 137.1 L28.35 137.1 L28.35 131.43 L17.01 131.43 L17.01
+						 120.09 L11.34 120.09 L11.34 131.43 L0 131.43 L0 137.1 Z" class="st10"/>
+		</g>
+		<g id="shape80-84" v:mID="80" v:groupContext="shape" transform="translate(112.953,-51.3986)">
+			<title>Quadrat</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<rect x="0" y="128.438" width="20" height="20" class="st11"/>
+		</g>
+	</g>
+</svg>

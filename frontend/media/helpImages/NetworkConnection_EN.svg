@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generiert durch Microsoft Visio, SVG Export NetworkConnection_EN.svg Zeichenblatt-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="3.77026in" height="1.349in"
+		viewBox="0 0 271.459 97.128" xml:space="preserve" color-interpolation-filters="sRGB" class="st5">
+	<v:documentProperties v:langID="1031" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:#000000;font-family:Arial;font-size:0.666664em}
+		.st3 {font-size:1em}
+		.st4 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st5 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Zeichenblatt-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Verbinder" v:index="0"/>
+		<g id="shape2-1" v:mID="2" v:groupContext="shape" transform="translate(102.422,-59.9026)">
+			<title>Rechteck</title>
+			<desc>Network connection</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="78.7028" width="62.37" height="36.8504"/>
+			<rect x="0" y="60.2776" width="62.3622" height="36.8504" class="st1"/>
+			<text x="16.51" y="76.3" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Network <tspan
+						x="11.83" dy="1.2em" class="st3">connection</tspan></text>		</g>
+		<g id="shape12-5" v:mID="12" v:groupContext="shape" transform="translate(0.375,-0.375)">
+			<title>Rechteck.12</title>
+			<desc>Wired via Ethernet (LAN) with IPv4 and IPv6</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="62.3622" cy="78.7028" width="124.73" height="36.8504"/>
+			<rect x="0" y="60.2776" width="124.724" height="36.8504" class="st1"/>
+			<text x="51.92" y="71.5" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Wired <v:lf/><tspan
+						x="29.46" dy="1.2em" class="st3">via Ethernet </tspan>(LAN) <v:lf/><tspan x="29.23" dy="1.2em" class="st3">with IPv</tspan>4 and IPv6</text>		</g>
+		<g id="shape34-10" v:mID="34" v:groupContext="shape" v:layerMember="0" transform="translate(133.603,-59.9026)">
+			<title>Universeller Verbinder.34</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 97.13 L0 110.17 L-35.43 110.17 L-70.87 110.17 L-70.87 119.81" class="st4"/>
+		</g>
+		<g id="shape48-13" v:mID="48" v:groupContext="shape" transform="translate(146.359,-0.375)">
+			<title>Rechteck.48</title>
+			<desc>Wireless via USB Wi-Fi adapter (WLAN) with IPv4 and IPv6</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="62.3622" cy="78.7028" width="124.73" height="36.8504"/>
+			<rect x="0" y="60.2776" width="124.724" height="36.8504" class="st1"/>
+			<text x="47.03" y="71.5" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Wireless <v:lf/><tspan
+						x="7.46" dy="1.2em" class="st3">via USB Wi</tspan>-Fi adapter (WLAN)<v:lf/><tspan x="29.23" dy="1.2em"
+						class="st3">with IPv</tspan>4 and IPv6</text>		</g>
+		<g id="shape51-18" v:mID="51" v:groupContext="shape" v:layerMember="0" transform="translate(133.603,-59.9026)">
+			<title>Universeller Verbinder.51</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 97.13 L0 110.17 L37.56 110.17 L75.12 110.17 L75.12 119.81" class="st4"/>
+		</g>
+	</g>
+</svg>

@@ -1,0 +1,17 @@
+{
+  "TOPICS": {
+    "HELPTEXT": {
+      "definition": "All help texts",
+      "languages": [
+        "ENGLISH",
+        "GERMAN",
+        "FRENCH",
+        "SPANISH",
+        "RUSSIAN",
+        "ITALIAN",
+        "CHINESE"
+      ],
+      "defaultlanguage": "ENGLISH"
+    }
+  }
+}

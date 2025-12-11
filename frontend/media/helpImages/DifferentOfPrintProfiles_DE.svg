@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generiert durch Microsoft Visio, SVG Export DifferentOfPrintProfiles_DE.svg Zeichenblatt-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="8.94742in" height="2.90412in"
+		viewBox="0 0 644.215 209.096" xml:space="preserve" color-interpolation-filters="sRGB" class="st5">
+	<v:documentProperties v:langID="1031" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:#000000;font-family:Arial;font-size:0.666664em}
+		.st3 {font-size:1em}
+		.st4 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st5 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Zeichenblatt-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Verbinder" v:index="0"/>
+		<g id="shape2-1" v:mID="2" v:groupContext="shape" transform="translate(322.107,-171.871)">
+			<title>Rechteck</title>
+			<desc>Druckprofil</desc>
+			<v:custProps>
+				<v:cp v:nameU="Title_DE" v:lbl="Titel" v:type="0" v:langID="1031" v:cal="0" v:val="VT4(Druckprofil)"/>
+				<v:cp v:nameU="Title_EN" v:lbl="Title" v:prompt="Print profil" v:type="0" v:langID="1031" v:cal="0"
+						v:val="VT4(Print profile)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="12.07" y="193.07" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Druckprofil</text>		</g>
+		<g id="shape11-4" v:mID="11" v:groupContext="shape" transform="translate(123.682,-115.178)">
+			<title>Rechteck.11</title>
+			<desc>Drucken in Drucker-speicher</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="12.06" y="183.47" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Drucken in<v:lf/><tspan
+						x="15.85" dy="1.2em" class="st3">Drucker</tspan>-<tspan x="16.06" dy="1.2em" class="st3">speicher</tspan></text>		</g>
+		<g id="shape12-9" v:mID="12" v:groupContext="shape" transform="translate(438.433,-115.178)">
+			<title>Rechteck.12</title>
+			<desc>Drucken mit direkter Ausgabe</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="16.29" y="183.47" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Drucken <v:lf/><tspan
+						x="11.4" dy="1.2em" class="st3">mit direkter </tspan><tspan x="15.39" dy="1.2em" class="st3">Ausgabe</tspan></text>		</g>
+		<g id="shape13-14" v:mID="13" v:groupContext="shape" transform="translate(34.3907,-58.4852)">
+			<title>Rechteck.13</title>
+			<desc>USB Drucker YDP30</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="7.84" y="188.27" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>USB Drucker <tspan
+						x="18.51" dy="1.2em" class="st3">YDP30</tspan></text>		</g>
+		<g id="shape14-18" v:mID="14" v:groupContext="shape" transform="translate(369.976,-57.0679)">
+			<title>Rechteck.14</title>
+			<desc>USB Drucker YDP30</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="7.84" y="188.27" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>USB Drucker<v:lf/><tspan
+						x="18.51" dy="1.2em" class="st3">YDP30</tspan></text>		</g>
+		<g id="shape19-22" v:mID="19" v:groupContext="shape" transform="translate(0.375,-0.375)">
+			<title>Rechteck.19</title>
+			<desc>Streifen Papier</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="17.4" y="188.27" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Streifen <v:lf/><tspan
+						x="19.62" dy="1.2em" class="st3">Papier</tspan></text>		</g>
+		<g id="shape20-26" v:mID="20" v:groupContext="shape" transform="translate(68.4065,-0.375)">
+			<title>Rechteck.20</title>
+			<desc>Etikett Papier</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="20.07" y="188.27" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Etikett <v:lf/><tspan
+						x="19.62" dy="1.2em" class="st3">Papier</tspan></text>		</g>
+		<g id="shape21-30" v:mID="21" v:groupContext="shape" transform="translate(231.399,-58.4852)">
+			<title>Rechteck.21</title>
+			<desc>Drucken in Datei</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="12.06" y="188.27" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Drucken in <tspan
+						x="21.84" dy="1.2em" class="st3">Datei</tspan></text>		</g>
+		<g id="shape22-34" v:mID="22" v:groupContext="shape" transform="translate(162.942,-0.375)">
+			<title>Rechteck.22</title>
+			<desc>PDF auf Konnektor</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="16.51" y="188.27" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>PDF auf <v:lf/><tspan
+						x="12.95" dy="1.2em" class="st3">Konnektor</tspan></text>		</g>
+		<g id="shape23-38" v:mID="23" v:groupContext="shape" transform="translate(231.399,-0.375)">
+			<title>Rechteck.23</title>
+			<desc>CSV auf Konnektor</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="16.29" y="188.27" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>CSV auf<v:lf/><tspan
+						x="12.95" dy="1.2em" class="st3">Konnektor</tspan></text>		</g>
+		<g id="shape27-42" v:mID="27" v:groupContext="shape" transform="translate(438.433,-57.0679)">
+			<title>Rechteck.27</title>
+			<desc>PC-Direct auf USB-B</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="13.85" y="188.27" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>PC-Direct <v:lf/><tspan
+						x="12.28" dy="1.2em" class="st3">auf USB</tspan>-B</text>		</g>
+		<g id="shape28-46" v:mID="28" v:groupContext="shape" transform="translate(506.89,-57.0679)">
+			<title>Rechteck.28</title>
+			<desc>SBI-Direkt auf Schnittstelle(n)</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="12.96" y="183.47" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>SBI-Direkt <v:lf/><tspan
+						x="25.62" dy="1.2em" class="st3">auf <v:lf/></tspan><tspan x="4.73" dy="1.2em" class="st3">Schnittstelle(n)</tspan></text>		</g>
+		<g id="shape33-51" v:mID="33" v:groupContext="shape" v:layerMember="0" transform="translate(353.288,-171.871)">
+			<title>Universeller Verbinder</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 221 L-99.21 221 L-198.43 221 L-198.43 228.94" class="st4"/>
+		</g>
+		<g id="shape34-54" v:mID="34" v:groupContext="shape" v:layerMember="0" transform="translate(353.288,-171.871)">
+			<title>Universeller Verbinder.34</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 221 L58.16 221 L116.33 221 L116.33 228.94" class="st4"/>
+		</g>
+		<g id="shape35-57" v:mID="35" v:groupContext="shape" v:layerMember="0" transform="translate(154.863,-115.178)">
+			<title>Universeller Verbinder.35</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 219.02 L-44.65 219.02 L-89.29 219.02 L-89.29 228.94" class="st4"/>
+		</g>
+		<g id="shape36-60" v:mID="36" v:groupContext="shape" v:layerMember="0" transform="translate(154.863,-115.178)">
+			<title>Universeller Verbinder.36</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 219.02 L53.86 219.02 L107.72 219.02 L107.72 228.94" class="st4"/>
+		</g>
+		<g id="shape37-63" v:mID="37" v:groupContext="shape" v:layerMember="0" transform="translate(469.614,-115.178)">
+			<title>Universeller Verbinder.37</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 219.73 L-34.23 219.73 L-68.46 219.73 L-68.46 230.36" class="st4"/>
+		</g>
+		<g id="shape38-66" v:mID="38" v:groupContext="shape" v:layerMember="0" transform="translate(469.614,-115.178)">
+			<title>Universeller Verbinder.38</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 219.73 L0 230.36" class="st4"/>
+		</g>
+		<g id="shape39-69" v:mID="39" v:groupContext="shape" v:layerMember="0" transform="translate(469.614,-115.178)">
+			<title>Universeller Verbinder.39</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 219.73 L34.23 219.73 L68.46 219.73 L68.46 230.36" class="st4"/>
+		</g>
+		<g id="shape40-72" v:mID="40" v:groupContext="shape" v:layerMember="0" transform="translate(262.58,-58.4852)">
+			<title>Universeller Verbinder.40</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 219.73 L0 230.36" class="st4"/>
+		</g>
+		<g id="shape41-75" v:mID="41" v:groupContext="shape" v:layerMember="0" transform="translate(262.58,-58.4852)">
+			<title>Universeller Verbinder.41</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 219.73 L-34.23 219.73 L-68.46 219.73 L-68.46 230.36" class="st4"/>
+		</g>
+		<g id="shape42-78" v:mID="42" v:groupContext="shape" v:layerMember="0" transform="translate(65.5719,-58.4852)">
+			<title>Universeller Verbinder.42</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 219.73 L17.01 219.73 L34.02 219.73 L34.02 230.36" class="st4"/>
+		</g>
+		<g id="shape43-81" v:mID="43" v:groupContext="shape" v:layerMember="0" transform="translate(65.5719,-58.4852)">
+			<title>Universeller Verbinder.43</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 209.1 L0 219.73 L-17.01 219.73 L-34.02 219.73 L-34.02 230.36" class="st4"/>
+		</g>
+		<g id="shape44-84" v:mID="44" v:groupContext="shape" transform="translate(581.477,-115.178)">
+			<title>Rechteck.44</title>
+			<desc>Drucken mit Datenüber-tragung</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="9.84" y="183.47" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Drucken mit <tspan
+						x="11.17" dy="1.2em" class="st3">Datenüber</tspan>-<tspan x="17.61" dy="1.2em" class="st3">tragung</tspan></text>		</g>
+		<g id="shape45-89" v:mID="45" v:groupContext="shape" transform="translate(581.477,-57.0679)">
+			<title>Rechteck.45</title>
+			<desc>Datendatei auf HTTP(S)-Konnektor</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="5.16" y="183.47" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Datendatei auf <tspan
+						x="14.07" dy="1.2em" class="st3">HTTP(S)</tspan>-<tspan x="12.95" dy="1.2em" class="st3">Konnektor</tspan></text>		</g>
+		<g id="shape46-94" v:mID="46" v:groupContext="shape" v:layerMember="0" transform="translate(605.572,-115.178)">
+			<title>Dynamischer Verbinder</title>
+			<path d="M7.09 209.1 L7.09 230.36" class="st4"/>
+		</g>
+		<g id="shape47-97" v:mID="47" v:groupContext="shape" v:layerMember="0" transform="translate(353.288,-171.871)">
+			<title>Dynamischer Verbinder.47</title>
+			<path d="M0 209.1 L0 221 L259.37 221 L259.37 228.94" class="st4"/>
+		</g>
+		<g id="shape48-100" v:mID="48" v:groupContext="shape" transform="translate(299.43,-0.375)">
+			<title>Rechteck.48</title>
+			<desc>Text auf Konnektor</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="190.671" width="62.37" height="36.8504"/>
+			<rect x="0" y="172.246" width="62.3622" height="36.8504" class="st1"/>
+			<text x="16.73" y="188.27" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Text auf<v:lf/><tspan
+						x="12.95" dy="1.2em" class="st3">Konnektor</tspan></text>		</g>
+		<g id="shape49-104" v:mID="49" v:groupContext="shape" v:layerMember="0" transform="translate(262.58,-58.4852)">
+			<title>Dynamischer Verbinder.49</title>
+			<path d="M0 209.1 L0 219.73 L68.03 219.73 L68.03 230.36" class="st4"/>
+		</g>
+	</g>
+</svg>

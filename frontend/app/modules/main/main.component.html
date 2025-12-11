@@ -1,0 +1,115 @@
+<!-- Gesamter Container: dreispaltig, Fullscreen -->
+<div class="editor">
+  <div class="header">
+    <div class="menu-control">
+      <app-header-menu (onItemClicked)="onMenuItemClicked($event)" title="HelpTextEditor+"
+        [items]='menuItems'></app-header-menu>
+    </div>
+
+  </div>
+
+  <app-file-upload-overlay *ngIf="showOverlayFileOpen"
+    (closeOverlay)="closeOverlayFileOpen($event)"></app-file-upload-overlay>
+  <app-add-content-overlay *ngIf="showOverlayAddContent"
+    (closeOverlay)="closeOverlayAddContent($event)"></app-add-content-overlay>
+
+  <div class="editor-columns">
+
+    <!-- Spalte 1: Baumansicht (20%) -->
+    <div class="column left">
+      <div class="structure-header">
+        <h3>Help parts</h3>
+        <!-- Auswahlbox für Top-Level-Keys -->
+        <select [(ngModel)]="selectedTopLevelKey" (ngModelChange)="onTopLevelChange($event)"
+          style="width: 100%; margin-bottom: 10px;">
+          <option *ngFor="let key of getRootKeys()" [value]="key">{{ key }}</option>
+        </select>
+      </div>
+
+      <app-help-structure-treeview [helpItem]="getSelectedItem()" [selectedHelpSection]="selectedSection"
+        (onItemClicked)="onSelectTreeViewItem($event)" class="structure-treeview"></app-help-structure-treeview>
+    </div>
+
+    <!-- Second column (auto) Preview -->
+    <div class="column main">
+      <h3>Output</h3>
+      <!-- Sprache -->
+      <select [(ngModel)]="selectedLanguage" (ngModelChange)="onLanguageChange($event)" style="margin-bottom: 10px;">
+        <option *ngFor="let lang of languages" [value]="lang">
+          {{ lang }}
+        </option>
+      </select>
+      <div class="previewHtmlBox">
+        <!-- <div aria-pressed="false" tabindex="0" role="button" aria-label="Page contents" aria-describedby="page-outline__assistive-description" class="PageOutline__Button"><i color="var(--colors-ui-element-text-secondary, #605f60)" size="6" class="Iconstyled__IconStyled-cGkYxe fPXPVt"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" vector-effect="non-scaling-stroke"><path fill-rule="evenodd" clip-rule="evenodd" d="M3 6c0-.55228.44772-1 1-1h10c.5523 0 1 .44772 1 1s-.4477 1-1 1H4c-.55228 0-1-.44772-1-1zM3 10c0-.55228.44772-1 1-1h16c.5523 0 1 .44772 1 1 0 .5523-.4477 1-1 1H4c-.55228 0-1-.4477-1-1zM3 14c0-.5523.44772-1 1-1h12c.5523 0 1 .4477 1 1s-.4477 1-1 1H4c-.55228 0-1-.4477-1-1zM3 18c0-.5523.44772-1 1-1h10c.5523 0 1 .4477 1 1s-.4477 1-1 1H4c-.55228 0-1-.4477-1-1z" fill="#212121" vector-effect="non-scaling-stroke"></path></svg></i></div> -->
+        <div *ngFor="let mainSection of getSelectedItem()?.content  let i = index">
+          <app-help-section [section]="mainSection" [sectionNumber]="i + 1" [sectionLevel]=1
+            (onSelectContent)="onSelectSection($event)" [selectedHelpSection]="selectedSection"
+            [language]="getImageLanguage()"></app-help-section>
+        </div>
+      </div>
+
+      <div>
+        <small>Version: 30.04.2025</small>
+      </div>
+    </div>
+
+    <!-- Third column (20%) Properties -->
+    <div class="column right">
+      <h3>Properties</h3>     
+      <div *ngIf="selectedSection != undefined; else noSelection">
+        <div *ngIf="selectedSection.type != 'IMAGE'">
+          <ng-container *ngTemplateOutlet="defaultType; context:{ $selectedSection: selectedSection }"></ng-container>
+        </div>
+        <div *ngIf="selectedSection.type == 'IMAGE' || selectedSection.type == 'SPLITIMAGE'">
+          <ng-container *ngTemplateOutlet="imageType; context:{ $selectedSection: selectedSection }"></ng-container>
+        </div>
+      </div>
+
+
+
+      <ng-template #defaultType>
+        <div>
+          <p><strong>ID/Name:</strong> <input [(ngModel)]="selectedSection.linkId" (focusout)="onLinkChanged($event)"></p>
+          <p><strong>Unique key:</strong> <input [value]="selectedSection.value" (focusout)="onIdChanged($event)"></p>
+          <p><strong>Type:</strong> {{ selectedSection.type || '[nicht gesetzt]' }}</p>
+          <label><strong>Translation ({{ selectedLanguage }}):</strong></label>
+          <textarea #textArea [(ngModel)]="selectedTextContent" (ngModelChange)="onTranslationChanged($event)"
+            style="width: 100%; height: 200px;"></textarea>
+          <button (click)="wrapSelectionInBold(textArea)">B</button>
+          <button (click)="copyText(textArea)">Copy all</button>
+        </div>
+        <div>
+          <button (click)="deleteItem(selectedSection)" style="margin-left: 4px;">delete</button>
+        </div>
+        <div>
+          <div class="PropertyAction" (click)="copyGermanText()" style="margin-left: 4px">Copy German</div>
+          <div class="PropertyAction" (click)="copyEnglishText()" style="margin-left: 4px">Copy English</div>
+        </div>
+      </ng-template>
+      <ng-template #imageType>
+        <div>
+          <p><strong>Image file:</strong> <input [value]="selectedSection.value" (focusout)="onImageFileChanged($event)"></p>
+          <button mat-raised-button color="primary" (click)="openImagePicker()">
+            Bild auswählen
+          </button>
+      
+          <p><strong>Unique key:</strong> <input [value]="selectedSection.imageDescription" (focusout)="onIdChanged($event)"></p>
+          <p><strong>Type:</strong> {{ selectedSection.type || '[nicht gesetzt]' }}</p>
+          <label><strong>Translation ({{ selectedLanguage }}):</strong></label>
+          <textarea [(ngModel)]="selectedTextContent" (ngModelChange)="onTranslationChanged($event)"
+            style="width: 100%; height: 200px;"></textarea>
+            <p><strong>Width:</strong> <input [value]="selectedSection.width" (focusout)="onImageWidthChanged($event)"></p>  
+            <p><strong>Width (PDF):</strong> <input [value]="selectedSection.pdfWidth" (focusout)="onPdfWidthChanged($event)"></p>  
+        </div>
+        <div>
+          <button (click)="deleteItem(selectedSection)" style="margin-left: 4px;">delete</button>
+        </div>
+      </ng-template>
+      <ng-template #noSelection>
+        <p>No item selected.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<app-contextmenu [target]="appComponentRef" #context></app-contextmenu>

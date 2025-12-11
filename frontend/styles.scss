@@ -1,0 +1,35 @@
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "@angular/material/_theming.scss";
+@import './material-icons.scss'; // url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+.section_header {
+  font-size: 0.6em;
+  border-bottom: #666666 solid 1px;
+}
+
+.input {
+  width: 98%;
+
+  &:focus {
+    outline: #fadd37 solid 2px;
+    outline-offset: -1px;
+    border: none;
+  }
+}
+
+
+a {
+  text-decoration: underline;
+  //color: black;
+  color: #008796;
+    cursor: pointer;
+}
+
+a:hover {
+  //background-color: #FADD37;
+}

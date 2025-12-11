@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generiert durch Microsoft Visio, SVG Export TimerCntrlAction_DE.svg Zeichenblatt-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="5.52223in" height="1.32931in"
+		viewBox="0 0 397.6 95.7107" xml:space="preserve" color-interpolation-filters="sRGB" class="st5">
+	<v:documentProperties v:langID="1031" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:#000000;font-family:Arial;font-size:0.666664em}
+		.st3 {font-size:1em}
+		.st4 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st5 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Zeichenblatt-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<g id="shape64-1" v:mID="64" v:groupContext="shape" transform="translate(83.9971,-0.37503)">
+			<title>Rechteck.64</title>
+			<desc>Nachricht anzeigen</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="77.2855" width="62.37" height="36.8504"/>
+			<rect x="0" y="58.8603" width="62.3622" height="36.8504" class="st1"/>
+			<text x="14.29" y="74.89" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Nachricht <v:lf/><tspan
+						x="14.94" dy="1.2em" class="st3">anzeigen</tspan></text>		</g>
+		<g id="shape65-5" v:mID="65" v:groupContext="shape" transform="translate(251.241,-0.37503)">
+			<title>Rechteck.65</title>
+			<desc>Standby-Modus betreten</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="77.2855" width="62.37" height="36.8504"/>
+			<rect x="0" y="58.8603" width="62.3622" height="36.8504" class="st1"/>
+			<text x="15.17" y="70.09" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Standby-<tspan
+						x="19.18" dy="1.2em" class="st3">Modus </tspan><tspan x="16.5" dy="1.2em" class="st3">betreten</tspan></text>		</g>
+		<g id="shape66-10" v:mID="66" v:groupContext="shape" transform="translate(334.863,-0.37503)">
+			<title>Rechteck.66</title>
+			<desc>Standby-Modus verlassen</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="77.2855" width="62.37" height="36.8504"/>
+			<rect x="0" y="58.8603" width="62.3622" height="36.8504" class="st1"/>
+			<text x="15.17" y="70.09" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Standby-<tspan
+						x="19.18" dy="1.2em" class="st3">Modus </tspan><tspan x="14.06" dy="1.2em" class="st3">verlassen</tspan></text>		</g>
+		<g id="shape67-15" v:mID="67" v:groupContext="shape" transform="translate(0.375,-58.4852)">
+			<title>Rechteck.67</title>
+			<desc>Gerät aus- schalten</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="77.2855" width="62.37" height="36.8504"/>
+			<rect x="0" y="58.8603" width="62.3622" height="36.8504" class="st1"/>
+			<text x="12.28" y="74.89" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Gerät aus-<v:lf/><tspan
+						x="16.28" dy="1.2em" class="st3">schalten</tspan></text>		</g>
+		<g id="shape68-19" v:mID="68" v:groupContext="shape" transform="translate(0.375041,-0.375)">
+			<title>Rechteck.68</title>
+			<desc>Task starten</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="77.2855" width="62.37" height="36.8504"/>
+			<rect x="0" y="58.8603" width="62.3622" height="36.8504" class="st1"/>
+			<text x="22.51" y="74.89" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Task <v:newlineChar/><tspan
+						x="18.95" dy="1.2em" class="st3">starten</tspan></text>		</g>
+		<g id="shape69-23" v:mID="69" v:groupContext="shape" transform="translate(83.9971,-58.4853)">
+			<title>Rechteck.69</title>
+			<desc>Backup exportieren</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="77.2855" width="62.37" height="36.8504"/>
+			<rect x="0" y="58.8603" width="62.3622" height="36.8504" class="st1"/>
+			<text x="17.84" y="74.89" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Backup <tspan
+						x="11.17" dy="1.2em" class="st3">exportieren</tspan></text>		</g>
+		<g id="shape70-27" v:mID="70" v:groupContext="shape" transform="translate(334.863,-58.4853)">
+			<title>Rechteck.70</title>
+			<desc>Datenspeicher exportieren</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="77.2855" width="62.37" height="36.8504"/>
+			<rect x="0" y="58.8603" width="62.3622" height="36.8504" class="st1"/>
+			<text x="5.39" y="74.89" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Datenspeicher <tspan
+						x="11.17" dy="1.2em" class="st3">exportieren</tspan></text>		</g>
+		<g id="shape71-31" v:mID="71" v:groupContext="shape" transform="translate(461.755,37.2254) rotate(90)">
+			<title>Tabelle.71</title>
+			<path d="M0 95.71 L21.26 95.71" class="st4"/>
+		</g>
+		<g id="shape72-34" v:mID="72" v:groupContext="shape" transform="translate(167.619,-30.1388)">
+			<title>Rechteck.86</title>
+			<desc>Zeitgesteuerte Aktionen</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="77.2855" width="62.37" height="36.8504"/>
+			<rect x="0" y="58.8603" width="62.3622" height="36.8504" class="st1"/>
+			<text x="5.61" y="74.89" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Zeitgesteuerte <tspan
+						x="15.61" dy="1.2em" class="st3">Aktionen</tspan></text>		</g>
+		<g id="shape73-38" v:mID="73" v:groupContext="shape" transform="translate(251.241,-58.4853)">
+			<title>Rechteck.87</title>
+			<desc>Audit-Trail exportieren</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="77.2855" width="62.37" height="36.8504"/>
+			<rect x="0" y="58.8603" width="62.3622" height="36.8504" class="st1"/>
+			<text x="12.95" y="74.89" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Audit-Trail <tspan
+						x="11.17" dy="1.2em" class="st3">exportieren</tspan></text>		</g>
+		<g id="shape74-42" v:mID="74" v:groupContext="shape" transform="translate(210.889,37.2254) rotate(90)">
+			<title>Tabelle.74</title>
+			<path d="M0 95.71 L21.26 95.71" class="st4"/>
+		</g>
+		<g id="shape75-45" v:mID="75" v:groupContext="shape" transform="translate(127.267,37.2254) rotate(90)">
+			<title>Tabelle.75</title>
+			<path d="M0 95.71 L21.26 95.71" class="st4"/>
+		</g>
+		<g id="shape76-48" v:mID="76" v:groupContext="shape" transform="translate(378.133,37.2254) rotate(90)">
+			<title>Tabelle.76</title>
+			<path d="M0 95.71 L21.26 95.71" class="st4"/>
+		</g>
+		<g id="shape77-51" v:mID="77" v:groupContext="shape" transform="translate(229.981,-48.564)">
+			<title>Tabelle.77</title>
+			<path d="M0 95.71 L136.06 95.71" class="st4"/>
+		</g>
+		<g id="shape78-54" v:mID="78" v:groupContext="shape" transform="translate(31.5562,-48.564)">
+			<title>Tabelle.78</title>
+			<path d="M0 95.71 L136.06 95.71" class="st4"/>
+		</g>
+	</g>
+</svg>

@@ -1,0 +1,45 @@
+<!-- Dialog-Header mit "X"-Button oben rechts -->
+<div mat-dialog-title class="dialog-header">
+  <span>Bild auswählen</span>
+  <button mat-icon-button (click)="closeWithoutSelection()" aria-label="Dialog schließen">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<!-- Dialog-Inhalt -->
+<div mat-dialog-content>
+  <!-- Liste der verfügbaren Bilder -->
+  <div class="image-list">
+    <div
+      class="image-item"
+      *ngFor="let img of allImages"
+      [class.selected]="img === selectedImage"
+      (click)="selectImage(img)"
+    >
+      <!-- Bildvorschau (ggf. Pfad anpassen) -->
+      <img [src]="'/assets/images/' + img" [alt]="img" />
+      <span class="filename">{{ img }}</span>
+    </div>
+  </div>
+
+  <!-- Datei-Upload -->
+  <div class="upload-section">
+    <label>
+      <mat-icon>file_upload</mat-icon> Neues Bild hochladen
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        accept=".png,.svg"
+        hidden
+      />
+    </label>
+  </div>
+</div>
+
+<!-- Dialog-Aktionen -->
+<div mat-dialog-actions>
+  <button mat-button (click)="closeWithoutSelection()">Abbrechen</button>
+  <button mat-raised-button color="primary" [disabled]="!canConfirm" (click)="confirmSelection()">
+    OK
+  </button>
+</div>

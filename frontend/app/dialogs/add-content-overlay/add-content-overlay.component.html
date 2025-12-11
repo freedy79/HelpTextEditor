@@ -1,0 +1,33 @@
+<div class="overlay-backdrop">
+    <div class="overlay-panel">
+        <button class="close-button" (click)="onCancel()">X</button>
+
+        <h2>Add content</h2>
+
+        <div>
+
+            <select [(ngModel)]="contentType">
+                <option *ngFor="let contentType of contentTypes" [value]="contentType">
+                    {{ contentType }}
+                </option>
+            </select>
+        </div>
+
+        <fieldset>
+            <legend>Add content:</legend>
+            <div>
+                <input type="radio" id="after" name="addcontentposition_after" value="after"
+                    [(ngModel)]="insertPosition" />
+                <label for="after">After</label>
+
+                <input type="radio" id="endof" name="addcontentposition_end" value="endof"
+                    [(ngModel)]="insertPosition" />
+                <label for="endof">End of</label>
+            </div>
+        </fieldset>
+
+        <button (click)="onOk()">
+            OK
+        </button>
+    </div>
+</div>

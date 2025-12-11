@@ -1,0 +1,29 @@
+<div class="header-menu">
+    <div class="app-title">
+        {{title}}
+    </div>
+
+    <div class="menu-wrapper">
+        <ul class="" role="menubar" tabindex="0">
+            <ng-container *ngFor="let item of items">
+                <ng-container *ngTemplateOutlet="recursiveMenu; context:{ $implicit: item, level: 1 }"></ng-container>
+            </ng-container>
+        </ul>
+    </div>
+
+</div>
+
+<ng-template #recursiveMenu let-item let-level="level">
+    <li *ngIf="item.separator" class="menu-separator"></li>
+    
+    <li *ngIf="!item.separator" class="menu-item" [ngClass]="{'parent': level == 1}"  tabindex="-1" aria-label="item.text" aria-haspopup="item.items.length > 0"
+        aria-expanded="true" (click)="selectItem(item)" (mouseover)='hover_over(item)' (mouseout)='hover_out(item)'><span class=""></span>{{item.text}}<span class=""></span>
+        <ol *ngIf="item.items && item.items.length > 0" class="submenu" [ngClass]="{'hide': !parentHovered(item)}">
+        <ng-container *ngFor="let subitem of item.items">
+            <ng-container
+                *ngTemplateOutlet="recursiveMenu; context:{ $implicit: subitem, level: level + 1}"></ng-container>
+        </ng-container>
+        </ol>
+    </li>
+
+</ng-template>

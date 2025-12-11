@@ -1,0 +1,193 @@
+.sectionHeader1 {
+    font-weight: bold;
+    font-size: 1.8em;
+    margin-top: 50px;
+    margin-bottom: 0px;
+}
+
+.sectionHeader2 {
+    font-weight: normal;
+    font-size: 1.6em;
+    margin-top: 50px;
+    margin-bottom: 0px;
+}
+
+.sectionHeader3 {
+    font-weight: normal;
+    font-size: 1.4em;
+    margin-top: 40px;
+    margin-bottom: 0px;
+}
+
+.sectionHeader4 {
+    font-size: 1.0em;
+    margin-top: 20px;
+    margin-bottom: -0.2em;
+    font-weight: bold;
+}
+
+.sectionHeader5 {
+    font-size: 1.0em;
+    margin-top: 20px;
+    margin-bottom: -0.2em;
+    font-weight: bold;
+}
+
+.help-instruction {
+    font-size: 1.0em;
+    margin-bottom: 10px;
+    line-height: 1.5em;
+
+    a {
+        text-decoration: underline;
+        color: #008796;
+    }
+    
+    a:hover {
+        background-color: #FADD37;
+    }
+}
+
+.help-instruction-bold {
+    font-size: 1.0em;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    line-height: 1.5em;
+}
+
+.OrderedList {
+    margin-top: 12px;
+    margin-bottom: 8px;
+}
+
+.subSecList{ 
+    list-style-type: lower-alpha;
+    margin-left:20px;
+    line-height: 1.6em;
+}
+
+.subSecBulletList {
+    margin-top: 0.5em;
+    margin-left:20px;
+    list-style-type: square;
+    line-height: 1.6em;
+}
+
+.list_inline_edge { 
+    display: inline-block; 
+}
+
+a {
+    text-decoration: underline;
+    //color: black;
+    color: #008796;
+    cursor: pointer;
+}
+
+a:hover {
+    //background-color: #FADD37;
+}
+
+ul, ol {
+    margin-top: 12px;
+}
+
+.image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.imageDesc {
+    text-align: center;
+    font-style: italic;
+}
+
+table, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.1rem;
+}
+
+th {
+    background-color: #999999;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.table-even-row {
+    background-color: #ffffff;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+.table-odd-row {
+    background-color: #eeeeee;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+.help-table {
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+    vertical-align: top;
+    text-align: left;
+    width: 100%;
+
+    table, td {
+        border: none;
+    }
+
+    th {
+        border-collapse: collapse;
+        background-color: white;
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px solid #000;
+        border-top: 1px solid #000;
+        vertical-align: top;
+    }
+
+    tr {
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px solid #000;
+        border-top: 1px solid #000;
+        background-color: white;
+        margin-top: 0.2em;
+        margin-bottom: 0.2em;
+        vertical-align: top;
+    }
+
+    .table-even-row {
+
+    }
+    
+    .table-odd-row {
+        
+    }
+}
+
+.Enum_list_item {
+    display: flex;
+    flex-direction: row;
+    line-height: 1.5em;
+}
+
+.Enum_list_numberfield {
+    //background-color: #FADD37;
+    font-size: 1.0em;
+    font-weight: 400;
+    margin-right: 0.75em;
+}
+
+// helptext editor styles
+.selected {
+    background-color: #ffffbe;
+}

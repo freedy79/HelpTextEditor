@@ -1,0 +1,43 @@
+.treeview_main {
+    background-color: white;
+    padding: 3px;
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    white-space: nowrap;
+    font-family: Roboto,"Helvetica Neue";
+}
+
+.tree_item {
+    font-size: 0.8em;
+    cursor: pointer;
+    display: flex;
+    line-height: 28px;
+
+    &:hover {
+        background-color: #eee;
+    }
+
+    &:active {
+        background-color: #FADD37;
+    }
+}
+
+.selected {
+    background-color: #FADD37;
+}
+
+.hasChildren::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+    width: 15pt;
+    vertical-align: middle;
+}
+
+.tree_item-open::before {
+    transform: rotate(90deg);
+}

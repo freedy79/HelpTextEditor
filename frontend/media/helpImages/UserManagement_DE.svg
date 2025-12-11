@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generiert durch Microsoft Visio, SVG Export UserManagement_DE.svg Zeichenblatt-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="6.82144in" height="2.12656in"
+		viewBox="0 0 491.144 153.112" xml:space="preserve" color-interpolation-filters="sRGB" class="st5">
+	<v:documentProperties v:langID="1031" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:#000000;font-family:Arial;font-size:0.666664em}
+		.st3 {font-size:1em}
+		.st4 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st5 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Zeichenblatt-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Verbinder" v:index="0"/>
+		<g id="shape2-1" v:mID="2" v:groupContext="shape" transform="translate(186.044,-115.887)">
+			<title>Rechteck</title>
+			<desc>Benutzer-verwaltung</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="134.687" width="62.37" height="36.8504"/>
+			<rect x="0" y="116.262" width="62.3622" height="36.8504" class="st1"/>
+			<text x="13.84" y="132.29" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Benutzer-<tspan
+						x="11.84" dy="1.2em" class="st3">verwaltung</tspan></text>		</g>
+		<g id="shape11-5" v:mID="11" v:groupContext="shape" transform="translate(48.564,-58.4852)">
+			<title>Rechteck.11</title>
+			<desc>Vorgegebene Benutzer</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="134.687" width="62.37" height="36.8504"/>
+			<rect x="0" y="116.262" width="62.3622" height="36.8504" class="st1"/>
+			<text x="7.16" y="132.29" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Vorgegebene<v:lf/><tspan
+						x="15.17" dy="1.2em" class="st3">Benutzer</tspan></text>		</g>
+		<g id="shape12-9" v:mID="12" v:groupContext="shape" transform="translate(300.847,-58.4852)">
+			<title>Rechteck.12</title>
+			<desc>Neue Benutzer</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="134.687" width="62.37" height="36.8504"/>
+			<rect x="0" y="116.262" width="62.3622" height="36.8504" class="st1"/>
+			<text x="21.62" y="132.29" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Neue <v:lf/><tspan
+						x="15.17" dy="1.2em" class="st3">Benutzer</tspan></text>		</g>
+		<g id="shape13-13" v:mID="13" v:groupContext="shape" transform="translate(0.375,-0.375)">
+			<title>Rechteck.13</title>
+			<desc>Ändern</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="134.687" width="62.37" height="36.8504"/>
+			<rect x="0" y="116.262" width="62.3622" height="36.8504" class="st1"/>
+			<text x="18.28" y="137.09" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Ändern</text>		</g>
+		<g id="shape14-16" v:mID="14" v:groupContext="shape" transform="translate(177.54,-0.375)">
+			<title>Rechteck.14</title>
+			<desc>Anlegen</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="134.687" width="62.37" height="36.8504"/>
+			<rect x="0" y="116.262" width="62.3622" height="36.8504" class="st1"/>
+			<text x="16.5" y="137.09" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Anlegen</text>		</g>
+		<g id="shape21-19" v:mID="21" v:groupContext="shape" transform="translate(83.997,-0.375)">
+			<title>Rechteck.21</title>
+			<desc>Aktivieren / Deaktivieren</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="134.687" width="62.37" height="36.8504"/>
+			<rect x="0" y="116.262" width="62.3622" height="36.8504" class="st1"/>
+			<text x="11.4" y="132.29" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Aktivieren / <tspan
+						x="8.95" dy="1.2em" class="st3">Deaktivieren</tspan></text>		</g>
+		<g id="shape27-23" v:mID="27" v:groupContext="shape" transform="translate(261.162,-0.375)">
+			<title>Rechteck.27</title>
+			<desc>Ändern</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="134.687" width="62.37" height="36.8504"/>
+			<rect x="0" y="116.262" width="62.3622" height="36.8504" class="st1"/>
+			<text x="18.28" y="137.09" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Ändern</text>		</g>
+		<g id="shape33-26" v:mID="33" v:groupContext="shape" v:layerMember="0" transform="translate(217.225,-115.887)">
+			<title>Universeller Verbinder</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 153.11 L0 165.13 L-68.74 165.13 L-137.48 165.13 L-137.48 173.66" class="st4"/>
+		</g>
+		<g id="shape34-29" v:mID="34" v:groupContext="shape" v:layerMember="0" transform="translate(217.225,-115.887)">
+			<title>Universeller Verbinder.34</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 153.11 L0 165.13 L57.4 165.13 L114.8 165.13 L114.8 173.66" class="st4"/>
+		</g>
+		<g id="shape35-32" v:mID="35" v:groupContext="shape" v:layerMember="0" transform="translate(79.7451,-58.4852)">
+			<title>Universeller Verbinder.35</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 153.11 L0 163.74 L-24.09 163.74 L-48.19 163.74 L-48.19 174.37" class="st4"/>
+		</g>
+		<g id="shape36-35" v:mID="36" v:groupContext="shape" v:layerMember="0" transform="translate(79.7451,-58.4852)">
+			<title>Universeller Verbinder.36</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 153.11 L0 163.74 L17.72 163.74 L35.43 163.74 L35.43 174.37" class="st4"/>
+		</g>
+		<g id="shape37-38" v:mID="37" v:groupContext="shape" v:layerMember="0" transform="translate(332.029,-58.4852)">
+			<title>Universeller Verbinder.37</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 153.11 L0 163.74 L-61.65 163.74 L-123.31 163.74 L-123.31 174.37" class="st4"/>
+		</g>
+		<g id="shape38-41" v:mID="38" v:groupContext="shape" v:layerMember="0" transform="translate(332.029,-58.4852)">
+			<title>Universeller Verbinder.38</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 153.11 L0 163.74 L-19.84 163.74 L-39.69 163.74 L-39.69 174.37" class="st4"/>
+		</g>
+		<g id="shape40-44" v:mID="40" v:groupContext="shape" transform="translate(344.784,-0.375)">
+			<title>Rechteck.40</title>
+			<desc>Löschen</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="134.687" width="62.37" height="36.8504"/>
+			<rect x="0" y="116.262" width="62.3622" height="36.8504" class="st1"/>
+			<text x="16.06" y="137.09" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Löschen</text>		</g>
+		<g id="shape41-47" v:mID="41" v:groupContext="shape" transform="translate(428.406,-0.375)">
+			<title>Rechteck.41</title>
+			<desc>Aktivieren / Deaktivieren</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="134.687" width="62.37" height="36.8504"/>
+			<rect x="0" y="116.262" width="62.3622" height="36.8504" class="st1"/>
+			<text x="11.4" y="132.29" class="st2" v:langID="1031"><v:paragraph v:horizAlign="1"/><v:tabList/>Aktivieren / <tspan
+						x="8.95" dy="1.2em" class="st3">Deaktivieren</tspan></text>		</g>
+		<g id="shape42-51" v:mID="42" v:groupContext="shape" v:layerMember="0" transform="translate(332.029,-58.4852)">
+			<title>Universeller Verbinder.42</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 153.11 L0 163.74 L63.78 163.74 L127.56 163.74 L127.56 174.37" class="st4"/>
+		</g>
+		<g id="shape43-54" v:mID="43" v:groupContext="shape" v:layerMember="0" transform="translate(332.029,-58.4852)">
+			<title>Universeller Verbinder.43</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 153.11 L0 163.74 L21.97 163.74 L43.94 163.74 L43.94 174.37" class="st4"/>
+		</g>
+	</g>
+</svg>

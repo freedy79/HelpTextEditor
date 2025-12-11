@@ -1,0 +1,54 @@
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .image-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  
+    .image-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+  
+      img {
+        width: 80px;
+        height: auto;
+        border: 2px solid transparent;
+      }
+  
+      &.selected img {
+        border-color: blue;
+      }
+  
+      .filename {
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        word-break: break-all;
+      }
+    }
+  }
+  
+  .upload-section {
+    margin-top: 1rem;
+  
+    label {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      gap: 0.5rem;
+  
+      mat-icon {
+        vertical-align: middle;
+      }
+  
+      input[type='file'] {
+        display: none;
+      }
+    }
+  }
+  
