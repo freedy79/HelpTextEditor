@@ -427,8 +427,12 @@ export class MainComponent implements OnInit {
       if (changed) {
         console.log("Id changed. Old: ", oldId, " -> ", newId, ": ", changed);
         this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-        this.qtfFile.TEXTS[newId] = this.qtfFile.TEXTS[oldId];
-        delete this.qtfFile.TEXTS[oldId];
+
+        if (this.qtfFile && this.qtfFile.TEXTS && this.qtfFile.TEXTS[oldId]) {
+          this.qtfFile.TEXTS[newId] = this.qtfFile.TEXTS[oldId];
+          delete this.qtfFile.TEXTS[oldId];
+        }
+
         this.saveCurrentSectionText();
         this.onTopLevelChange(this.selectedTopLevelKey);
         this.onSelectSection(newId);
