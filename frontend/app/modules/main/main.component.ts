@@ -188,8 +188,11 @@ export class MainComponent implements OnInit {
       this.onSelectSection(event as string);
 
       // scroll to position
-      let el = document.getElementById(this.selectedSection.value);
-      el.scrollIntoView();
+      const elementId = this.selectedSection?.value || (event as string);
+      const el = elementId ? document.getElementById(elementId) : null;
+      if (el) {
+        el.scrollIntoView();
+      }
     }
   }
 
