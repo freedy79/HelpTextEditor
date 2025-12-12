@@ -222,7 +222,7 @@ export class MainComponent implements OnInit {
     const [item] = collection.splice(event.index, 1);
     collection.splice(targetIndex, 0, item);
 
-    this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+    this.isDirty = true;
     this.saveCurrentSectionText();
     this.onTopLevelChange(this.selectedTopLevelKey);
 
