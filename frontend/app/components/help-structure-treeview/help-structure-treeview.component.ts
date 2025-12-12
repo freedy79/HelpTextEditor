@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep } from '~models/help-text-structure.model';
+import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
 
 @Component({
   selector: 'app-help-structure-treeview',
@@ -16,6 +17,11 @@ export class HelpStructureTreeviewComponent {
   @Output() deleteSection: EventEmitter<HelpTextSection | HelpTextStep> = new EventEmitter();
   @Output() moveSection: EventEmitter<{ parent: HelpTextSection | MainHelpSection; container: string; index: number; direction: 'up' | 'down' }>
     = new EventEmitter();
+
+  @ViewChild('contextMenu') contextMenu: ContextMenuComponent;
+
+  contextMenuItems: ContextMenuItem[] = [];
+  private contextMenuContext: { section: HelpTextSection | HelpTextStep; parent: HelpTextSection | MainHelpSection; container: string; index: number; } | null = null;
 
   private expandedSections: string[];
 
@@ -52,6 +58,70 @@ export class HelpStructureTreeviewComponent {
 
   public onMove(parent: HelpTextSection | MainHelpSection, container: string, index: number, direction: 'up' | 'down') {
     this.moveSection.emit({ parent, container, index, direction });
+  }
+
+  openContextMenu(event: MouseEvent, section: HelpTextSection | HelpTextStep, parent: HelpTextSection | MainHelpSection, container: string, index: number) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.contextMenuContext = { section, parent, container, index };
+    this.contextMenuItems = this.buildContextMenuItems(section, parent, container, index);
+
+    if (this.contextMenu) {
+      this.contextMenu.openContextMenu(event.clientX, event.clientY, this.contextMenuItems);
+    }
+  }
+
+  private buildContextMenuItems(section: HelpTextSection | HelpTextStep, parent: HelpTextSection | MainHelpSection, container: string, index: number): ContextMenuItem[] {
+    const items: ContextMenuItem[] = [];
+    const hasContainer = !!container && !!parent && !!(parent as any)[container];
+    const collection = hasContainer ? (parent as any)[container] as any[] : [];
+
+    items.push({ label: 'Move up', action: 'moveUp', disabled: !hasContainer || index === 0 });
+    items.push({ label: 'Move down', action: 'moveDown', disabled: !hasContainer || index >= collection.length - 1 });
+
+    if (this.isHelpTextSection(section)) {
+      items.push({ label: 'Add subsection', action: 'addSubsection' });
+      items.push({ label: 'Add content', action: 'addContent' });
+      if (this.showStepControls(section)) {
+        items.push({ label: 'Add step', action: 'addStep' });
+      }
+    }
+
+    items.push({ label: 'Delete', action: 'delete' });
+
+    return items;
+  }
+
+  onContextMenuAction(action: string) {
+    if (!this.contextMenuContext) { return; }
+
+    const { section, parent, container, index } = this.contextMenuContext;
+
+    switch (action) {
+      case 'moveUp':
+        this.onMove(parent, container, index, 'up');
+        break;
+      case 'moveDown':
+        this.onMove(parent, container, index, 'down');
+        break;
+      case 'addSubsection':
+        if (this.isHelpTextSection(section)) { this.onAddSubsection(section); }
+        break;
+      case 'addContent':
+        if (this.isHelpTextSection(section)) { this.onAddContent(section); }
+        break;
+      case 'addStep':
+        if (this.isHelpTextSection(section)) { this.onAddStep(section); }
+        break;
+      case 'delete':
+        this.onDeleteSection(section);
+        break;
+      default:
+        break;
+    }
+
+    this.contextMenuContext = null;
   }
 
   public getMarginLeft(level: number) {

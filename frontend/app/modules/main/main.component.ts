@@ -1,10 +1,9 @@
-import { Component, ComponentFactoryResolver, ElementRef, HostListener, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FileIOService } from '~shared/services/file-io.service';
 import { HelpTextRoot, MainHelpSection, HelpTextSection, parseHelpTextRoot, parseMainHelpSection, HelpTextRootKey, HelpContentType, HelpTextStep } from '~/app/models/help-text-structure.model';
 import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from '../../models/qtf-file.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { TranslateService } from '@ngx-translate/core';
-import { ContextMenuComponent } from '~/app/components/context-menu/app-context-menu.component';
 import { ImagePickerDialogComponent, ImagePickerDialogData } from '~/app/dialogs/image-picker-dialog/image-picker-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogService } from '~/app/dialogs/confirmation-dialog/confirmation-dialog.service';
@@ -24,9 +23,6 @@ export class MainComponent implements OnInit {
 
   public showOverlayFileOpen = false;
   public showOverlayAddContent = false;
-  contextmenu = false;
-  contextmenuX = 0;
-  contextmenuY = 0;
 
   languages = ['GERMAN', 'ENGLISH', 'FRENCH', 'CHINESE', 'RUSSIAN',  'SPANISH', 'ITALIAN', "JAPANESE", "KOREAN"];
   selectedLanguage = 'GERMAN';
@@ -40,9 +36,6 @@ export class MainComponent implements OnInit {
   selectedTextContent = '';
 
   isDirty: boolean = false;
-
-  componentRef: any;
-  @ViewChild('context', { read: ViewContainerRef, static: true }) entry: ViewContainerRef;
 
   // HTML-Preview des aktuell gewählten Top-Level-Teils
   previewHtml = '';
@@ -82,8 +75,7 @@ export class MainComponent implements OnInit {
   ];
 
   constructor(private fileService: FileIOService, private translateService: TranslateService,
-    public appComponentRef: ElementRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog,
-    private confirmDialogService: ConfirmDialogService, private http: HttpClient) { }
+    private dialog: MatDialog, private confirmDialogService: ConfirmDialogService, private http: HttpClient) { }
 
   ngOnInit(): void {
   }
@@ -258,18 +250,6 @@ export class MainComponent implements OnInit {
     } else {
       console.error("Could not find ", contentId, " in ", this.currentMainHelpSection);
     }
-  }
-
-  onOpenBrowserContext(event) {
-    event.preventDefault();
-    this.entry.clear();
-    const factory = this.resolver.resolveComponentFactory(ContextMenuComponent);
-    this.componentRef = this.entry.createComponent(factory);
-  }
-
-  //disables the menu
-  disableContextMenu() {
-    this.contextmenu = false;
   }
 
   onLanguageChange(event) {

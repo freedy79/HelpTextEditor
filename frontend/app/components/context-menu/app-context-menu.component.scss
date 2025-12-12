@@ -21,4 +21,10 @@
     li:hover {
         background-color: #f0f0f0;
     }
+
+    li.disabled {
+        color: #999;
+        cursor: not-allowed;
+        background-color: transparent;
+    }
 }
