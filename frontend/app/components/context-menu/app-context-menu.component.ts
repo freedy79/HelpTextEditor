@@ -1,4 +1,10 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
+
+export interface ContextMenuItem {
+  label: string;
+  action: string;
+  disabled?: boolean;
+}
 
 @Component({
   selector: 'app-contextmenu',
@@ -10,6 +16,12 @@ export class ContextMenuComponent implements OnInit, OnDestroy {
   private _isOpen: boolean = false;
   private _positionX: number;
   private _positionY: number;
+
+  @Input()
+  public items: ContextMenuItem[] = [];
+
+  @Output()
+  public menuSelect = new EventEmitter<string>();
 
   @Input()
   public set target(a_oTarget: ElementRef) {
@@ -35,18 +47,15 @@ export class ContextMenuComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    (this._target.nativeElement as HTMLElement).removeEventListener('contextmenu', this.onContextMenu);
+    if (this._target) {
+      (this._target.nativeElement as HTMLElement).removeEventListener('contextmenu', this.onContextMenu);
+    }
   }
 
-  private onContextMenu = ($event: MouseEvent): void => {
-
-    console.log('contextmenu clicked!');
-
-    $event.preventDefault();
-
-    this._positionX = $event.clientX;
-    this._positionY = $event.clientY;
-
+  public openContextMenu(positionX: number, positionY: number, items: ContextMenuItem[]): void {
+    this._positionX = positionX;
+    this._positionY = positionY;
+    this.items = items;
     this._isOpen = true;
   }
 
@@ -62,8 +71,14 @@ export class ContextMenuComponent implements OnInit, OnDestroy {
    * Führt eine Aktion aus, wenn eine Option ausgewählt wird.
    * @param action Die gewählte Option.
    */
-  menuAction(action: string): void {
-    console.log(`Ausgewählte Aktion: ${action}`);
+  menuAction(action: string, disabled?: boolean): void {
+    if (disabled) { return; }
+    this.menuSelect.emit(action);
+    this.closeContextMenu();
+  }
+
+  @HostListener('document:click')
+  onDocumentClick(): void {
     this.closeContextMenu();
   }
 }

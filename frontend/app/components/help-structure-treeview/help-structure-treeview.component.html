@@ -28,23 +28,10 @@
             <span (click)="onSelectTreeItem(section.value)" (dblclick)="onOpenCloseSection(section.value)"
                 class="tree_item"
                 [ngClass]="{'hasChildren': hasChildren(section), 'tree_item-open': hasChildren(section) && getItemExpanded(section), 'selected': isSelectedSection(section)}"
-                (contextmenu)="onOpenBrowserContext($event)">
+                (contextmenu)="openContextMenu($event, section, parent, container, index)">
                 <div *ngIf="section.value">{{ section.value }}</div>
                 <div *ngIf="!section.value">{{ section.type }}</div>
             </span>
-            <div class="tree-actions">
-                <button title="Move up" (click)="onMove(parent, container, index, 'up')" [disabled]="index === 0 || !container">
-                    ↑
-                </button>
-                <button title="Move down" (click)="onMove(parent, container, index, 'down')"
-                    [disabled]="!container || !parent || !parent[container] || (parent[container].length - 1) === index">
-                    ↓
-                </button>
-                <button *ngIf="isHelpTextSection(section)" title="Add subsection" (click)="onAddSubsection(section)">+Sub</button>
-                <button *ngIf="isHelpTextSection(section)" title="Add content" (click)="onAddContent(section)">+Content</button>
-                <button *ngIf="isHelpTextSection(section) && showStepControls(section)" title="Add step" (click)="onAddStep(section)">+Step</button>
-                <button title="Delete" (click)="onDeleteSection(section)">✕</button>
-            </div>
         </div>
 
         <div *ngIf="getItemExpanded(section)">
@@ -77,5 +64,7 @@
             </div>
         </div>
     </ng-template>
+
+    <app-contextmenu #contextMenu [items]="contextMenuItems" (menuSelect)="onContextMenuAction($event)"></app-contextmenu>
 
 </div>
