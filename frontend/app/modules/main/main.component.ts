@@ -213,17 +213,27 @@ export class MainComponent implements OnInit {
   }
 
   onMoveSection(event: { parent: HelpTextSection | MainHelpSection | HelpTextStep; container: string; index: number; direction: 'up' | 'down' }) {
-    if (!event || !event.parent || !event.container) { return; }
+    if (!event || !event.parent || !event.container) {
+      console.log('Move section aborted: missing event data', event);
+      return;
+    }
 
     const collection = (event.parent as any)[event.container] as any[];
-    if (!collection || event.index < 0 || event.index >= collection.length) { return; }
+    if (!collection || event.index < 0 || event.index >= collection.length) {
+      console.log('Move section aborted: invalid collection or index', event);
+      return;
+    }
 
     const targetIndex = event.direction === 'up' ? event.index - 1 : event.index + 1;
-    if (targetIndex < 0 || targetIndex >= collection.length) { return; }
+    if (targetIndex < 0 || targetIndex >= collection.length) {
+      console.log('Move section aborted: target index out of range', { targetIndex, event });
+      return;
+    }
 
     const [item] = collection.splice(event.index, 1);
     collection.splice(targetIndex, 0, item);
 
+    this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.isDirty = true;
     this.saveCurrentSectionText();
     this.onTopLevelChange(this.selectedTopLevelKey);
