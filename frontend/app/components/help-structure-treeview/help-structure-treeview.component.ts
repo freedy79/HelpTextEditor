@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MainHelpSection, HelpTextSection } from '~models/help-text-structure.model';
+import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep } from '~models/help-text-structure.model';
 
 @Component({
   selector: 'app-help-structure-treeview',
@@ -10,6 +10,12 @@ export class HelpStructureTreeviewComponent {
   @Input() helpItem: MainHelpSection;
   @Input() selectedHelpSection: HelpTextSection;
   @Output() onItemClicked: EventEmitter<any> = new EventEmitter();
+  @Output() addSubsection: EventEmitter<HelpTextSection> = new EventEmitter();
+  @Output() addContent: EventEmitter<HelpTextSection | MainHelpSection> = new EventEmitter();
+  @Output() addStep: EventEmitter<HelpTextSection> = new EventEmitter();
+  @Output() deleteSection: EventEmitter<HelpTextSection | HelpTextStep> = new EventEmitter();
+  @Output() moveSection: EventEmitter<{ parent: HelpTextSection | MainHelpSection; container: string; index: number; direction: 'up' | 'down' }>
+    = new EventEmitter();
 
   private expandedSections: string[];
 
@@ -26,6 +32,26 @@ export class HelpStructureTreeviewComponent {
       //console.log("click ", event);
       this.onItemClicked.emit(event);
     }
+  }
+
+  public onAddSubsection(section: HelpTextSection) {
+    this.addSubsection.emit(section);
+  }
+
+  public onAddContent(section: HelpTextSection | MainHelpSection) {
+    this.addContent.emit(section);
+  }
+
+  public onAddStep(section: HelpTextSection) {
+    this.addStep.emit(section);
+  }
+
+  public onDeleteSection(section: HelpTextSection | HelpTextStep) {
+    this.deleteSection.emit(section);
+  }
+
+  public onMove(parent: HelpTextSection | MainHelpSection, container: string, index: number, direction: 'up' | 'down') {
+    this.moveSection.emit({ parent, container, index, direction });
   }
 
   public getMarginLeft(level: number) {
@@ -75,5 +101,13 @@ export class HelpStructureTreeviewComponent {
       //console.log("isSelected", this.selectedHelpSection.value);
       return (this.selectedHelpSection.value == section.value);
     } else return false;
+  }
+
+  showStepControls(section: HelpTextSection): boolean {
+    return section && (section.type === HelpContentType.ENUMERATION || section.type === HelpContentType.BULLET_ENUMERATION);
+  }
+
+  isHelpTextSection(item: HelpTextSection | HelpTextStep): item is HelpTextSection {
+    return item instanceof HelpTextSection;
   }
 }

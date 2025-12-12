@@ -27,7 +27,13 @@
       </div>
 
       <app-help-structure-treeview [helpItem]="getSelectedItem()" [selectedHelpSection]="selectedSection"
-        (onItemClicked)="onSelectTreeViewItem($event)" class="structure-treeview"></app-help-structure-treeview>
+        (onItemClicked)="onSelectTreeViewItem($event)"
+        (addSubsection)="onAddSubsection($event)"
+        (addContent)="onAddContent($event)"
+        (addStep)="onAddStep($event)"
+        (deleteSection)="onDeleteTreeSection($event)"
+        (moveSection)="onMoveSection($event)"
+        class="structure-treeview"></app-help-structure-treeview>
     </div>
 
     <!-- Second column (auto) Preview -->
