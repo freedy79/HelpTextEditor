@@ -11,6 +11,7 @@ export enum HelpContentType {
 
 export class HelpTextRoot {
   HELP_TEXT_DEVICE_CONCEPT?: MainHelpSection;
+  HELP_TEXT_TASKS_CONCEPT?: MainHelpSection;
   HELP_TEXT_PRINT_CONCEPT?: MainHelpSection;
   HELP_TEXT_USER_MANAGEMENT?: MainHelpSection;
   HELP_TEXT_NETWORK_CONNECTION?: MainHelpSection;
@@ -23,6 +24,9 @@ export class HelpTextRoot {
 
   public idExists(key: string): boolean {
     if (this.idExistsInMainHelpSection(this.HELP_TEXT_DEVICE_CONCEPT, key)) {
+      return true;
+    }
+    if (this.idExistsInMainHelpSection(this.HELP_TEXT_TASKS_CONCEPT, key)) {
       return true;
     }
     if (this.idExistsInMainHelpSection(this.HELP_TEXT_PRINT_CONCEPT, key)) {
@@ -645,6 +649,9 @@ export function parseHelpTextRoot(json: any): HelpTextRoot {
 
   if (json.HELP_TEXT_DEVICE_CONCEPT) {
     root.HELP_TEXT_DEVICE_CONCEPT = parseMainHelpSection(json.HELP_TEXT_DEVICE_CONCEPT);
+  }
+  if (json.HELP_TEXT_TASKS_CONCEPT) {
+    root.HELP_TEXT_TASKS_CONCEPT = parseMainHelpSection(json.HELP_TEXT_TASKS_CONCEPT);
   }
   if (json.HELP_TEXT_PRINT_CONCEPT) {
     root.HELP_TEXT_PRINT_CONCEPT = parseMainHelpSection(json.HELP_TEXT_PRINT_CONCEPT);
