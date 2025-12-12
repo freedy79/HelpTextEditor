@@ -10,6 +10,11 @@
     font-family: Roboto,"Helvetica Neue";
 }
 
+.tree-row {
+    display: flex;
+    align-items: center;
+}
+
 .tree_item {
     font-size: 0.8em;
     cursor: pointer;
@@ -22,6 +27,19 @@
 
     &:active {
         background-color: #FADD37;
+    }
+}
+
+.tree-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: 8px;
+
+    button {
+        font-size: 0.7rem;
+        padding: 2px 4px;
+        line-height: 1.2;
+        cursor: pointer;
     }
 }
 

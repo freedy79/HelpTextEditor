@@ -2,14 +2,14 @@
     <ng-container *ngIf="getSelectedItem() as item">
         <div *ngIf="item.coversheet?.length">
             <p class="section_header">Cover</p>
-            <ng-container *ngFor="let sec of item.coversheet">
-                <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: sec, level: 1 }"></ng-container>
+            <ng-container *ngFor="let sec of item.coversheet; let i = index">
+                <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: sec, level: 1, parent: item, container: 'coversheet', index: i }"></ng-container>
             </ng-container>
         </div>
         <div *ngIf="item.content?.length">
             <p class="section_header">Content</p>
-            <ng-container *ngFor="let sec of item.content">
-                <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: sec, level: 1 }"></ng-container>
+            <ng-container *ngFor="let sec of item.content; let i = index">
+                <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: sec, level: 1, parent: item, container: 'content', index: i }"></ng-container>
             </ng-container>
         </div>
         <ng-container *ngIf="item.abbreviations?.length">
@@ -23,8 +23,8 @@
     </ng-container>
 
     <!-- Rekursives Template für die Baumansicht -->
-    <ng-template #recursiveTree let-parent let-section let-level="level">
-        <div [ngStyle]="getMarginLeft(level)">
+    <ng-template #recursiveTree let-parent let-section let-level="level" let-container="container" let-index="index">
+        <div class="tree-row" [ngStyle]="getMarginLeft(level)">
             <span (click)="onSelectTreeItem(section.value)" (dblclick)="onOpenCloseSection(section.value)"
                 class="tree_item"
                 [ngClass]="{'hasChildren': hasChildren(section), 'tree_item-open': hasChildren(section) && getItemExpanded(section), 'selected': isSelectedSection(section)}"
@@ -32,43 +32,47 @@
                 <div *ngIf="section.value">{{ section.value }}</div>
                 <div *ngIf="!section.value">{{ section.type }}</div>
             </span>
-            <!-- <div *ngIf="(section.type && section.type == 'ENUMERATION')">
-          <button (click)="createNewItem(parent, i, 'step')" style="margin-left: 4px;">+Step</button>
-          <button (click)="deleteItem(parent)" style="margin-left: 4px;">delete</button>
-       </div>
-       <div *ngIf="(section.type && section.type != 'ENUMERATION')">
-          <button (click)="createNewItem(parent, i, 'subsection')" style="margin-left: 4px;">+Subsection</button>
-          <button (click)="createNewItem(parent, i, 'content')" style="margin-left: 4px;">+Content</button>
-          <button (click)="deleteItem(parent)" style="margin-left: 4px;">delete</button>
-       </div>-->
+            <div class="tree-actions">
+                <button title="Move up" (click)="onMove(parent, container, index, 'up')" [disabled]="index === 0 || !container">
+                    ↑
+                </button>
+                <button title="Move down" (click)="onMove(parent, container, index, 'down')"
+                    [disabled]="!container || !parent || !parent[container] || (parent[container].length - 1) === index">
+                    ↓
+                </button>
+                <button *ngIf="isHelpTextSection(section)" title="Add subsection" (click)="onAddSubsection(section)">+Sub</button>
+                <button *ngIf="isHelpTextSection(section)" title="Add content" (click)="onAddContent(section)">+Content</button>
+                <button *ngIf="isHelpTextSection(section) && showStepControls(section)" title="Add step" (click)="onAddStep(section)">+Step</button>
+                <button title="Delete" (click)="onDeleteSection(section)">✕</button>
+            </div>
         </div>
 
         <div *ngIf="getItemExpanded(section)">
             <div *ngIf="section.coversheet?.length">
                 <ng-container *ngFor="let sub of section.coversheet; let j = index">
                     <ng-container
-                        *ngTemplateOutlet="recursiveTree; context:{ $implicit: sub, level: level + 1, parent: section, index: j }"></ng-container>
+                        *ngTemplateOutlet="recursiveTree; context:{ $implicit: sub, level: level + 1, parent: section, index: j, container: 'coversheet'}"></ng-container>
                 </ng-container>
             </div>
 
             <div *ngIf="section.content?.length">
                 <ng-container *ngFor="let sub of section.content; let j = index">
                     <ng-container
-                        *ngTemplateOutlet="recursiveTree; context:{ $implicit: sub, level: level + 1, parent: section, index: j }"></ng-container>
+                        *ngTemplateOutlet="recursiveTree; context:{ $implicit: sub, level: level + 1, parent: section, index: j, container: 'content'}"></ng-container>
                 </ng-container>
             </div>
 
             <div *ngIf="section.subsections?.length">
                 <ng-container *ngFor="let sub of section.subsections; let j = index">
                     <ng-container
-                        *ngTemplateOutlet="recursiveTree; context:{ $implicit: sub, level: level + 1, parent: section, index: j }"></ng-container>
+                        *ngTemplateOutlet="recursiveTree; context:{ $implicit: sub, level: level + 1, parent: section, index: j, container: 'subsections'}"></ng-container>
                 </ng-container>
             </div>
 
             <div *ngIf="section.steps?.length">
-                <ng-container *ngFor="let step of section.steps">
+                <ng-container *ngFor="let step of section.steps; let j = index">
                     <ng-container
-                        *ngTemplateOutlet="recursiveTree; context:{ $implicit: step, level: level + 1, parent: section }"></ng-container>
+                        *ngTemplateOutlet="recursiveTree; context:{ $implicit: step, level: level + 1, parent: section, index: j, container: 'steps'}"></ng-container>
                 </ng-container>
             </div>
         </div>

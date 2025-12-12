@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, ElementRef, HostListener, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FileIOService } from '~shared/services/file-io.service';
-import { HelpTextRoot, MainHelpSection, HelpTextSection, parseHelpTextRoot, parseMainHelpSection, HelpTextRootKey, HelpContentType } from '~/app/models/help-text-structure.model';
+import { HelpTextRoot, MainHelpSection, HelpTextSection, parseHelpTextRoot, parseMainHelpSection, HelpTextRootKey, HelpContentType, HelpTextStep } from '~/app/models/help-text-structure.model';
 import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from '../../models/qtf-file.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { TranslateService } from '@ngx-translate/core';
@@ -196,6 +196,49 @@ export class MainComponent implements OnInit {
     }
   }
 
+  onAddSubsection(section: HelpTextSection) {
+    this.selectedSection = section;
+    this.createNewSubsection();
+  }
+
+  onAddContent(section: HelpTextSection | MainHelpSection) {
+    if (!section) { return; }
+    if (section instanceof HelpTextSection) {
+      this.selectedSection = section;
+      this.openOverlayAddContent();
+    }
+  }
+
+  onAddStep(section: HelpTextSection) {
+    this.selectedSection = section;
+    this.createNewStep();
+  }
+
+  onDeleteTreeSection(section: HelpTextSection | HelpTextStep) {
+    this.deleteItem(section);
+  }
+
+  onMoveSection(event: { parent: HelpTextSection | MainHelpSection; container: string; index: number; direction: 'up' | 'down' }) {
+    if (!event || !event.parent || !event.container) { return; }
+
+    const collection = (event.parent as any)[event.container] as any[];
+    if (!collection || event.index < 0 || event.index >= collection.length) { return; }
+
+    const targetIndex = event.direction === 'up' ? event.index - 1 : event.index + 1;
+    if (targetIndex < 0 || targetIndex >= collection.length) { return; }
+
+    const [item] = collection.splice(event.index, 1);
+    collection.splice(targetIndex, 0, item);
+
+    this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+    this.saveCurrentSectionText();
+    this.onTopLevelChange(this.selectedTopLevelKey);
+
+    if (item && (item as HelpTextSection).value) {
+      this.onSelectSection((item as HelpTextSection).value);
+    }
+  }
+
   onSelectSection(contentId: string) {
     if (!this.currentMainHelpSection || contentId == "") {
       console.log("currenthelp text item is undefined.");
@@ -379,7 +422,7 @@ export class MainComponent implements OnInit {
     }
   }
 
-  deleteItem(sectionToDelete: HelpTextSection) {
+  deleteItem(sectionToDelete: HelpTextSection | HelpTextStep) {
     let parentSection: HelpTextSection = null;
     if (this.currentMainHelpSection && this.currentMainHelpSection != null) {
       parentSection = this.currentMainHelpSection.findParentOfSectionById(sectionToDelete.value);
