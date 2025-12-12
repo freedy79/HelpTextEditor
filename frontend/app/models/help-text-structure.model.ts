@@ -321,13 +321,9 @@ export class HelpTextSection {
           return item as HelpTextSection;
         }
 
-        if (item.substeps) {
-          for (const substep of item.substeps) {
-            if (substep.value === contentId) {
-              console.log("contentId is substep");
-              return substep as HelpTextSection;
-            }
-          }
+        const foundStep = this.findStepById(item.substeps, contentId);
+        if (foundStep) {
+          return foundStep as HelpTextSection;
         }
       }
     }
@@ -385,10 +381,18 @@ export class HelpTextSection {
         if (section.steps) {
           //console.log("Check steps of ", section.value);
           for (const step of section.steps) {
-            if (step.value === contentId) {
+            if (this.stepIdExists(step, contentId)) {
               return section;
             }
           }
+        }
+      }
+    }
+
+    if (this.steps) {
+      for (const step of this.steps) {
+        if (this.stepIdExists(step, contentId)) {
+          return this;
         }
       }
     }
@@ -426,11 +430,8 @@ export class HelpTextSection {
 
     if (this.steps) {
       console.log("checking in steps");
-      for (const step of this.steps) {
-        if (step.value === contentId) {
-          this.steps = this.steps.filter(item => item.value != contentId);
-          return true;
-        }
+      if (this.removeStepById(this.steps, contentId)) {
+        return true;
       }
     }
 
@@ -444,6 +445,22 @@ export class HelpTextSection {
       }
     }
     console.error("Could not remove. Wrong parent? ", JSON.stringify(this));
+    return false;
+  }
+
+  private removeStepById(steps: HelpTextStep[], contentId: string): boolean {
+    const index = steps.findIndex(step => step.value === contentId);
+    if (index !== -1) {
+      steps.splice(index, 1);
+      return true;
+    }
+
+    for (const step of steps) {
+      if (step.substeps && this.removeStepById(step.substeps, contentId)) {
+        return true;
+      }
+    }
+
     return false;
   }
 
@@ -486,18 +503,8 @@ export class HelpTextSection {
     }
     if (this.steps) {
       for (var step of this.steps) {
-        if (step.value === oldId) {
-          step.value = newId;
+        if (this.changeStepValueId(step, oldId, newId)) {
           return true;
-        }
-
-        if (step.substeps) {
-          for (var substep of step.substeps) {
-            if (substep.value === oldId) {
-              substep.value = newId;
-              return true;
-            }
-          }
         }
       }
     }
@@ -548,16 +555,8 @@ export class HelpTextSection {
     }
     if (this.steps) {
       for (var step of this.steps) {
-        if (step.value === key) {
+        if (this.stepIdExists(step, key)) {
           return true;
-        }
-
-        if (step.substeps) {
-          for (var substep of step.substeps) {
-            if (substep.value === key) {
-              return true;
-            }
-          }
         }
       }
     }
@@ -596,6 +595,58 @@ export class HelpTextSection {
         return true;
       }
     }
+  }
+
+  private findStepById(steps: HelpTextStep[] | undefined, contentId: string): HelpTextStep | null {
+    if (!steps) {
+      return null;
+    }
+
+    for (const step of steps) {
+      if (step.value === contentId) {
+        return step;
+      }
+
+      const found = this.findStepById(step.substeps, contentId);
+      if (found) {
+        return found;
+      }
+    }
+
+    return null;
+  }
+
+  private changeStepValueId(step: HelpTextStep, oldId: string, newId: string): boolean {
+    if (step.value === oldId) {
+      step.value = newId;
+      return true;
+    }
+
+    if (step.substeps) {
+      for (const substep of step.substeps) {
+        if (this.changeStepValueId(substep, oldId, newId)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private stepIdExists(step: HelpTextStep, key: string): boolean {
+    if (step.value === key) {
+      return true;
+    }
+
+    if (step.substeps) {
+      for (const substep of step.substeps) {
+        if (this.stepIdExists(substep, key)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 }
 
