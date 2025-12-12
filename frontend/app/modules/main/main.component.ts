@@ -332,7 +332,8 @@ export class MainComponent implements OnInit {
     }
     this.saveCurrentSectionText();
 
-    const newKey = "NEW_SECTION_" + Math.random().toString(20).substring(2, 4);
+    const previousKey = this.getLastSiblingKey(this.currentMainHelpSection.content);
+    const newKey = this.generateIdFromPrevious(previousKey) || ("NEW_SECTION_" + Math.random().toString(20).substring(2, 4));
     var newItem: HelpTextSection = this.currentMainHelpSection.addSection(newKey);
     console.log("created: ", newItem);
 
@@ -350,7 +351,6 @@ export class MainComponent implements OnInit {
     }
     this.saveCurrentSectionText();
 
-    const newKey = "NEW_SECTION_" + Math.random().toString(20).substring(2, 4);
     const createAsSibling = this.selectedSection.type === HelpContentType.INSTRUCTION
       || this.selectedSection.type === HelpContentType.INSTRUCTION_BOLD
       || this.selectedSection.type === HelpContentType.ENUMERATION
@@ -364,6 +364,12 @@ export class MainComponent implements OnInit {
         return;
       }
     }
+
+    const siblings = targetParent.subsections;
+    const siblingIndex = siblings ? siblings.findIndex(section => section === this.selectedSection) : -1;
+    const insertIndex = createAsSibling && siblingIndex >= 0 ? siblingIndex + 1 : (siblings?.length || 0);
+    const previousKey = this.getPreviousSiblingKey(siblings, insertIndex);
+    const newKey = this.generateIdFromPrevious(previousKey) || ("NEW_SECTION_" + Math.random().toString(20).substring(2, 4));
 
     const newItem: HelpTextSection = createAsSibling
       ? targetParent.addSubsectionAfter(newKey, this.selectedSection.value)
@@ -401,7 +407,9 @@ export class MainComponent implements OnInit {
       }
 
       if (parentSection.type == HelpContentType.ENUMERATION || parentSection.type == HelpContentType.BULLET_ENUMERATION) {
-        let newStepId = parentSection.value + "_ENUM_123";
+        const insertIndex = parentSection.steps ? parentSection.steps.length : 0;
+        const previousKey = this.getPreviousSiblingKey(parentSection.steps, insertIndex);
+        const newStepId = this.generateIdFromPrevious(previousKey) || parentSection.value + "_ENUM_123";
         parentSection.addStep(newStepId);
         console.log("Step created ");
         this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
@@ -585,7 +593,9 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    const newKey = parentSection.value + '_' + data.type + "_" + Math.random().toString(36).substring(2);
+    const insertIndex = this.getInsertIndex(parentSection, data.insertPosition);
+    const previousKey = this.getPreviousSiblingKey(parentSection.content, insertIndex);
+    const newKey = this.generateIdFromPrevious(previousKey) || parentSection.value + '_' + data.type + "_" + Math.random().toString(36).substring(2);
     const newLinkId = 'LINK_' + Math.random().toString(36).substring(2);
     const newItem: HelpTextSection = new HelpTextSection;
     newItem.linkId = newLinkId;
@@ -603,15 +613,8 @@ export class MainComponent implements OnInit {
     if (!parentSection.content) {
       parentSection.content = [];
     }
-    console.log(parentSection.content);
 
-    if (this.selectedSection.type && data.insertPosition == "after" && parentSection.content.length > 1) {
-      let selectedIndex = parentSection.getIndexOfId(this.selectedSection.value);
-      parentSection.content.splice(selectedIndex, 0, newItem);
-    } else {
-      parentSection.content.push(newItem);
-      console.log(parentSection.content);
-    }
+    parentSection.content.splice(insertIndex, 0, newItem);
 
     // Neuen Eintrag in der QTF-Struktur anlegen
     if (this.qtfFile) {
@@ -686,6 +689,72 @@ export class MainComponent implements OnInit {
     if (deletedItems > 0) {
       this.isDirty = true;
     }
+  }
+
+  private getInsertIndex(parentSection: HelpTextSection, insertPosition: string): number {
+    if (!parentSection || !parentSection.content || parentSection.content.length === 0) {
+      return 0;
+    }
+
+    const selectedIndex = parentSection.content.findIndex(item => item === this.selectedSection);
+    if (insertPosition === 'after' && selectedIndex >= 0) {
+      return Math.min(selectedIndex + 1, parentSection.content.length);
+    }
+
+    return parentSection.content.length;
+  }
+
+  private getPreviousSiblingKey(collection: Array<HelpTextSection | HelpTextStep> | undefined, insertIndex: number): string | null {
+    if (!collection || collection.length === 0 || insertIndex <= 0) {
+      return null;
+    }
+
+    const safeIndex = Math.min(insertIndex, collection.length) - 1;
+    return this.getItemTranslationKey(collection[safeIndex]);
+  }
+
+  private getLastSiblingKey(collection: Array<HelpTextSection | HelpTextStep> | undefined): string | null {
+    if (!collection || collection.length === 0) {
+      return null;
+    }
+
+    return this.getItemTranslationKey(collection[collection.length - 1]);
+  }
+
+  private getItemTranslationKey(item: HelpTextSection | HelpTextStep | undefined): string | null {
+    if (!item) { return null; }
+
+    const getter = (item as any).getTranslationKey;
+    if (typeof getter === 'function') {
+      return getter.call(item);
+    }
+
+    return (item as any).value || null;
+  }
+
+  private generateIdFromPrevious(previousKey: string | null): string | null {
+    if (!previousKey) {
+      return null;
+    }
+
+    const match = previousKey.match(/^(.*?)(\d+)$/);
+    if (!match) {
+      return null;
+    }
+
+    const prefix = match[1];
+    let counter = parseInt(match[2], 10);
+    if (isNaN(counter)) {
+      return null;
+    }
+
+    let candidate: string;
+    do {
+      counter += 1;
+      candidate = `${prefix}${counter}`;
+    } while (this.helpTextRootIdExists(candidate));
+
+    return candidate;
   }
 
   private helpTextRootIdExists(key: string): boolean {
