@@ -210,7 +210,7 @@ export class MainComponent implements OnInit {
     this.deleteItem(section);
   }
 
-  onMoveSection(event: { parent: HelpTextSection | MainHelpSection; container: string; index: number; direction: 'up' | 'down' }) {
+  onMoveSection(event: { parent: HelpTextSection | MainHelpSection | HelpTextStep; container: string; index: number; direction: 'up' | 'down' }) {
     if (!event || !event.parent || !event.container) { return; }
 
     const collection = (event.parent as any)[event.container] as any[];

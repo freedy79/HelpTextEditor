@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep } from '~models/help-text-structure.model';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
 
+type ParentType = HelpTextSection | MainHelpSection | HelpTextStep;
+
 @Component({
   selector: 'app-help-structure-treeview',
   templateUrl: './help-structure-treeview.component.html',
@@ -15,13 +17,13 @@ export class HelpStructureTreeviewComponent {
   @Output() addContent: EventEmitter<HelpTextSection | MainHelpSection> = new EventEmitter();
   @Output() addStep: EventEmitter<HelpTextSection> = new EventEmitter();
   @Output() deleteSection: EventEmitter<HelpTextSection | HelpTextStep> = new EventEmitter();
-  @Output() moveSection: EventEmitter<{ parent: HelpTextSection | MainHelpSection; container: string; index: number; direction: 'up' | 'down' }>
+  @Output() moveSection: EventEmitter<{ parent: ParentType; container: string; index: number; direction: 'up' | 'down' }>
     = new EventEmitter();
 
   @ViewChild('contextMenu') contextMenu: ContextMenuComponent;
 
   contextMenuItems: ContextMenuItem[] = [];
-  private contextMenuContext: { section: HelpTextSection | HelpTextStep; parent: HelpTextSection | MainHelpSection; container: string; index: number; } | null = null;
+  private contextMenuContext: { section: HelpTextSection | HelpTextStep; parent: ParentType; container: string; index: number; } | null = null;
 
   private expandedSections: string[];
 
@@ -56,11 +58,11 @@ export class HelpStructureTreeviewComponent {
     this.deleteSection.emit(section);
   }
 
-  public onMove(parent: HelpTextSection | MainHelpSection, container: string, index: number, direction: 'up' | 'down') {
+  public onMove(parent: ParentType, container: string, index: number, direction: 'up' | 'down') {
     this.moveSection.emit({ parent, container, index, direction });
   }
 
-  openContextMenu(event: MouseEvent, section: HelpTextSection | HelpTextStep, parent: HelpTextSection | MainHelpSection, container: string, index: number) {
+  openContextMenu(event: MouseEvent, section: HelpTextSection | HelpTextStep, parent: ParentType, container: string, index: number) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -72,7 +74,7 @@ export class HelpStructureTreeviewComponent {
     }
   }
 
-  private buildContextMenuItems(section: HelpTextSection | HelpTextStep, parent: HelpTextSection | MainHelpSection, container: string, index: number): ContextMenuItem[] {
+  private buildContextMenuItems(section: HelpTextSection | HelpTextStep, parent: ParentType, container: string, index: number): ContextMenuItem[] {
     const items: ContextMenuItem[] = [];
     const hasContainer = !!container && !!parent && !!(parent as any)[container];
     const collection = hasContainer ? (parent as any)[container] as any[] : [];
