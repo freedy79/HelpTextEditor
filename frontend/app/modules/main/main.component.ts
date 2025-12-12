@@ -171,7 +171,11 @@ export class MainComponent implements OnInit {
   }
 
   getSelectedItem(): MainHelpSection | null {
-    if (!this.helpTextRoot || !this.selectedTopLevelKey) return null;
+    if (this.currentMainHelpSection) {
+      return this.currentMainHelpSection;
+    }
+
+    if (!this.helpTextRoot || !this.selectedTopLevelKey) { return null; }
     return (this.helpTextRoot as any)[this.selectedTopLevelKey] as MainHelpSection;
   }
 
@@ -225,6 +229,7 @@ export class MainComponent implements OnInit {
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.saveCurrentSectionText();
     this.onTopLevelChange(this.selectedTopLevelKey);
+    this.isDirty = true;
 
     if (item && (item as HelpTextSection).value) {
       this.onSelectSection((item as HelpTextSection).value);
