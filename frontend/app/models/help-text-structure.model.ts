@@ -464,16 +464,31 @@ export class HelpTextSection {
     return false;
   }
 
-  public addSubsection(contentId: string): HelpTextSection {
+  public addSubsection(contentId: string, index: number = -1): HelpTextSection {
     if (!this.subsections) {
       this.subsections = [];
     }
 
     var newItem = new HelpTextSection;
     newItem.value = contentId;
-    this.subsections.push(newItem);
+
+    if (index === -1 || index > this.subsections.length) {
+      this.subsections.push(newItem);
+    } else {
+      this.subsections.splice(index, 0, newItem);
+    }
 
     return newItem;
+  }
+
+  public addSubsectionAfter(contentId: string, afterSectionId: string): HelpTextSection {
+    if (!this.subsections || this.subsections.length === 0) {
+      return this.addSubsection(contentId);
+    }
+
+    const currentIndex = this.subsections.findIndex(section => section.value === afterSectionId);
+    const insertIndex = currentIndex === -1 ? this.subsections.length : currentIndex + 1;
+    return this.addSubsection(contentId, insertIndex);
   }
 
   public addStep(contentId: string) {
