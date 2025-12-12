@@ -136,9 +136,13 @@ export class HelpStructureTreeviewComponent {
     return styles;
   }
 
-  hasChildren(section) {
+  hasChildren(section: HelpTextSection | HelpTextStep) {
     if (section instanceof HelpTextSection) {
       return (section as HelpTextSection).hasChildren();
+    }
+
+    if (section instanceof HelpTextStep) {
+      return !!section.substeps && section.substeps.length > 0;
     }
 
     return false;
