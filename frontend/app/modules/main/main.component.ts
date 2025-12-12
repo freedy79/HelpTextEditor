@@ -347,20 +347,32 @@ export class MainComponent implements OnInit {
     }
     this.saveCurrentSectionText();
 
-    if (this.selectedSection.type == "INSTRUCTION" || !this.selectedSection.type || this.selectedSection.type == "") {
-      const newKey = "NEW_SECTION_" + Math.random().toString(20).substring(2, 4);
-      var newItem: HelpTextSection = this.selectedSection.addSubsection(newKey);
-      console.log("created: ", newItem);
+    const newKey = "NEW_SECTION_" + Math.random().toString(20).substring(2, 4);
+    const createAsSibling = this.selectedSection.type === HelpContentType.INSTRUCTION
+      || this.selectedSection.type === HelpContentType.INSTRUCTION_BOLD
+      || this.selectedSection.type === HelpContentType.ENUMERATION
+      || this.selectedSection.type === HelpContentType.BULLET_ENUMERATION;
 
-      if (this.qtfFile) {
-        this.qtfFile.TEXTS[newKey] = createNewQtfItem(this.selectedLanguage, "new text");
+    let targetParent: HelpTextSection = this.selectedSection;
+    if (createAsSibling) {
+      targetParent = this.currentMainHelpSection.findParentOfSectionById(this.selectedSection.value);
+      if (!targetParent) {
+        console.error("Parent not found for ", this.selectedSection.value);
+        return;
       }
-      this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-      this.onTopLevelChange(this.selectedTopLevelKey);
-      this.onSelectSection(newItem.value);
-    } else {
-      console.log("selected type: ", this.selectedSection.type);
     }
+
+    const newItem: HelpTextSection = createAsSibling
+      ? targetParent.addSubsectionAfter(newKey, this.selectedSection.value)
+      : targetParent.addSubsection(newKey);
+    console.log("created: ", newItem);
+
+    if (this.qtfFile) {
+      this.qtfFile.TEXTS[newKey] = createNewQtfItem(this.selectedLanguage, "new text");
+    }
+    this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+    this.onTopLevelChange(this.selectedTopLevelKey);
+    this.onSelectSection(newItem.value);
   }
 
   createNewStep() {
