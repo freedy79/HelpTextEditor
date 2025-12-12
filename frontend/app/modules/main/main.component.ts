@@ -195,10 +195,8 @@ export class MainComponent implements OnInit {
 
   onAddContent(section: HelpTextSection | MainHelpSection) {
     if (!section) { return; }
-    if (section instanceof HelpTextSection) {
-      this.selectedSection = section;
-      this.openOverlayAddContent();
-    }
+    this.selectedSection = section as HelpTextSection;
+    this.openOverlayAddContent();
   }
 
   onAddStep(section: HelpTextSection) {

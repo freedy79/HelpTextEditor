@@ -184,6 +184,6 @@ export class HelpStructureTreeviewComponent {
   }
 
   isHelpTextSection(item: HelpTextSection | HelpTextStep): item is HelpTextSection {
-    return item instanceof HelpTextSection;
+    return !!item && (item instanceof HelpTextSection || item.type !== 'STEP');
   }
 }
