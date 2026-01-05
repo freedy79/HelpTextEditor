@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --source-map=false --prod --build-optimizer --output-hashing=all",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider ng build --source-map=false --prod --build-optimizer --output-hashing=all",
     "test": "NODE_OPTIONS=--openssl-legacy-provider ng test --watch=false --browsers=ChromeHeadlessNoSandbox",
     "lint": "ng lint",
     "e2e": "ng e2e"
