@@ -6,7 +6,15 @@ const router = express.Router();
 router.post('/translate/deepl', async (req: Request, res: Response): Promise<void> => {
   const { text, sourceLang, targetLang, authKey } = req.body || {};
 
+  console.log('[DeepL] Incoming request', {
+    hasText: !!text,
+    sourceLang,
+    targetLang,
+    authKeyPreview: authKey ? `${authKey.slice(0, 4)}...${authKey.slice(-3)}` : 'none'
+  });
+
   if (!text || !targetLang || !authKey) {
+    console.warn('[DeepL] Missing required fields', { hasText: !!text, targetLang, hasAuthKey: !!authKey });
     res.status(400).json({ message: 'Missing required fields for DeepL translation.' });
     return;
   }
@@ -23,7 +31,11 @@ router.post('/translate/deepl', async (req: Request, res: Response): Promise<voi
 
     const deeplResponse = await sendDeepLRequest(params.toString());
 
-    if (deeplResponse.status < 200 || deeplResponse.status >= 300) {
+    console.log('[DeepL] Response status', deeplResponse.status);
+
+    if (!deeplResponse.ok) {
+      const errorText = await deeplResponse.text();
+      console.error('[DeepL] Request failed', { status: deeplResponse.status, body: errorText });
       res.status(deeplResponse.status || 502).json({
         message: 'DeepL request failed.',
         details: deeplResponse.body
@@ -34,6 +46,8 @@ router.post('/translate/deepl', async (req: Request, res: Response): Promise<voi
     let data;
     try {
       data = JSON.parse(deeplResponse.body);
+      console.log('[DeepL] Request successful', {
+      translationCount: Array.isArray(data?.translations) ? data.translations.length : 0
     } catch (parseError) {
       console.error('DeepL response parse error', parseError);
       res.status(502).json({ message: 'Invalid response from DeepL.' });
