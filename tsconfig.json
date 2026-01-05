@@ -21,6 +21,7 @@
       "~shared/*": ["frontend/app/shared/*"],
       "~models/*": ["frontend/app/models/*"],
     },
+    "skipLibCheck": true,
     "lib": [
       "es2018",
       "dom"
