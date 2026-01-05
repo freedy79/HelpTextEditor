@@ -9,71 +9,99 @@ export enum HelpContentType {
   TABLE = 'TABLE',
 }
 
-export class HelpTextRoot {
-  HELP_TEXT_DEVICE_CONCEPT?: MainHelpSection;
-  HELP_TEXT_TASKS_CONCEPT?: MainHelpSection;
-  HELP_TEXT_PRINT_CONCEPT?: MainHelpSection;
-  HELP_TEXT_USER_MANAGEMENT?: MainHelpSection;
-  HELP_TEXT_NETWORK_CONNECTION?: MainHelpSection;
-  HELP_TEXT_WEIGHING_FUNCTION?: MainHelpSection;
-  HELP_TEXT_TIMER_CNTRL_ACTION?: MainHelpSection;
-  HELP_TEXT_DEVICE_CLEANING?: MainHelpSection;
-  HELP_TEXT_DEVICE_MAINTENANCE?: MainHelpSection;
-  HELP_TEXT_JOB_MANAGEMENT?: MainHelpSection;
-  // ... ggf. weitere 
+export const HELP_TEXT_ROOT_KEYS = [
+  'HELP_TEXT_DEVICE_CONCEPT',
+  'HELP_TEXT_TASKS_CONCEPT',
+  'HELP_TEXT_PRINT_CONCEPT',
+  'HELP_TEXT_USER_MANAGEMENT',
+  'HELP_TEXT_NETWORK_CONNECTION',
+  'HELP_TEXT_WEIGHING_FUNCTION',
+  'HELP_TEXT_TIMER_CNTRL_ACTION',
+  'HELP_TEXT_DEVICE_CLEANING',
+  'HELP_TEXT_DEVICE_MAINTENANCE',
+  'HELP_TEXT_JOB_MANAGEMENT'
+] as const;
 
-  public idExists(key: string): boolean {
-    if (this.idExistsInMainHelpSection(this.HELP_TEXT_DEVICE_CONCEPT, key)) {
-      return true;
-    }
-    if (this.idExistsInMainHelpSection(this.HELP_TEXT_TASKS_CONCEPT, key)) {
-      return true;
-    }
-    if (this.idExistsInMainHelpSection(this.HELP_TEXT_PRINT_CONCEPT, key)) {
-      return true;
-    }
-    if (this.idExistsInMainHelpSection(this.HELP_TEXT_USER_MANAGEMENT, key)) {
-      return true;
-    }
-    if (this.idExistsInMainHelpSection(this.HELP_TEXT_NETWORK_CONNECTION, key)) {
-      return true;
-    }
-    if (this.idExistsInMainHelpSection(this.HELP_TEXT_WEIGHING_FUNCTION, key)) {
-      return true;
-    }
-    if (this.idExistsInMainHelpSection(this.HELP_TEXT_TIMER_CNTRL_ACTION, key)) {
-      return true;
-    }
-    if (this.idExistsInMainHelpSection(this.HELP_TEXT_DEVICE_CLEANING, key)) {
-      return true;
-    }
-    if (this.idExistsInMainHelpSection(this.HELP_TEXT_DEVICE_MAINTENANCE, key)) {
-      return true;
-    }
-    if (this.idExistsInMainHelpSection(this.HELP_TEXT_JOB_MANAGEMENT, key)) {
-      return true;
-    }
+export type HelpTextRootKey = typeof HELP_TEXT_ROOT_KEYS[number];
 
-    return false;
+type SectionCollection = HelpTextSection[] | undefined;
+
+class SectionCollections {
+  constructor(private readonly collectionFactory: () => SectionCollection[]) {}
+
+  public findSectionById(contentId: string): HelpTextSection | null {
+    return findSectionInCollections(this.collectionFactory(), contentId);
   }
 
-  private idExistsInMainHelpSection(main: MainHelpSection, key: string) {
-    let exists: boolean = false;
-    if (main) {
-      exists = main.idExists(key);
-      if (exists) {
-        return exists;
-      }
-    }
+  public findParentOfSectionById(contentId: string, directParent: HelpTextSection | null): HelpTextSection | null {
+    return findParentInCollections(this.collectionFactory(), contentId, directParent);
+  }
+
+  public changeValueId(oldId: string, newId: string): boolean {
+    return changeValueIdInCollections(this.collectionFactory(), oldId, newId);
+  }
+
+  public idExists(key: string): boolean {
+    return idExistsInCollections(this.collectionFactory(), key);
+  }
+
+  public removeId(contentId: string): boolean {
+    return removeFromCollections(this.collectionFactory(), contentId);
   }
 }
 
-export type HelpTextRootKey = keyof typeof HelpTextRoot;
+export class HelpTextRoot {
+  [key: string]: unknown;
+
+  constructor(initialSections: Partial<Record<HelpTextRootKey, MainHelpSection>> = {}) {
+    Object.assign(this, initialSections);
+  }
+
+  public getSectionKeys(): HelpTextRootKey[] {
+    return HELP_TEXT_ROOT_KEYS.filter(key => !!(this as any)[key]);
+  }
+
+  public getSections(): MainHelpSection[] {
+    return this.getSectionKeys()
+      .map(key => (this as any)[key] as MainHelpSection)
+      .filter((section): section is MainHelpSection => !!section);
+  }
+
+  public getSection(key: HelpTextRootKey): MainHelpSection | undefined {
+    return (this as any)[key] as MainHelpSection;
+  }
+
+  public setSection(key: HelpTextRootKey, section: MainHelpSection | null | undefined): void {
+    if (!section) {
+      delete (this as any)[key];
+      return;
+    }
+
+    (this as any)[key] = section;
+  }
+
+  public forEachSection(handler: (section: MainHelpSection, key: HelpTextRootKey) => void): void {
+    this.getSectionKeys().forEach(key => {
+      const section = this.getSection(key);
+      if (section) {
+        handler(section, key);
+      }
+    });
+  }
+
+  public idExists(key: string): boolean {
+    return this.getSections().some(section => section?.idExists(key));
+  }
+}
 
 export class MainHelpSection {
   coversheet?: HelpTextSection[];
   abbreviations?: AbbreviationItem[];
   content?: HelpTextSection[];
+
+  private get collections(): SectionCollections {
+    return new SectionCollections(() => [this.coversheet, this.content]);
+  }
 
   public addSection(contentId: string, index: number = -1): HelpTextSection {
     if (!this.content) {
@@ -93,157 +121,25 @@ export class MainHelpSection {
     return newSection;
   }
 
-  public findSectionById(contentId: string): HelpTextSection {
-    //console.log("searching ", contentId);
-
-    if (this.content) {
-      for (const section of this.content) {
-        //console.log("found: ", section.value);
-        if (section.value === contentId) {
-          return section;
-        }
-        // Potentially, also traverse child subsections or content
-        //console.log("searching in subsection...");
-        const foundInSub = section.findSectionById(contentId);
-        if (foundInSub) {
-          return foundInSub;
-        }
-      }
-    }
-
-    if (this.coversheet) {
-      for (const section of this.coversheet) {
-        //console.log("found: ", section.value);
-        if (section.value === contentId) {
-          return section;
-        }
-        // Potentially, also traverse child subsections or content
-        //console.log("searching in subsection...");
-        const foundInSub = section.findSectionById(contentId);
-        if (foundInSub) {
-          return foundInSub;
-        }
-      }
-    }
-
-    return null;
+  public findSectionById(contentId: string): HelpTextSection | null {
+    return this.collections.findSectionById(contentId);
   }
 
-  public findParentOfSectionById(contentId: string): HelpTextSection {
-    if (this.content) {
-      //console.log("searching in content");
-      for (const section of this.content) {
-        if (section.value == contentId) {
-          console.log("Part of content");
-          return null;
-        }
-        // console.log("found: ", section.value);
-
-        let foundInContent = section.findParentOfSectionById(contentId);
-        if (foundInContent) {
-          return foundInContent;
-        }
-      }
-    }
-
-
-    if (this.coversheet) {
-      //console.log("searching in coversheet");
-      for (const section of this.coversheet) {
-        if (section.value == contentId) {
-          console.log("Part of coversheet");
-          return null;
-        }
-
-        let foundInContent = section.findParentOfSectionById(contentId);
-        if (foundInContent) {
-          return foundInContent;
-        }
-      }
-    }
-
-    console.error(contentId, " not found in ", JSON.stringify(this));
-
-    return null;
+  public findParentOfSectionById(contentId: string): HelpTextSection | null {
+    return this.collections.findParentOfSectionById(contentId, null);
   }
 
   public changeValueId(oldId: string, newId: string): boolean {
-    if (this.content) {
-      for (const section of this.content) {
-        //console.log("found: ", section.value);
-        if (section.value === oldId) {
-          section.value = newId;
-          return true;
-        }
-        // Potentially, also traverse child subsections or content
-        //console.log("searching in subsection...");
-        const changedInSub = section.changeValueId(oldId, newId);
-        if (changedInSub) {
-          return changedInSub;
-        }
-      }
-    }
-
-    if (this.coversheet) {
-      for (const section of this.coversheet) {
-        //console.log("found: ", section.value);
-        if (section.value === oldId) {
-          section.value = newId;
-          return true;
-        }
-        // Potentially, also traverse child subsections or content
-        //console.log("searching in subsection...");
-        const foundInSub = section.changeValueId(oldId, newId);
-        if (foundInSub) {
-          return foundInSub;
-        }
-      }
-    }
-
-    return false;
+    return this.collections.changeValueId(oldId, newId);
   }
 
   public idExists(key: string): boolean {
-    if (this.content) {
-      for (const section of this.content) {
-        //console.log("found: ", section.value);
-        if (section.value === key) {
-          return true;
-        }
-        // Potentially, also traverse child subsections or content
-        //console.log("searching in subsection...");
-        const exists = section.idExists(key);
-        if (exists) {
-          return exists;
-        }
-      }
-    }
+    const existsInSections = this.collections.idExists(key);
+    const existsInAbbreviations = (this.abbreviations || []).some(item =>
+      item.abbreviation === key || item.longDescription === key || item.shortDescription === key
+    );
 
-    if (this.coversheet) {
-      for (const section of this.coversheet) {
-        //console.log("found: ", section.value);
-        if (section.value === key) {
-          return true;
-        }
-        // Potentially, also traverse child subsections or content
-        //console.log("searching in subsection...");
-        const exists = section.idExists(key);
-        if (exists) {
-          return exists;
-        }
-      }
-    }
-
-    if (this.abbreviations) {
-      for (const item of this.abbreviations) {
-        //console.log("found: ", section.value);
-        if ((item.abbreviation === key) || (item.longDescription === key) || (item.shortDescription === key)) {
-          return true;
-        }
-      }
-    }
-
-    return false;
+    return existsInSections || existsInAbbreviations;
   }
 }
 
@@ -261,6 +157,10 @@ export class HelpTextSection {
   subsections?: HelpTextSection[];
   steps?: HelpTextStep[];
 
+  private get collections(): SectionCollections {
+    return new SectionCollections(() => [this.content, this.subsections, this.coversheet]);
+  }
+
   public getTranslationKey(): string | null {
     if (this.type === HelpContentType.BULLET_ENUMERATION) {
       return null;
@@ -274,196 +174,47 @@ export class HelpTextSection {
   }
 
   hasChildren(): boolean {
-    if (this.content) {
-      return this.content.length > 0;
-    }
-    if (this.subsections) {
-      return this.subsections.length > 0;
-    } else if (this.steps) {
-      return this.steps.length > 0;
-    }
+    return !!(
+      (this.content && this.content.length > 0) ||
+      (this.subsections && this.subsections.length > 0) ||
+      (this.steps && this.steps.length > 0)
+    );
   }
 
-  public findSectionById(contentId: string): HelpTextSection {
-    // Check direct content first
-    if (this.content) {
-      for (const item of this.content) {
-        if (item.value === contentId) {
-          return item;
-        }
-        if (item.type === "TABLE") {
-          //console.log("table found. ");
-          const tableItem = (item as HelpTextTable);
-          if (tableItem.header && tableItem.header.length > 0) {
-            if (tableItem.header.indexOf(contentId) > -1) {
-              return tableItem;
-            }
-          }
-          
-          if (tableItem.rows && tableItem.rows.length > 0) {
-            for (const row of tableItem.rows) {
-              const idx = row.rowValues.indexOf(contentId);
-              if (idx > -1) {
-                return tableItem;
-              }
-            }
-          }
-        }
-        
-        const found = item.findSectionById(contentId);
-        if (found) {
-          return found;
-        }
-      }
-    }
-    if (this.steps) {
-      for (const item of this.steps) {
-        if (item.value === contentId) {
-          //console.log("contentId is step");
-          return item as HelpTextSection;
-        }
-
-        const foundStep = this.findStepById(item.substeps, contentId);
-        if (foundStep) {
-          return foundStep as HelpTextSection;
-        }
-      }
+  public findSectionById(contentId: string): HelpTextSection | null {
+    const foundInCollections = this.collections.findSectionById(contentId);
+    if (foundInCollections) {
+      return foundInCollections;
     }
 
-    // Also search subsections
-    if (this.subsections) {
-      for (const sub of this.subsections) {
-        if (sub.value === contentId) {
-          return sub;
-        }
-        const found = sub.findSectionById(contentId);
-        if (found) {
-          return found;
-        }
-      }
+    const foundStep = findStepById(this.steps, contentId);
+    if (foundStep) {
+      return foundStep as unknown as HelpTextSection;
     }
-    // Also coversheet
-    if (this.coversheet) {
-      for (const cs of this.coversheet) {
-        if (cs.value === contentId) {
-          return cs;
-        }
-        const found = cs.findSectionById(contentId);
-        if (found) {
-          return found;
-        }
-      }
-    }
+
     return null;
   }
 
-  public findParentOfSectionById(contentId: string): HelpTextSection {
-    //console.log("findParentOfSectionById: trying to find ", contentId, " in ", this.value);
-
-    if (this.content) {
-      for (const section of this.content) {
-        //console.log("findParentOfSectionById: current section: ", section.value);
-        if (section.value === contentId) {
-          return this;
-        }
-
-        if (section.subsections) {
-          //console.log("searching in subsection of ", this.value);
-          for (const sub of section.subsections) {
-            if (sub.value === contentId) {
-              return sub;
-            }
-            const found = sub.findParentOfSectionById(contentId);
-            if (found) {
-              return found;
-            }
-          }
-        }
-
-        if (section.steps) {
-          //console.log("Check steps of ", section.value);
-          for (const step of section.steps) {
-            if (this.stepIdExists(step, contentId)) {
-              return section;
-            }
-          }
-        }
-      }
+  public findParentOfSectionById(contentId: string): HelpTextSection | null {
+    const foundParent = this.collections.findParentOfSectionById(contentId, this);
+    if (foundParent) {
+      return foundParent;
     }
 
-    if (this.steps) {
-      for (const step of this.steps) {
-        if (this.stepIdExists(step, contentId)) {
-          return this;
-        }
-      }
-    }
-
-    if (this.subsections) {
-      //console.log("look in subsections ");
-      for (const sub of this.subsections) {
-        //console.log("   subsection: ", sub.value);
-        if (sub.value === contentId) {
-          //console.log("return subsection: ", this.value);
-          return this;
-        }
-        const found = sub.findParentOfSectionById(contentId);
-        if (found) {
-          //console.log("found ", found.value);
-          return found;
-        }
-      }
+    if (findStepById(this.steps, contentId)) {
+      return this;
     }
 
     return null;
   }
 
   public removeId(contentId: string): boolean {
-    //console.log("remove in ", this.value);
-    if (this.content) {
-      for (const section of this.content) {
-        if (section.value === contentId) {
-          //console.log("removeId: ", section.value);
-          this.content = this.content.filter(item => item.value !== contentId);
-          return true;
-        }
-      }
-    }
-
-    if (this.steps) {
-      console.log("checking in steps");
-      if (this.removeStepById(this.steps, contentId)) {
-        return true;
-      }
-    }
-
-    if (this.subsections) {
-      for (const section of this.subsections) {
-        if (section.value === contentId) {
-          //console.log("removeId: ", section.value);
-          this.subsections = this.subsections.filter(item => item.value !== contentId);
-          return true;
-        }
-      }
-    }
-    console.error("Could not remove. Wrong parent? ", JSON.stringify(this));
-    return false;
-  }
-
-  private removeStepById(steps: HelpTextStep[], contentId: string): boolean {
-    const index = steps.findIndex(step => step.value === contentId);
-    if (index !== -1) {
-      steps.splice(index, 1);
+    const removedFromSteps = removeStepById(this.steps, contentId);
+    if (removedFromSteps) {
       return true;
     }
 
-    for (const step of steps) {
-      if (step.substeps && this.removeStepById(step.substeps, contentId)) {
-        return true;
-      }
-    }
-
-    return false;
+    return this.collections.removeId(contentId);
   }
 
   public addSubsection(contentId: string, index: number = -1): HelpTextSection {
@@ -505,39 +256,12 @@ export class HelpTextSection {
   }
 
   public changeValueId(oldId: string, newId: string): boolean {
-    if (this.content) {
-      for (var item of this.content) {
-        //console.log("changeValueId Item: ", item.value, " old: ", oldId, " new: ", newId);
-        if (item.value === oldId) {
-          item.value = newId;
-          return true;
-        }
-        const found = item.changeValueId(oldId, newId);
-        if (found) {
-          return found;
-        }
-      }
+    const changedInSteps = changeStepValueId(this.steps, oldId, newId);
+    if (changedInSteps) {
+      return true;
     }
-    if (this.steps) {
-      for (var step of this.steps) {
-        if (this.changeStepValueId(step, oldId, newId)) {
-          return true;
-        }
-      }
-    }
-    if (this.subsections) {
-      for (var subsection of this.subsections) {
-        if (subsection.value == oldId) {
-          subsection.value = newId;
-          return true;
-        }
-        const found = subsection.changeValueId(oldId, newId);
-        if (found) {
-          return found;
-        }
-      }
-    }
-    return false;
+
+    return this.collections.changeValueId(oldId, newId);
   }
 
   public getIndexOfId(contentId: string): number {
@@ -555,115 +279,12 @@ export class HelpTextSection {
   }
 
   public idExists(key: string): boolean {
-    if (this.content) {
-      for (const section of this.content) {
-        //console.log("found: ", section.value);
-        if (section.value === key) {
-          return true;
-        }
+    const existsInCollections = this.collections.idExists(key);
+    const existsInSteps = stepIdExists(this.steps, key);
+    const existsInImageDescription = this.imageDescription === key;
+    const existsInTable = this.type === "TABLE" && (this as unknown as HelpTextTable).idExists(key);
 
-        // Potentially, also traverse child subsections or content
-        //console.log("searching in subsection...");
-        const exists = section.idExists(key);
-        if (exists) {
-          return exists;
-        }
-      }
-    }
-    if (this.steps) {
-      for (var step of this.steps) {
-        if (this.stepIdExists(step, key)) {
-          return true;
-        }
-      }
-    }
-    if (this.subsections) {
-      for (var subsection of this.subsections) {
-        if (subsection.value == key) {
-          return true;
-        }
-        const found = subsection.idExists(key);
-        if (found) {
-          return found;
-        }
-      }
-    }
-
-    if (this.coversheet) {
-      for (var cover of this.coversheet) {
-        if (cover.value == key) {
-          return true;
-        }
-        const found = cover.idExists(key);
-        if (found) {
-          return found;
-        }
-      }
-    }
-
-    if (this.imageDescription) {
-      if (this.imageDescription === key) {
-        return true;
-      }
-    }
-
-    if (this.type == "TABLE") {
-      if (((this as unknown) as HelpTextTable).idExists(key)) {
-        return true;
-      }
-    }
-  }
-
-  private findStepById(steps: HelpTextStep[] | undefined, contentId: string): HelpTextStep | null {
-    if (!steps) {
-      return null;
-    }
-
-    for (const step of steps) {
-      if (step.value === contentId) {
-        return step;
-      }
-
-      const found = this.findStepById(step.substeps, contentId);
-      if (found) {
-        return found;
-      }
-    }
-
-    return null;
-  }
-
-  private changeStepValueId(step: HelpTextStep, oldId: string, newId: string): boolean {
-    if (step.value === oldId) {
-      step.value = newId;
-      return true;
-    }
-
-    if (step.substeps) {
-      for (const substep of step.substeps) {
-        if (this.changeStepValueId(substep, oldId, newId)) {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
-
-  private stepIdExists(step: HelpTextStep, key: string): boolean {
-    if (step.value === key) {
-      return true;
-    }
-
-    if (step.substeps) {
-      for (const substep of step.substeps) {
-        if (this.stepIdExists(substep, key)) {
-          return true;
-        }
-      }
-    }
-
-    return false;
+    return !!(existsInCollections || existsInSteps || existsInImageDescription || existsInTable);
   }
 }
 
@@ -712,40 +333,195 @@ export interface AbbreviationItem {
   referenceAbbreviation?: string;
 }
 
+function findSectionInCollections(collections: SectionCollection[], contentId: string): HelpTextSection | null {
+  for (const collection of collections) {
+    if (!collection) { continue; }
+
+    for (const section of collection) {
+      if (!section) { continue; }
+      if (section.value === contentId) {
+        return section;
+      }
+      if (section.type === "TABLE") {
+        const tableSection = section as HelpTextTable;
+        if (tableSection.header?.includes(contentId)) {
+          return tableSection;
+        }
+        if (tableSection.rows?.some(row => row.rowValues?.includes(contentId))) {
+          return tableSection;
+        }
+      }
+
+      const found = section.findSectionById(contentId);
+      if (found) {
+        return found;
+      }
+    }
+  }
+
+  return null;
+}
+
+function findParentInCollections(collections: SectionCollection[], contentId: string, directParent: HelpTextSection | null): HelpTextSection | null {
+  for (const collection of collections) {
+    if (!collection) { continue; }
+
+    for (const section of collection) {
+      if (!section) { continue; }
+      if (section.value === contentId) {
+        return directParent;
+      }
+      if (section.type === "TABLE") {
+        const tableSection = section as HelpTextTable;
+        if (tableSection.header?.includes(contentId) || tableSection.rows?.some(row => row.rowValues?.includes(contentId))) {
+          return section;
+        }
+      }
+
+      if (stepIdExists(section.steps, contentId)) {
+        return section;
+      }
+
+      const childCollections: SectionCollection[] = [section.content, section.subsections, section.coversheet];
+      const found = findParentInCollections(childCollections, contentId, section);
+      if (found) {
+        return found;
+      }
+    }
+  }
+
+  return null;
+}
+
+function changeValueIdInCollections(collections: SectionCollection[], oldId: string, newId: string): boolean {
+  for (const collection of collections) {
+    if (!collection) { continue; }
+
+    for (const section of collection) {
+      if (section.value === oldId) {
+        section.value = newId;
+        return true;
+      }
+
+      const changed = section.changeValueId(oldId, newId);
+      if (changed) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function idExistsInCollections(collections: SectionCollection[], key: string): boolean {
+  for (const collection of collections) {
+    if (!collection) { continue; }
+
+    for (const section of collection) {
+      if (section.value === key) {
+        return true;
+      }
+
+      const exists = section.idExists(key);
+      if (exists) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function removeFromCollections(collections: SectionCollection[], contentId: string): boolean {
+  for (const collection of collections) {
+    if (!collection) { continue; }
+
+    const index = collection.findIndex(item => item && item.value === contentId);
+    if (index !== -1) {
+      collection.splice(index, 1);
+      return true;
+    }
+
+    for (const section of collection) {
+      if (!section) { continue; }
+      if (section.removeId(contentId)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function findStepById(steps: HelpTextStep[] | undefined, contentId: string): HelpTextStep | null {
+  if (!steps) {
+    return null;
+  }
+
+  for (const step of steps) {
+    if (step.value === contentId) {
+      return step;
+    }
+
+    const found = findStepById(step.substeps, contentId);
+    if (found) {
+      return found;
+    }
+  }
+
+  return null;
+}
+
+function removeStepById(steps: HelpTextStep[] | undefined, contentId: string): boolean {
+  if (!steps) {
+    return false;
+  }
+
+  const index = steps.findIndex(step => step.value === contentId);
+  if (index !== -1) {
+    steps.splice(index, 1);
+    return true;
+  }
+
+  return steps.some(step => removeStepById(step.substeps, contentId));
+}
+
+function changeStepValueId(steps: HelpTextStep[] | undefined, oldId: string, newId: string): boolean {
+  if (!steps) {
+    return false;
+  }
+
+  for (const step of steps) {
+    if (step.value === oldId) {
+      step.value = newId;
+      return true;
+    }
+    if (changeStepValueId(step.substeps, oldId, newId)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function stepIdExists(steps: HelpTextStep[] | undefined, key: string): boolean {
+  if (!steps) {
+    return false;
+  }
+
+  return steps.some(step => step.value === key || stepIdExists(step.substeps, key));
+}
+
 
 export function parseHelpTextRoot(json: any): HelpTextRoot {
   const root = new HelpTextRoot();
 
-  if (json.HELP_TEXT_DEVICE_CONCEPT) {
-    root.HELP_TEXT_DEVICE_CONCEPT = parseMainHelpSection(json.HELP_TEXT_DEVICE_CONCEPT);
-  }
-  if (json.HELP_TEXT_TASKS_CONCEPT) {
-    root.HELP_TEXT_TASKS_CONCEPT = parseMainHelpSection(json.HELP_TEXT_TASKS_CONCEPT);
-  }
-  if (json.HELP_TEXT_PRINT_CONCEPT) {
-    root.HELP_TEXT_PRINT_CONCEPT = parseMainHelpSection(json.HELP_TEXT_PRINT_CONCEPT);
-  }
-  if (json.HELP_TEXT_USER_MANAGEMENT) {
-    root.HELP_TEXT_USER_MANAGEMENT = parseMainHelpSection(json.HELP_TEXT_USER_MANAGEMENT);
-  }
-  if (json.HELP_TEXT_NETWORK_CONNECTION) {
-    root.HELP_TEXT_NETWORK_CONNECTION = parseMainHelpSection(json.HELP_TEXT_NETWORK_CONNECTION);
-  }
-  if (json.HELP_TEXT_WEIGHING_FUNCTION) {
-    root.HELP_TEXT_WEIGHING_FUNCTION = parseMainHelpSection(json.HELP_TEXT_WEIGHING_FUNCTION);
-  }
-  if (json.HELP_TEXT_TIMER_CNTRL_ACTION) {
-    root.HELP_TEXT_TIMER_CNTRL_ACTION = parseMainHelpSection(json.HELP_TEXT_TIMER_CNTRL_ACTION);
-  }
-  if (json.HELP_TEXT_DEVICE_CLEANING) {
-    root.HELP_TEXT_DEVICE_CLEANING = parseMainHelpSection(json.HELP_TEXT_DEVICE_CLEANING);
-  }
-  if (json.HELP_TEXT_DEVICE_MAINTENANCE) {
-    root.HELP_TEXT_DEVICE_MAINTENANCE = parseMainHelpSection(json.HELP_TEXT_DEVICE_MAINTENANCE);
-  }
-  if (json.HELP_TEXT_JOB_MANAGEMENT) {
-    root.HELP_TEXT_JOB_MANAGEMENT = parseMainHelpSection(json.HELP_TEXT_JOB_MANAGEMENT);
-  }
+  HELP_TEXT_ROOT_KEYS.forEach(key => {
+    if (json && json[key]) {
+      root.setSection(key, parseMainHelpSection(json[key]));
+    }
+  });
+
   return root;
 }
 
