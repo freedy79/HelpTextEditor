@@ -10,7 +10,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DeeplTranslationService } from '~shared/services/deepl-translation.service';
 import { DeeplSettingsDialogComponent, DeeplSettingsDialogResult } from '~/app/dialogs/deepl-settings-dialog/deepl-settings-dialog.component';
 import { CleanQtfDialogComponent, CleanQtfDialogResult } from '~/app/dialogs/clean-qtf-dialog/clean-qtf-dialog.component';
-import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -800,7 +799,7 @@ export class MainComponent implements OnInit {
       }
     });
 
-    const result = await firstValueFrom(dialogRef.afterClosed()) as CleanQtfDialogResult | undefined;
+    const result = await dialogRef.afterClosed().toPromise() as CleanQtfDialogResult | undefined;
     if (!result || !result.deletedKeys || result.deletedKeys.length === 0) {
       return;
     }
