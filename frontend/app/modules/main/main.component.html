@@ -132,4 +132,11 @@
       </ng-template>
     </div>
   </div>
+
+  <app-statusbar
+    [selectedTopLevelKey]="selectedTopLevelKey"
+    [selectedSectionId]="selectedSection?.value"
+    [language]="selectedLanguage"
+    [isDirty]="isDirty">
+  </app-statusbar>
 </div>
