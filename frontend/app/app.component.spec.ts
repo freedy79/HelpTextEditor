@@ -1,6 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { TranslateService } from '@ngx-translate/core';
+import { Component } from '@angular/core';
 
 class TranslateServiceMock {
   setDefaultLang = jasmine.createSpy('setDefaultLang');
@@ -8,10 +9,17 @@ class TranslateServiceMock {
 }
 
 describe('AppComponent', () => {
+  @Component({
+    selector: 'app-main',
+    template: ''
+  })
+  class MainComponentStub {}
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        MainComponentStub
       ],
       providers: [
         { provide: TranslateService, useClass: TranslateServiceMock }

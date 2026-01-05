@@ -17,9 +17,8 @@ $statusbar-height: 48px;
 
 .editor-columns {
     display: flex;
-    height: calc(100vh - 68px - $statusbar-height);
-    width: 100%;
-    min-height: 0;
+    height: calc(100vh - 68px - #{$statusbar-height});
+    width: 100vw;
     overflow: hidden;
 
     .column {

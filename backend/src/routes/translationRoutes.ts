@@ -34,7 +34,7 @@ router.post('/translate/deepl', async (req: Request, res: Response): Promise<voi
     console.log('[DeepL] Response status', deeplResponse.status);
 
     if (!deeplResponse.ok) {
-      const errorText = await deeplResponse.text();
+      const errorText = deeplResponse.body;
       console.error('[DeepL] Request failed', { status: deeplResponse.status, body: errorText });
       res.status(deeplResponse.status || 502).json({
         message: 'DeepL request failed.',
@@ -47,7 +47,8 @@ router.post('/translate/deepl', async (req: Request, res: Response): Promise<voi
     try {
       data = JSON.parse(deeplResponse.body);
       console.log('[DeepL] Request successful', {
-      translationCount: Array.isArray(data?.translations) ? data.translations.length : 0
+        translationCount: Array.isArray(data?.translations) ? data.translations.length : 0
+      });
     } catch (parseError) {
       console.error('DeepL response parse error', parseError);
       res.status(502).json({ message: 'Invalid response from DeepL.' });
@@ -61,7 +62,7 @@ router.post('/translate/deepl', async (req: Request, res: Response): Promise<voi
   }
 });
 
-async function sendDeepLRequest(body: string): Promise<{ status: number; body: string }> {
+async function sendDeepLRequest(body: string): Promise<{ status: number; body: string; ok: boolean }> {
   return new Promise((resolve, reject) => {
     const request = https.request(
       'https://api-free.deepl.com/v2/translate',
@@ -80,7 +81,8 @@ async function sendDeepLRequest(body: string): Promise<{ status: number; body: s
           responseBody += chunk;
         });
         response.on('end', () => {
-          resolve({ status: response.statusCode ?? 0, body: responseBody });
+          const status = response.statusCode ?? 0;
+          resolve({ status, body: responseBody, ok: status >= 200 && status < 300 });
         });
       }
     );
