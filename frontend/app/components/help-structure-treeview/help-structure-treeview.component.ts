@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep } from '~models/help-text-structure.model';
+import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep, AbbreviationItem } from '~models/help-text-structure.model';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
 
 type ParentType = HelpTextSection | MainHelpSection | HelpTextStep;
+type TreeItem = HelpTextSection | HelpTextStep | AbbreviationItem | null;
 
 @Component({
   selector: 'app-help-structure-treeview',
@@ -19,11 +20,14 @@ export class HelpStructureTreeviewComponent implements OnChanges {
   @Output() deleteSection: EventEmitter<HelpTextSection | HelpTextStep> = new EventEmitter();
   @Output() moveSection: EventEmitter<{ parent: ParentType; container: string; index: number; direction: 'up' | 'down' }>
     = new EventEmitter();
+  @Output() addAbbreviation: EventEmitter<MainHelpSection> = new EventEmitter();
+  @Output() editAbbreviation: EventEmitter<{ abbreviation: AbbreviationItem; parent: MainHelpSection; index: number; }> = new EventEmitter();
+  @Output() deleteAbbreviation: EventEmitter<{ abbreviation: AbbreviationItem; parent: MainHelpSection; }> = new EventEmitter();
 
   @ViewChild('contextMenu') contextMenu: ContextMenuComponent;
 
   contextMenuItems: ContextMenuItem[] = [];
-  private contextMenuContext: { section: HelpTextSection | HelpTextStep; parent: ParentType; container: string; index: number; } | null = null;
+  private contextMenuContext: { section: TreeItem; parent: ParentType; container: string; index: number; } | null = null;
 
   private expandedSections: string[];
 
@@ -64,6 +68,18 @@ export class HelpStructureTreeviewComponent implements OnChanges {
     this.addStep.emit(section);
   }
 
+  public onAddAbbreviation(mainSection: MainHelpSection) {
+    this.addAbbreviation.emit(mainSection);
+  }
+
+  public onEditAbbreviation(abbreviation: AbbreviationItem, parent: MainHelpSection, index: number) {
+    this.editAbbreviation.emit({ abbreviation, parent, index });
+  }
+
+  public onDeleteAbbreviation(abbreviation: AbbreviationItem, parent: MainHelpSection) {
+    this.deleteAbbreviation.emit({ abbreviation, parent });
+  }
+
   public onDeleteSection(section: HelpTextSection | HelpTextStep) {
     this.deleteSection.emit(section);
   }
@@ -72,7 +88,7 @@ export class HelpStructureTreeviewComponent implements OnChanges {
     this.moveSection.emit({ parent, container, index, direction });
   }
 
-  openContextMenu(event: MouseEvent, section: HelpTextSection | HelpTextStep, parent: ParentType, container: string, index: number) {
+  openContextMenu(event: MouseEvent, section: TreeItem, parent: ParentType, container: string, index: number) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -84,10 +100,17 @@ export class HelpStructureTreeviewComponent implements OnChanges {
     }
   }
 
-  private buildContextMenuItems(section: HelpTextSection | HelpTextStep, parent: ParentType, container: string, index: number): ContextMenuItem[] {
+  private buildContextMenuItems(section: TreeItem, parent: ParentType, container: string, index: number): ContextMenuItem[] {
     const items: ContextMenuItem[] = [];
     const hasContainer = !!container && !!parent && !!(parent as any)[container];
     const collection = hasContainer ? (parent as any)[container] as any[] : [];
+
+    if (container === 'abbreviations') {
+      items.push({ label: 'Add abbreviation', action: 'addAbbreviation' });
+      items.push({ label: 'Edit abbreviation', action: 'editAbbreviation', disabled: !section });
+      items.push({ label: 'Delete abbreviation', action: 'deleteAbbreviation', disabled: !section });
+      return items;
+    }
 
     items.push({ label: 'Move up', action: 'moveUp', disabled: !hasContainer || index === 0 });
     items.push({ label: 'Move down', action: 'moveDown', disabled: !hasContainer || index >= collection.length - 1 });
@@ -116,6 +139,15 @@ export class HelpStructureTreeviewComponent implements OnChanges {
         break;
       case 'moveDown':
         this.onMove(parent, container, index, 'down');
+        break;
+      case 'addAbbreviation':
+        if (this.isMainHelpSection(parent)) { this.onAddAbbreviation(parent); }
+        break;
+      case 'editAbbreviation':
+        if (this.isAbbreviation(section) && this.isMainHelpSection(parent)) { this.onEditAbbreviation(section, parent, index); }
+        break;
+      case 'deleteAbbreviation':
+        if (this.isAbbreviation(section) && this.isMainHelpSection(parent)) { this.onDeleteAbbreviation(section, parent); }
         break;
       case 'addSubsection':
         if (this.isHelpTextSection(section)) { this.onAddSubsection(section); }
@@ -197,8 +229,18 @@ export class HelpStructureTreeviewComponent implements OnChanges {
     return section && (section.type === HelpContentType.ENUMERATION || section.type === HelpContentType.BULLET_ENUMERATION);
   }
 
-  isHelpTextSection(item: HelpTextSection | HelpTextStep): item is HelpTextSection {
-    return !!item && (item instanceof HelpTextSection || item.type !== 'STEP');
+  isHelpTextSection(item: TreeItem): item is HelpTextSection {
+    return !!item && (item instanceof HelpTextSection || (item as any).type && (item as any).type !== 'STEP');
+  }
+
+  isAbbreviation(item: TreeItem): item is AbbreviationItem {
+    return !!item && (item as AbbreviationItem).abbreviation !== undefined && (item as any).type === undefined;
+  }
+
+  isMainHelpSection(item: ParentType): item is MainHelpSection {
+    return !!item &&
+      ((item instanceof MainHelpSection) ||
+        ((item as any).abbreviations !== undefined && (item as any).value === undefined));
   }
 
   private expandToSelectedSection(selectedId: string) {

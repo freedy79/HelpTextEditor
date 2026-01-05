@@ -14,6 +14,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DeeplSettingsDialogComponent } from './deepl-settings-dialog/deepl-settings-dialog.component';
 import { CleanQtfDialogComponent } from './clean-qtf-dialog/clean-qtf-dialog.component';
 import { TranslationIssuesDialogComponent } from './translation-issues-dialog/translation-issues-dialog.component';
+import { AbbreviationDialogComponent } from './abbreviation-dialog/abbreviation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { TranslationIssuesDialogComponent } from './translation-issues-dialog/tr
     ConfirmationDialogComponent,
     DeeplSettingsDialogComponent,
     CleanQtfDialogComponent,
-    TranslationIssuesDialogComponent
+    TranslationIssuesDialogComponent,
+    AbbreviationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -40,10 +42,11 @@ import { TranslationIssuesDialogComponent } from './translation-issues-dialog/tr
     ConfirmationDialogComponent,
     DeeplSettingsDialogComponent,
     CleanQtfDialogComponent,
-    TranslationIssuesDialogComponent
+    TranslationIssuesDialogComponent,
+    AbbreviationDialogComponent
   ],
   providers: [ConfirmDialogService],
-  entryComponents:[ImagePickerDialogComponent, ConfirmationDialogComponent, CleanQtfDialogComponent, TranslationIssuesDialogComponent],
+  entryComponents:[ImagePickerDialogComponent, ConfirmationDialogComponent, CleanQtfDialogComponent, TranslationIssuesDialogComponent, AbbreviationDialogComponent],
   bootstrap: []
 })
 export class DialogsModule { }

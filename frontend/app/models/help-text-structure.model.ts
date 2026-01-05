@@ -707,6 +707,7 @@ export interface AbbreviationItem {
   abbreviation: string;
   shortDescription: string;
   longDescription: string;
+  referenceAbbreviation?: string;
 }
 
 
@@ -760,6 +761,7 @@ export function parseMainHelpSection(obj: any): MainHelpSection {
       abbreviation: abbr.abbreviation,
       shortDescription: abbr.shortDescription,
       longDescription: abbr.longDescription,
+      referenceAbbreviation: abbr.referenceAbbreviation
     }));
   }
 
