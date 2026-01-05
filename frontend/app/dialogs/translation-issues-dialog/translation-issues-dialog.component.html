@@ -1,0 +1,66 @@
+<div class="translation-issues">
+  <h2 mat-dialog-title>Translation issues ({{ data.selectedLanguage }})</h2>
+
+  <mat-dialog-content *ngIf="hasLoadedData; else missingData">
+    <section class="issue-section">
+      <h3>Empty translations</h3>
+      <p *ngIf="emptyTranslationIssues.length === 0">No empty translations found.</p>
+      <div *ngFor="let issue of emptyTranslationIssues" class="issue-row">
+        <div class="issue-key">{{ issue.key }}</div>
+        <div class="issue-actions">
+          <button mat-button (click)="autoTranslate(issue)" [disabled]="issue.isTranslating || !canAutoTranslate(issue)">
+            {{ issue.isTranslating ? 'Translating…' : 'Autotranslate (DeepL)' }}
+          </button>
+        </div>
+        <div class="issue-error" *ngIf="issue.error">{{ issue.error }}</div>
+      </div>
+    </section>
+
+    <section class="issue-section">
+      <h3>Missing text ids</h3>
+      <p *ngIf="missingTextIds.length === 0">No missing text ids found.</p>
+      <div *ngFor="let key of missingTextIds" class="issue-row">
+        <div class="issue-key">{{ key }}</div>
+        <div class="issue-actions">
+          <button mat-button (click)="createMissingKey(key)">Create</button>
+        </div>
+      </div>
+      <div *ngIf="missingTextIds.length > 1" class="issue-footer">
+        <button mat-stroked-button color="primary" (click)="createAllMissingKeys()">Create all</button>
+      </div>
+    </section>
+
+    <section class="issue-section">
+      <h3>Doubled translations</h3>
+      <p *ngIf="doubledTranslationIssues.length === 0">No doubled translations found.</p>
+      <div *ngFor="let issue of doubledTranslationIssues" class="issue-row stacked">
+        <div class="issue-key">{{ issue.key }}</div>
+        <div class="translation-block">
+          <div class="translation-label">Manual</div>
+          <div class="translation-value">{{ issue.translation }}</div>
+          <button mat-stroked-button color="primary" (click)="keepManualTranslation(issue)">Keep manual</button>
+        </div>
+        <div class="translation-block">
+          <div class="translation-label">Auto</div>
+          <div class="translation-value">{{ issue.autoTranslation }}</div>
+          <button mat-button (click)="keepAutoTranslation(issue)">Keep auto</button>
+        </div>
+      </div>
+    </section>
+
+    <div *ngIf="noIssuesFound" class="no-issues">
+      <p>No issues detected 🎉</p>
+    </div>
+  </mat-dialog-content>
+
+  <ng-template #missingData>
+    <mat-dialog-content>
+      <p>Load a help text structure and QTF file first to check for issues.</p>
+    </mat-dialog-content>
+  </ng-template>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+    <button mat-raised-button color="primary" (click)="close()">Save &amp; Close</button>
+  </mat-dialog-actions>
+</div>

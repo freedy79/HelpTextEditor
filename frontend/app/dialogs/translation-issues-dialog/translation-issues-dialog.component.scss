@@ -1,0 +1,62 @@
+.translation-issues {
+  min-width: 520px;
+}
+
+.issue-section {
+  margin-bottom: 16px;
+}
+
+.issue-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.issue-row.stacked {
+  flex-direction: column;
+}
+
+.issue-key {
+  font-family: monospace;
+  word-break: break-all;
+  flex: 1 1 auto;
+}
+
+.issue-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.issue-error {
+  color: #c62828;
+  font-size: 12px;
+}
+
+.translation-block {
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.translation-label {
+  font-weight: 600;
+}
+
+.translation-value {
+  white-space: pre-wrap;
+}
+
+.issue-footer {
+  margin-top: 8px;
+}
+
+.no-issues {
+  padding: 12px 0;
+  font-weight: 600;
+}
