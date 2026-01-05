@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -6,26 +6,14 @@ import { map } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class DeeplTranslationService {
   private readonly cookieName = 'deeplApiToken';
-  private readonly endpoint = 'https://api-free.deepl.com/v2/translate';
+  private readonly endpoint = 'http://localhost:3000/api/translate/deepl';
 
   constructor(private http: HttpClient) {}
 
   translateText(text: string, sourceLang: string | undefined, targetLang: string, authKey: string): Observable<string> {
-    let params = new HttpParams()
-      .set('auth_key', authKey)
-      .set('text', text)
-      .set('target_lang', targetLang);
-
-    if (sourceLang) {
-      params = params.set('source_lang', sourceLang);
-    }
-
-    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
-
     return this.http.post<{ translations: Array<{ text: string }> }>(
       this.endpoint,
-      params.toString(),
-      { headers }
+      { text, sourceLang, targetLang, authKey }
     ).pipe(
       map(response => response?.translations?.[0]?.text || '')
     );

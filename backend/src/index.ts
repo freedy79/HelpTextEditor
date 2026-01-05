@@ -1,8 +1,9 @@
 import express, {Application, Request, Response } from 'express';
+import path from 'path';
 import userRoutes from './routes/userRoutes';
 import errorHandler from './middlewares/errorHandler';
 import uploadRoutes from './routes/uploadRoutes';
-import path from 'path';
+import translationRoutes from './routes/translationRoutes';
 
 const cors=require('cors');
 
@@ -16,6 +17,9 @@ app.use(cors({
   credentials: true // Allow cookies and credentials
 }));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get('/', (req: Request, res: Response) => {
   console.log("request received: ");
   res.send('Hello, World!');
@@ -23,6 +27,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api', userRoutes);
 app.use('/api', uploadRoutes); 
+app.use('/api', translationRoutes);
 app.use(errorHandler);
 
 app.use(
