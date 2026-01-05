@@ -1,0 +1,37 @@
+<div class="deepl-settings-dialog">
+  <h2>DeepL Einstellungen</h2>
+  <p>
+    Hinterlege hier deinen DeepL API-Token, um automatische Übersetzungen zu aktivieren.
+    Du kannst festlegen, ob der Token im Browser gespeichert werden soll.
+  </p>
+
+  <label class="field-label" for="deepl-token">DeepL API-Token</label>
+  <input
+    id="deepl-token"
+    [type]="showToken ? 'text' : 'password'"
+    [(ngModel)]="token"
+    placeholder="API-Token eingeben" />
+
+  <div class="options">
+    <label>
+      <input type="checkbox" [(ngModel)]="showToken" />
+      Token anzeigen
+    </label>
+    <label>
+      <input type="checkbox" [(ngModel)]="rememberToken" />
+      Token im Browser speichern (1 Jahr)
+    </label>
+  </div>
+
+  <p class="hint">
+    Ohne Speicherung steht der Token nur während dieser Sitzung zur Verfügung.
+    Beim Speichern wird er als Cookie abgelegt.
+  </p>
+
+  <div class="actions">
+    <button class="ghost" (click)="clearToken()">Token löschen</button>
+    <span class="spacer"></span>
+    <button class="ghost" (click)="cancel()">Abbrechen</button>
+    <button class="primary" (click)="save()">Speichern</button>
+  </div>
+</div>
