@@ -55,4 +55,5 @@ const handleUpload: RequestHandler = (req, res) => {
 
 router.post('/upload', upload.single('file'), handleUpload);
 
+export { handleUpload, fileFilter, storage, UPLOAD_DIR };
 export default router;

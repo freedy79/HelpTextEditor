@@ -1,16 +1,21 @@
 import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { TranslateService } from '@ngx-translate/core';
+
+class TranslateServiceMock {
+  setDefaultLang = jasmine.createSpy('setDefaultLang');
+  use = jasmine.createSpy('use');
+}
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
       declarations: [
         AppComponent
       ],
+      providers: [
+        { provide: TranslateService, useClass: TranslateServiceMock }
+      ]
     }).compileComponents();
   }));
 
@@ -20,16 +25,18 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'HelpTextEditor'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('HelpTextEditor');
+  it('initializes the translation service with ENGLISH locale', () => {
+    TestBed.createComponent(AppComponent);
+    const translate = TestBed.inject(TranslateService) as any;
+
+    expect(translate.setDefaultLang).toHaveBeenCalledWith('ENGLISH');
+    expect(translate.use).toHaveBeenCalledWith('ENGLISH');
   });
 
-  it('should render title in a h1 tag', () => {
+  it('renders the main component shell', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to HelpTextEditor!');
+    const compiled = fixture.debugElement.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-main')).toBeTruthy();
   });
 });
