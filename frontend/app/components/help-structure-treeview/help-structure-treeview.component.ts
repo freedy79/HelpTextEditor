@@ -163,13 +163,17 @@ export class HelpStructureTreeviewComponent {
     if (section) {
       //console.log("expanded? ", section.value);
       if (section.value) {
-        return (this.expandedSections.find(x => x === section.value));
+        return !!this.expandedSections.find(x => x === section.value);
       } else 
       {
-        return (this.expandedSections.find(x => x === section.value))
+        return !!this.expandedSections.find(x => x === section.value)
       }
     }
     return false;
+  }
+
+  getTreeIcon(section: HelpTextSection | HelpTextStep): string {
+    return this.getItemExpanded(section) ? 'expand_more' : 'chevron_right';
   }
 
   isSelectedSection(section) {
