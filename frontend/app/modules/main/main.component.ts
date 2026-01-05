@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogService } from '~/app/dialogs/confirmation-dialog/confirmation-dialog.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DeeplTranslationService } from '~shared/services/deepl-translation.service';
+import { DeeplSettingsDialogComponent, DeeplSettingsDialogResult } from '~/app/dialogs/deepl-settings-dialog/deepl-settings-dialog.component';
 
 @Component({
   selector: 'app-main',
@@ -51,7 +52,9 @@ export class MainComponent implements OnInit {
       items: [
         { text: 'Open', iconCss: 'em-icons e-open', clickId: 'openfile' },
         { text: 'Open asset', iconCss: 'em-icons e-open', clickId: 'openasset' },
-        { text: 'Save', iconCss: 'em-icons e-save', clickId: 'savefile' }
+        { text: 'Save', iconCss: 'em-icons e-save', clickId: 'savefile' },
+        { separator: true },
+        { text: 'DeepL Einstellungen', iconCss: 'em-icons e-open', clickId: 'deeplSettings' }
       ]
     },
     {
@@ -126,6 +129,8 @@ export class MainComponent implements OnInit {
       this.cleanQtf();
     } else if (item.clickId == "copy") {
       this.copy();
+    } else if (item.clickId == "deeplSettings") {
+      this.openDeeplSettingsDialog();
     }
   }
 
@@ -561,11 +566,6 @@ export class MainComponent implements OnInit {
     this.saveCurrentSectionText();
   }
 
-  storeDeeplAuthKey() {
-    this.deeplTranslationService.storeAuthKey(this.deeplAuthKey.trim());
-    this.autoTranslationMessage = 'DeepL API-Token gespeichert.';
-  }
-
   canAutoTranslateCurrentSelection(): boolean {
     if (!this.selectedSection || !this.qtfFile) {
       return false;
@@ -819,6 +819,40 @@ export class MainComponent implements OnInit {
     if (deletedItems > 0) {
       this.isDirty = true;
     }
+  }
+
+  openDeeplSettingsDialog(): void {
+    const dialogRef = this.dialog.open(DeeplSettingsDialogComponent, {
+      width: '520px',
+      data: {
+        token: this.deeplAuthKey || this.deeplTranslationService.getStoredAuthKey() || '',
+        rememberToken: !!this.deeplTranslationService.getStoredAuthKey()
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: DeeplSettingsDialogResult) => {
+      if (!result) {
+        return;
+      }
+
+      if (result.clearToken) {
+        this.deeplTranslationService.storeAuthKey('');
+        this.deeplAuthKey = '';
+        this.autoTranslationMessage = 'DeepL API-Token wurde gelöscht.';
+        return;
+      }
+
+      this.deeplAuthKey = result.token || '';
+      this.autoTranslationMessage = this.deeplAuthKey
+        ? 'DeepL API-Token aktualisiert.'
+        : 'Kein DeepL API-Token gesetzt.';
+
+      if (result.rememberToken && this.deeplAuthKey) {
+        this.deeplTranslationService.storeAuthKey(this.deeplAuthKey);
+      } else {
+        this.deeplTranslationService.storeAuthKey('');
+      }
+    });
   }
 
   private getInsertIndex(parentSection: HelpTextSection, insertPosition: string): number {

@@ -10,13 +10,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
+import { DeeplSettingsDialogComponent } from './deepl-settings-dialog/deepl-settings-dialog.component';
 
 @NgModule({
   declarations: [
     FileUploadOverlayComponent,
     AddContentOverlayComponent,
     ImagePickerDialogComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    DeeplSettingsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +31,8 @@ import { BrowserModule } from '@angular/platform-browser';
     FileUploadOverlayComponent,
     AddContentOverlayComponent,
     ImagePickerDialogComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    DeeplSettingsDialogComponent
   ],
   providers: [ConfirmDialogService],
   entryComponents:[ImagePickerDialogComponent, ConfirmationDialogComponent],
