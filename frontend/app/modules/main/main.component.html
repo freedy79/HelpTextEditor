@@ -89,6 +89,14 @@
           <button (click)="openDeeplSettingsDialog()">Dialog öffnen</button>
           <small>Der Token wird über das Menü "File" hinterlegt.</small>
         </div>
+        <div>
+          <label for="deepl-source-language"><strong>Deepl-Übersetzung:</strong></label>
+          <p>Gib eine Sprache an, von der aus übersetzt werden soll. Es wird immer nur in die Sprache übersetzt, die aktuell gewählt ist.</p>
+          <select id="deepl-source-language" [(ngModel)]="deeplSourceLanguage" (ngModelChange)="onDeeplSourceLanguageChange($event)">
+            <option value="">-- Sprache wählen --</option>
+            <option *ngFor="let lang of languages" [value]="lang">{{ lang }}</option>
+          </select>
+        </div>
         <div *ngIf="hasMissingTranslationForSelection()">
           <button (click)="autoTranslateCurrentSelection()" [disabled]="!canAutoTranslateCurrentSelection() || isAutoTranslating">
             {{ isAutoTranslating ? 'Übersetze...' : 'Automatisch übersetzen' }}
@@ -121,6 +129,14 @@
             <p><strong>DeepL Einstellungen:</strong></p>
             <button (click)="openDeeplSettingsDialog()">Dialog öffnen</button>
             <small>Der Token wird über das Menü "File" hinterlegt.</small>
+          </div>
+          <div>
+            <label for="deepl-source-language-image"><strong>Deepl-Übersetzung:</strong></label>
+            <p>Gib eine Sprache an, von der aus übersetzt werden soll. Es wird immer nur in die Sprache übersetzt, die aktuell gewählt ist.</p>
+            <select id="deepl-source-language-image" [(ngModel)]="deeplSourceLanguage" (ngModelChange)="onDeeplSourceLanguageChange($event)">
+              <option value="">-- Sprache wählen --</option>
+              <option *ngFor="let lang of languages" [value]="lang">{{ lang }}</option>
+            </select>
           </div>
           <div *ngIf="hasMissingTranslationForSelection()">
             <button (click)="autoTranslateCurrentSelection()" [disabled]="!canAutoTranslateCurrentSelection() || isAutoTranslating">

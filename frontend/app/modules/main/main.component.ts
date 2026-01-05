@@ -29,6 +29,7 @@ export class MainComponent implements OnInit {
   languages = ['GERMAN', 'ENGLISH', 'FRENCH', 'CHINESE', 'RUSSIAN',  'SPANISH', 'ITALIAN', "JAPANESE", "KOREAN"];
   selectedLanguage = 'GERMAN';
   deeplAuthKey = '';
+  deeplSourceLanguage = 'ENGLISH';
   isAutoTranslating = false;
   autoTranslationMessage = '';
 
@@ -282,11 +283,26 @@ export class MainComponent implements OnInit {
 
   onLanguageChange(event) {
     this.autoTranslationMessage = '';
+
+    if (this.deeplSourceLanguage === this.selectedLanguage) {
+      this.deeplSourceLanguage = '';
+      this.autoTranslationMessage = 'Bitte unterschiedliche Ausgangs- und Zielsprache wählen.';
+    }
+
     this.loadTextsFromQtf(this.selectedLanguage);
 
     if (this.selectedSection) {
       const translationKey = this.selectedSection.getTranslationKey();
       this.loadTextFromQtf(translationKey);
+    }
+  }
+
+  onDeeplSourceLanguageChange(language: string): void {
+    this.deeplSourceLanguage = language;
+    this.autoTranslationMessage = '';
+
+    if (this.deeplSourceLanguage === this.selectedLanguage) {
+      this.autoTranslationMessage = 'Bitte unterschiedliche Ausgangs- und Zielsprache wählen.';
     }
   }
 
@@ -576,8 +592,9 @@ export class MainComponent implements OnInit {
     const hasToken = (this.deeplAuthKey || this.deeplTranslationService.getStoredAuthKey());
     const targetLanguage = this.deeplTranslationService.mapLanguageToDeepL(this.selectedLanguage);
     const sourceTranslation = this.getSourceTranslation(entry);
+    const hasValidSource = !!(this.deeplSourceLanguage && this.deeplSourceLanguage !== this.selectedLanguage);
 
-    return !!(entry && !this.hasExistingTranslation(entry) && hasToken && targetLanguage && sourceTranslation);
+    return !!(entry && hasValidSource && !this.hasExistingTranslation(entry) && hasToken && targetLanguage && sourceTranslation);
   }
 
   autoTranslateCurrentSelection() {
@@ -602,6 +619,16 @@ export class MainComponent implements OnInit {
       return;
     }
 
+    if (!this.deeplSourceLanguage) {
+      this.autoTranslationMessage = 'Bitte eine Ausgangssprache für die DeepL-Übersetzung auswählen.';
+      return;
+    }
+
+    if (this.deeplSourceLanguage === this.selectedLanguage) {
+      this.autoTranslationMessage = 'Bitte unterschiedliche Ausgangs- und Zielsprache wählen.';
+      return;
+    }
+
     const targetLanguage = this.deeplTranslationService.mapLanguageToDeepL(this.selectedLanguage);
     if (!targetLanguage) {
       this.autoTranslationMessage = 'Die ausgewählte Zielsprache wird von DeepL nicht unterstützt.';
@@ -610,7 +637,12 @@ export class MainComponent implements OnInit {
 
     const sourceTranslation = this.getSourceTranslation(entry);
     if (!sourceTranslation) {
-      this.autoTranslationMessage = 'Keine Ausgangssprache für die Übersetzung gefunden.';
+      this.autoTranslationMessage = `Keine Ausgangsübersetzung in ${this.deeplSourceLanguage} gefunden.`;
+      return;
+    }
+
+    if (!sourceTranslation.languageCode) {
+      this.autoTranslationMessage = 'Die gewählte Ausgangssprache wird von DeepL nicht unterstützt.';
       return;
     }
 
@@ -987,18 +1019,13 @@ export class MainComponent implements OnInit {
       return null;
     }
 
-    const preferredSources = ['GERMAN', 'ENGLISH'];
-    for (const lang of preferredSources) {
-      const text = entry.TRANSLATIONS?.[lang] || entry.AUTOTRANSLATIONS?.[lang];
-      if (text && lang !== this.selectedLanguage) {
-        return { text, languageCode: this.deeplTranslationService.mapLanguageToDeepL(lang) };
-      }
-    }
-
-    const combinedTranslations = { ...entry.TRANSLATIONS, ...entry.AUTOTRANSLATIONS };
-    for (const [lang, text] of Object.entries(combinedTranslations)) {
-      if (text && lang !== this.selectedLanguage) {
-        return { text: text as string, languageCode: this.deeplTranslationService.mapLanguageToDeepL(lang) };
+    if (this.deeplSourceLanguage) {
+      const sourceText = entry.TRANSLATIONS?.[this.deeplSourceLanguage] || entry.AUTOTRANSLATIONS?.[this.deeplSourceLanguage];
+      if (sourceText) {
+        return {
+          text: sourceText,
+          languageCode: this.deeplTranslationService.mapLanguageToDeepL(this.deeplSourceLanguage)
+        };
       }
     }
 
