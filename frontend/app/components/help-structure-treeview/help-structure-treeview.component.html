@@ -25,9 +25,16 @@
     <!-- Rekursives Template für die Baumansicht -->
     <ng-template #recursiveTree let-parent let-section let-level="level" let-container="container" let-index="index">
         <div class="tree-row" [ngStyle]="getMarginLeft(level)">
+            <span
+                *ngIf="hasChildren(section)"
+                class="tree-toggle material-icons"
+                (click)="onOpenCloseSection(section.value)"
+                (contextmenu)="openContextMenu($event, section, parent, container, index)">
+                {{ getTreeIcon(section) }}
+            </span>
             <span (click)="onSelectTreeItem(section.value)" (dblclick)="onOpenCloseSection(section.value)"
                 class="tree_item"
-                [ngClass]="{'hasChildren': hasChildren(section), 'tree_item-open': hasChildren(section) && getItemExpanded(section), 'selected': isSelectedSection(section)}"
+                [ngClass]="{'selected': isSelectedSection(section)}"
                 (contextmenu)="openContextMenu($event, section, parent, container, index)">
                 <div *ngIf="section.value">{{ section.value }}</div>
                 <div *ngIf="!section.value">{{ section.type }}</div>

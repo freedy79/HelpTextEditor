@@ -15,10 +15,25 @@
     align-items: center;
 }
 
+.tree-toggle {
+    cursor: pointer;
+    color: #5f6368;
+    font-size: 18px;
+    margin-right: 2px;
+    width: 20px;
+    text-align: center;
+    user-select: none;
+
+    &:hover {
+        color: #202124;
+    }
+}
+
 .tree_item {
     font-size: 0.8em;
     cursor: pointer;
     display: flex;
+    align-items: center;
     line-height: 28px;
 
     &:hover {
@@ -32,17 +47,4 @@
 
 .selected {
     background-color: #FADD37;
-}
-
-.hasChildren::before {
-    content: "\25B6";
-    color: black;
-    display: inline-block;
-    margin-right: 6px;
-    width: 15pt;
-    vertical-align: middle;
-}
-
-.tree_item-open::before {
-    transform: rotate(90deg);
 }
