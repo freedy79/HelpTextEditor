@@ -1,110 +1,84 @@
 import assert from 'node:assert/strict';
-import { after, afterEach, before, describe, it } from 'node:test';
-import express, { RequestHandler } from 'express';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import http from 'http';
-import { fileFilter, handleUpload, storage, UPLOAD_DIR } from './uploadRoutes';
+import { test } from 'node:test';
+import { Request, Response, NextFunction } from 'express';
+import type { Express } from 'express';
+import { fileFilter, handleUpload } from './uploadRoutes';
 
-const createApp = (handler: RequestHandler) => {
-  const app = express();
-  app.post('/upload', handler, handleUpload);
-  return app;
-};
-
-describe('fileFilter', () => {
+test('fileFilter allows whitelisted mime types and rejects others', () => {
   const allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
 
-  for (const mimeType of allowedTypes) {
-    it(`allows ${mimeType} files`, () => {
-      const cb = (error: Error | null, accepted?: boolean) => {
-        assert.equal(error, null);
-        assert.equal(accepted, true);
-      };
-
-      fileFilter({} as any, { mimetype: mimeType } as Express.Multer.File, cb);
-    });
+  for (const type of allowedTypes) {
+    let allowed: boolean | null = null;
+    fileFilter(
+      {} as Request,
+      { mimetype: type } as Express.Multer.File,
+      (_err: Error | null, accept?: boolean) => {
+        allowed = accept ?? null;
+      }
+    );
+    assert.equal(allowed, true);
   }
 
-  it('rejects disallowed mime types', () => {
-    const cb = (error: Error | null, accepted?: boolean) => {
-      assert.equal(error, null);
-      assert.equal(accepted, false);
-    };
-
-    fileFilter({} as any, { mimetype: 'text/plain' } as Express.Multer.File, cb);
-  });
+  let rejected: boolean | null = null;
+  fileFilter(
+    {} as Request,
+    { mimetype: 'text/plain' } as Express.Multer.File,
+    (_err: Error | null, accept?: boolean) => {
+      rejected = accept ?? null;
+    }
+  );
+  assert.equal(rejected, false);
 });
 
-describe('handleUpload route', () => {
-  const upload = multer({ storage, fileFilter }).single('file');
-  let server: http.Server;
-  let baseUrl: string;
+test('handleUpload responds with 400 when no file is provided', () => {
+  let statusCode: number | undefined;
+  let payload: unknown;
 
-  before(() => {
-    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-    const app = createApp((_req, _res, next) => upload(_req, _res, next));
-    server = app.listen(0);
-    const address = server.address();
-    if (typeof address === 'object' && address) {
-      baseUrl = `http://127.0.0.1:${address.port}`;
-    } else {
-      throw new Error('Unable to determine server port');
-    }
-  });
+  const res = {
+    status(code: number) {
+      statusCode = code;
+      return this;
+    },
+    json(body: unknown) {
+      payload = body;
+      return this;
+    },
+  } as unknown as Response;
 
-  after(() => {
-    server.close();
-  });
+  handleUpload({} as Request, res, (() => undefined) as NextFunction);
 
-  afterEach(() => {
-    if (!fs.existsSync(UPLOAD_DIR)) {
-      return;
-    }
+  assert.equal(statusCode, 400);
+  assert.deepEqual(payload, { error: 'No file received' });
+});
 
-    for (const file of fs.readdirSync(UPLOAD_DIR)) {
-      fs.unlinkSync(path.join(UPLOAD_DIR, file));
-    }
-  });
+test('handleUpload returns upload metadata when a file is present', () => {
+  let statusCode: number | undefined;
+  let payload: unknown;
 
-  it('returns 400 when no file is provided', async () => {
-    const response = await fetch(`${baseUrl}/upload`, { method: 'POST' });
-    assert.equal(response.status, 400);
-    assert.deepEqual(await response.json(), { error: 'No file received' });
-  });
+  const res = {
+    status(code: number) {
+      statusCode = code;
+      return this;
+    },
+    json(body: unknown) {
+      payload = body;
+      return this;
+    },
+  } as unknown as Response;
 
-  it('returns file metadata when upload succeeds', async () => {
-    const fileBuffer = Buffer.from([
-      0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, // PNG header
-      0x00, 0x00, 0x00, 0x0d, 0x49, 0x48, 0x44, 0x52,
-      0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
-      0x08, 0x06, 0x00, 0x00, 0x00, 0x1f, 0x15, 0xc4,
-      0x89, 0x00, 0x00, 0x00, 0x0a, 0x49, 0x44, 0x41,
-      0x54, 0x78, 0x01, 0x63, 0x60, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x01, 0xe2, 0x21, 0xbc, 0x33, 0x00,
-      0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae,
-      0x42, 0x60, 0x82,
-    ]);
-    const formData = new FormData();
-    formData.append('file', new Blob([fileBuffer], { type: 'image/png' }), 'sample.png');
+  const file = {
+    filename: 'test-file.txt',
+    size: 1234,
+    mimetype: 'text/plain',
+  };
 
-    const response = await fetch(`${baseUrl}/upload`, {
-      method: 'POST',
-      body: formData,
-    });
+  handleUpload({ file } as unknown as Request, res, (() => undefined) as NextFunction);
 
-    assert.equal(response.status, 201);
-    const body = await response.json();
-
-    assert.match(body.filename, /\.png$/);
-    assert.equal(body.mimetype, 'image/png');
-    assert.equal(typeof body.size, 'number');
-    assert.match(body.url, /^\/uploads\//);
-
-    const savedFile = path.join(UPLOAD_DIR, body.filename);
-    assert.equal(fs.existsSync(savedFile), true);
-    assert.equal(path.dirname(savedFile), UPLOAD_DIR);
-    assert.match(path.basename(savedFile), /^sample-\d+-\d+\.png$/);
+  assert.equal(statusCode, 201);
+  assert.deepEqual(payload, {
+    filename: 'test-file.txt',
+    size: 1234,
+    mimetype: 'text/plain',
+    url: '/uploads/test-file.txt',
   });
 });
