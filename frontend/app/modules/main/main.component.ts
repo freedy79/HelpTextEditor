@@ -321,28 +321,45 @@ export class MainComponent implements OnInit {
     await this.deleteItem(section);
   }
 
-  onMoveSection(event: { parent: HelpTextSection | MainHelpSection | HelpTextStep; container: string; index: number; direction?: 'up' | 'down'; newIndex?: number }) {
+  onMoveSection(event: { parent: HelpTextSection | MainHelpSection | HelpTextStep; container: string; index: number; direction?: 'up' | 'down'; newIndex?: number; fromParent?: HelpTextSection | MainHelpSection | HelpTextStep; fromContainer?: string }) {
     if (!event || !event.parent || !event.container) {
       console.log('Move section aborted: missing event data', event);
       return;
     }
 
-    const collection = (event.parent as any)[event.container] as any[];
-    if (!collection || event.index < 0 || event.index >= collection.length) {
-      console.log('Move section aborted: invalid collection or index', event);
+    const sourceParent = event.fromParent || event.parent;
+    const sourceContainer = event.fromContainer || event.container;
+    const sourceCollection = (sourceParent as any)[sourceContainer] as any[];
+    if (!sourceCollection || event.index < 0 || event.index >= sourceCollection.length) {
+      console.log('Move section aborted: invalid source collection or index', event);
       return;
     }
 
-    const targetIndex = (typeof event.newIndex === 'number')
+    const [item] = sourceCollection.splice(event.index, 1);
+
+    const targetParent = event.parent;
+    const targetContainer = event.container;
+    if (!(targetParent as any)[targetContainer]) {
+      (targetParent as any)[targetContainer] = [];
+    }
+    const targetCollection = (targetParent as any)[targetContainer] as any[];
+
+    const requestedIndex = (typeof event.newIndex === 'number')
       ? event.newIndex
       : (event.direction === 'up' ? event.index - 1 : event.index + 1);
-    if (targetIndex < 0 || targetIndex >= collection.length) {
+
+    let targetIndex = Math.max(0, Math.min(requestedIndex, targetCollection.length));
+    if (sourceCollection === targetCollection && targetIndex > event.index) {
+      targetIndex = targetIndex - 1;
+    }
+
+    if (targetIndex < 0 || targetIndex > targetCollection.length) {
       console.log('Move section aborted: target index out of range', { targetIndex, event });
+      sourceCollection.splice(event.index, 0, item);
       return;
     }
 
-    const [item] = collection.splice(event.index, 1);
-    collection.splice(targetIndex, 0, item);
+    targetCollection.splice(targetIndex, 0, item);
 
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.saveCurrentSectionText();

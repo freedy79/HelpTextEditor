@@ -15,6 +15,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    cursor: grab;
 }
 
 .tree-toggle {
@@ -69,10 +70,6 @@
     }
 }
 
-.drag-handle {
-    cursor: grab;
-}
-
 .selected {
     background-color: #FADD37;
 }
@@ -118,4 +115,30 @@
 
 .abbreviation-placeholder {
     cursor: context-menu;
+}
+
+.drag-preview {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.drag-placeholder {
+    height: 28px;
+    border: 1px dashed #5f6368;
+    border-radius: 4px;
+    margin: 2px 0;
+}
+
+.child-drop {
+    height: 6px;
+    margin-left: 20px;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 120ms ease-in-out, background-color 120ms ease-in-out;
+}
+
+.child-drop.visible {
+    opacity: 1;
+    background-color: rgba(33, 150, 243, 0.25);
 }

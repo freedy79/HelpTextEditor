@@ -1,4 +1,4 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep, AbbreviationItem } from '~models/help-text-structure.model';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
@@ -11,8 +11,10 @@ type MoveEvent = {
   index: number;
   direction?: 'up' | 'down';
   newIndex?: number;
+  fromParent?: ParentType;
+  fromContainer?: string;
 };
-type DropContainerContext = { parent: ParentType; container: string };
+type DropContainerContext = { parent: ParentType; container: string; mode?: 'list' | 'child' };
 
 @Component({
   selector: 'app-help-structure-treeview',
@@ -39,6 +41,7 @@ export class HelpStructureTreeviewComponent implements OnChanges {
   private contextMenuContext: { section: TreeItem; parent: ParentType; container: string; index: number; } | null = null;
 
   private expandedSections: string[];
+  public isDragging = false;
 
   constructor() {
     this.expandedSections = [];
@@ -107,21 +110,38 @@ export class HelpStructureTreeviewComponent implements OnChanges {
   onDrop(event: CdkDragDrop<DropContainerContext>) {
     const containerData = event.container.data;
     const previousContainerData = event.previousContainer.data as DropContainerContext | undefined;
+    const dragContext = event.item.data as { parent: ParentType; container: string; index: number } | undefined;
 
-    if (!containerData || !previousContainerData) { return; }
-    const sameParent = containerData.parent === previousContainerData.parent;
-    const sameContainer = containerData.container === previousContainerData.container;
+    const fromParent = dragContext?.parent || previousContainerData?.parent;
+    const fromContainer = dragContext?.container || previousContainerData?.container;
 
-    if (!sameParent || !sameContainer || event.previousIndex === event.currentIndex) {
-      return;
-    }
+    if (!containerData || !fromParent || !fromContainer) { return; }
+
+    const targetParent = containerData.parent;
+    const targetContainer = containerData.container || fromContainer;
+    const isChildDrop = containerData.mode === 'child';
+    const targetCollection = this.getCollection(targetParent, targetContainer);
+
+    const targetIndex = isChildDrop
+      ? (targetCollection ? targetCollection.length : 0)
+      : event.currentIndex;
 
     this.moveSection.emit({
-      parent: containerData.parent,
-      container: containerData.container,
-      index: event.previousIndex,
-      newIndex: event.currentIndex
+      parent: targetParent,
+      container: targetContainer,
+      index: dragContext?.index ?? event.previousIndex,
+      newIndex: targetIndex,
+      fromParent,
+      fromContainer
     });
+  }
+
+  onDragStarted(event: CdkDragStart) {
+    this.isDragging = true;
+  }
+
+  onDragEnded() {
+    this.isDragging = false;
   }
 
   openContextMenu(event: MouseEvent, section: TreeItem, parent: ParentType, container: string, index: number) {
@@ -293,6 +313,22 @@ export class HelpStructureTreeviewComponent implements OnChanges {
   canMoveDown(parent: ParentType, container: string, index: number): boolean {
     const collection = this.getCollection(parent, container);
     return !!collection && index < collection.length - 1;
+  }
+
+  getDefaultChildContainer(section: TreeItem): string | null {
+    if (!section) { return null; }
+    if (this.isHelpTextStep(section)) {
+      return 'substeps';
+    }
+    if (this.isHelpTextSection(section)) {
+      if (this.showStepControls(section)) { return 'steps'; }
+      if ((section as any).subsections !== undefined) { return 'subsections'; }
+      if ((section as any).content !== undefined) { return 'content'; }
+      if ((section as any).steps !== undefined) { return 'steps'; }
+      if ((section as any).coversheet !== undefined) { return 'coversheet'; }
+      return 'subsections';
+    }
+    return null;
   }
 
   private getCollection(parent: ParentType, container: string): any[] | null {
