@@ -261,14 +261,16 @@ export class HelpTextSection {
   subsections?: HelpTextSection[];
   steps?: HelpTextStep[];
 
-  public getTranslationKey(): string {
-    if (this.type) {
-      if (this.type == "IMAGE" || this.type == "SPLITIMAGE") {
-        return this.imageDescription;
-      }
+  public getTranslationKey(): string | null {
+    if (this.type === HelpContentType.BULLET_ENUMERATION) {
+      return null;
     }
 
-    return this.value;
+    if (this.type === "IMAGE" || this.type === "SPLITIMAGE") {
+      return this.imageDescription;
+    }
+
+    return this.value || null;
   }
 
   hasChildren(): boolean {
