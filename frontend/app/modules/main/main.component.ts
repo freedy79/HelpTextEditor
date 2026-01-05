@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FileIOService } from '~shared/services/file-io.service';
-import { HelpTextRoot, MainHelpSection, HelpTextSection, parseHelpTextRoot, parseMainHelpSection, HelpTextRootKey, HelpContentType, HelpTextStep } from '~/app/models/help-text-structure.model';
+import { HelpTextRoot, MainHelpSection, HelpTextSection, parseHelpTextRoot, parseMainHelpSection, HelpTextRootKey, HelpContentType, HelpTextStep, AbbreviationItem } from '~/app/models/help-text-structure.model';
 import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from '../../models/qtf-file.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,6 +11,7 @@ import { DeeplTranslationService } from '~shared/services/deepl-translation.serv
 import { DeeplSettingsDialogComponent, DeeplSettingsDialogResult } from '~/app/dialogs/deepl-settings-dialog/deepl-settings-dialog.component';
 import { CleanQtfDialogComponent, CleanQtfDialogResult } from '~/app/dialogs/clean-qtf-dialog/clean-qtf-dialog.component';
 import { TranslationIssuesDialogComponent, TranslationIssuesDialogResult } from '~/app/dialogs/translation-issues-dialog/translation-issues-dialog.component';
+import { AbbreviationDialogComponent, AbbreviationDialogResult } from '~/app/dialogs/abbreviation-dialog/abbreviation-dialog.component';
 import { ConfirmDialogService } from '~/app/dialogs/confirmation-dialog/confirmation-dialog.service';
 
 @Component({
@@ -228,6 +229,76 @@ export class MainComponent implements OnInit {
     this.createNewStep();
   }
 
+  onAddAbbreviation(mainSection: MainHelpSection) {
+    if (!mainSection) { return; }
+
+    const dialogRef = this.dialog.open(AbbreviationDialogComponent, {
+      width: '520px',
+      data: {
+        existingAbbreviations: this.getAllAbbreviations()
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: AbbreviationDialogResult | undefined) => {
+      if (!result?.abbreviation) { return; }
+
+      const targetSection = this.currentMainHelpSection || mainSection;
+      if (!targetSection.abbreviations) {
+        targetSection.abbreviations = [];
+      }
+      targetSection.abbreviations.push(result.abbreviation);
+
+      this.ensureAbbreviationQtfEntries(result.abbreviation, null);
+      this.persistAbbreviationChange(targetSection);
+    });
+  }
+
+  onEditAbbreviation(event: { abbreviation: AbbreviationItem; parent: MainHelpSection; index: number; }) {
+    if (!event || !event.abbreviation) { return; }
+    const dialogRef = this.dialog.open(AbbreviationDialogComponent, {
+      width: '520px',
+      data: {
+        abbreviation: event.abbreviation,
+        existingAbbreviations: this.getAllAbbreviations()
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: AbbreviationDialogResult | undefined) => {
+      if (!result?.abbreviation) { return; }
+      const targetSection = this.currentMainHelpSection || event.parent;
+      if (!targetSection) { return; }
+
+      if (!targetSection.abbreviations) {
+        targetSection.abbreviations = [];
+      }
+
+      const index = (typeof event.index === 'number') ? event.index : targetSection.abbreviations.indexOf(event.abbreviation);
+      if (index < 0) { return; }
+
+      const previous = targetSection.abbreviations[index];
+      targetSection.abbreviations[index] = result.abbreviation;
+
+      this.ensureAbbreviationQtfEntries(result.abbreviation, previous);
+      this.persistAbbreviationChange(targetSection);
+    });
+  }
+
+  onDeleteAbbreviation(event: { abbreviation: AbbreviationItem; parent: MainHelpSection; }) {
+    if (!event || !event.abbreviation || !event.parent) { return; }
+
+    const confirmed = confirm(`Abkürzung \"${event.abbreviation.abbreviation}\" löschen?`);
+    if (!confirmed) { return; }
+
+    const targetSection = this.currentMainHelpSection || event.parent;
+    targetSection.abbreviations = (targetSection.abbreviations || []).filter(ab => ab !== event.abbreviation);
+
+    this.persistAbbreviationChange(targetSection);
+  }
+
+  onDeleteTreeSection(section: HelpTextSection | HelpTextStep) {
+    this.deleteItem(section);
+  }
+  
   async onDeleteTreeSection(section: HelpTextSection | HelpTextStep) {
     await this.deleteItem(section);
   }
@@ -1030,6 +1101,63 @@ export class MainComponent implements OnInit {
     const pattern = this.allowedKeys.map(escape).join('|');
     const re = new RegExp(`^(?:${pattern})$|${pattern}`);
     return re.test(keyword);
+  }
+
+  private getAllAbbreviations(): AbbreviationItem[] {
+    const items: AbbreviationItem[] = [];
+    const root = this.ensureParsedHelpTextRoot();
+    if (!root) { return items; }
+
+    Object.values(root).forEach(value => {
+      const section = value as MainHelpSection;
+      section?.abbreviations?.forEach(abbr => items.push(abbr));
+    });
+
+    return items;
+  }
+
+  private ensureAbbreviationQtfEntries(abbreviation: AbbreviationItem, previous: AbbreviationItem | null): void {
+    if (!this.qtfFile) { return; }
+    if (!this.qtfFile.TEXTS) {
+      this.qtfFile.TEXTS = {};
+    }
+
+    const newKeys = [abbreviation.shortDescription, abbreviation.longDescription].filter(Boolean) as string[];
+    const previousKeys = previous ? [previous.shortDescription, previous.longDescription] : [];
+
+    newKeys.forEach((key, idx) => {
+      if (!key) { return; }
+      if (!this.qtfFile.TEXTS[key]) {
+        const previousKey = previousKeys[idx];
+        if (previousKey && this.qtfFile.TEXTS[previousKey]) {
+          const previousEntry = this.qtfFile.TEXTS[previousKey];
+          this.qtfFile.TEXTS[key] = {
+            ...previousEntry,
+            TRANSLATIONS: { ...previousEntry.TRANSLATIONS },
+            AUTOTRANSLATIONS: { ...previousEntry.AUTOTRANSLATIONS },
+            VERIFIED: { ...previousEntry.VERIFIED }
+          };
+        } else {
+          this.qtfFile.TEXTS[key] = createNewQtfItem(this.selectedLanguage, '');
+        }
+      }
+    });
+  }
+
+  private persistAbbreviationChange(mainSection: MainHelpSection): void {
+    const selectedId = this.selectedSection?.value;
+    this.currentMainHelpSection = mainSection;
+    if (this.selectedTopLevelKey) {
+      this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+    }
+    this.isDirty = true;
+    this.saveCurrentSectionText();
+    if (this.selectedTopLevelKey) {
+      this.onTopLevelChange(this.selectedTopLevelKey);
+      if (selectedId) {
+        this.onSelectSection(selectedId);
+      }
+    }
   }
 
   private getSelectedTranslationKey(): string | null {

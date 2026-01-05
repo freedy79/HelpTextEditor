@@ -12,14 +12,22 @@
                 <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: sec, level: 1, parent: item, container: 'content', index: i }"></ng-container>
             </ng-container>
         </div>
-        <ng-container *ngIf="item.abbreviations?.length">
+        <div class="abbreviation-section" (contextmenu)="openContextMenu($event, null, item, 'abbreviations', -1)">
             <p class="section_header">Abbreviations:</p>
             <ul>
-                <li *ngFor="let ab of item.abbreviations">
-                    {{ ab.abbreviation }} = {{ ab.shortDescription }}
+                <li *ngFor="let ab of item.abbreviations; let i = index" class="abbreviation-item"
+                    (contextmenu)="openContextMenu($event, ab, item, 'abbreviations', i)">
+                    <span class="tree_item abbreviation-label">
+                        <div class="abbreviation-title">{{ ab.abbreviation }}</div>
+                        <div class="abbreviation-desc" *ngIf="ab.referenceAbbreviation">↪ {{ ab.referenceAbbreviation }}</div>
+                        <div class="abbreviation-desc" *ngIf="!ab.referenceAbbreviation">{{ ab.shortDescription }}</div>
+                    </span>
+                </li>
+                <li *ngIf="!item.abbreviations?.length" class="abbreviation-empty">
+                    <span class="abbreviation-placeholder">Keine Abkürzungen vorhanden (Rechtsklick zum Hinzufügen)</span>
                 </li>
             </ul>
-        </ng-container>
+        </div>
     </ng-container>
 
     <!-- Rekursives Template für die Baumansicht -->

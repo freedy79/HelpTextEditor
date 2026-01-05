@@ -49,3 +49,46 @@
 .selected {
     background-color: #FADD37;
 }
+
+.abbreviation-section {
+    margin-top: 8px;
+    padding: 4px 0;
+
+    ul {
+        list-style: none;
+        padding-left: 8px;
+        margin: 0;
+    }
+}
+
+.abbreviation-item {
+    display: flex;
+    align-items: center;
+    padding: 2px 0;
+}
+
+.abbreviation-label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.abbreviation-title {
+    font-weight: 500;
+}
+
+.abbreviation-desc {
+    font-size: 0.75em;
+    color: #555;
+}
+
+.abbreviation-empty {
+    padding: 4px 0;
+    color: #888;
+    font-size: 0.75em;
+}
+
+.abbreviation-placeholder {
+    cursor: context-menu;
+}

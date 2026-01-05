@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content class="dialog-content">
+  <div class="form-field">
+    <label for="abbreviation">Abkürzung</label>
+    <input id="abbreviation" type="text" [(ngModel)]="abbreviation">
+  </div>
+
+  <div class="form-field checkbox-field">
+    <input id="useReference" type="checkbox" [checked]="useReference" (change)="onUseReferenceChange($event)">
+    <label for="useReference">Bestehende Abkürzung wiederverwenden</label>
+  </div>
+
+  <div class="form-field" *ngIf="useReference">
+    <label for="reference">Referenz auswählen</label>
+    <select id="reference" [(ngModel)]="referenceAbbreviation" (ngModelChange)="onReferenceChanged($event)">
+      <option [ngValue]="''">-- auswählen --</option>
+      <option *ngFor="let ab of referenceOptions" [ngValue]="ab.abbreviation">
+        {{ ab.abbreviation }} ({{ ab.shortDescription }})
+      </option>
+    </select>
+    <div class="info-text" *ngIf="referenceAbbreviation">
+      Die Kurz- und Langbeschreibung werden aus der Referenz übernommen.
+    </div>
+  </div>
+
+  <div class="form-field" *ngIf="!useReference">
+    <label for="shortDescription">Kurzbeschreibung</label>
+    <input id="shortDescription" type="text" [(ngModel)]="shortDescription">
+  </div>
+
+  <div class="form-field" *ngIf="!useReference">
+    <label for="longDescription">Langbeschreibung</label>
+    <input id="longDescription" type="text" [(ngModel)]="longDescription">
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">Abbrechen</button>
+  <button mat-raised-button color="primary" type="button" [disabled]="!canSave" (click)="save()">
+    Speichern
+  </button>
+</mat-dialog-actions>
