@@ -3,21 +3,19 @@ $statusbar-height: 48px;
 .editor {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
+    min-height: 0;
     box-sizing: border-box;
-    padding-bottom: $statusbar-height;
+    overflow: hidden;
 }
 
 .header {
     height: 68px;
-    width: 100vw;
-    //position: fixed; /* Set the navbar to fixed position */
+    width: 100%;
     top: 0;
-    /* Position the navbar at the top of the page */
 }
 
 .editor-columns {
-    //position: relative;
     display: flex;
     height: calc(100vh - 68px - #{$statusbar-height});
     width: 100vw;
@@ -26,26 +24,25 @@ $statusbar-height: 48px;
     .column {
         padding: 10px;
         overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
     }
 
     .left {
         width: 20%;
         border-right: 1px solid #ccc;
-
         background-color: #eeeeee;
-        display: flex;
-        flex-flow: column;
 
         .structure-header {
-            display: inline-table;
-            overflow-y: auto;
+            flex: 0 0 auto;
         }
 
         .structure-treeview {
             border: 1px solid #888;
-            overflow-y: hidden;
-            display: inline-flex;
-            flex: auto;
+            flex: 1 1 auto;
+            overflow-y: auto;
+            min-height: 0;
         }
     }
 
@@ -62,9 +59,9 @@ $statusbar-height: 48px;
 .previewHtmlBox {
     border: 1px solid #aaa;
     padding: 10px;
-    min-height: 400px;
-    height: 80%;
-    overflow-y: scroll;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 input {
