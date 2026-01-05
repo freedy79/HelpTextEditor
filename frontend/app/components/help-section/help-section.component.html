@@ -24,7 +24,7 @@
                 <figure>
                     <img [src]="'./media/helpImages/' + content.value + '_' + language + '.svg'"
                         [default]="'./media/helpImages/' + content.value + '_' + language + '.png'" class="image"
-                        [style.width]="content.width" [style.height]="content.height">
+                        [fallback]="'assets/image-fallback.svg'" [style.width]="content.width" [style.height]="content.height">
                     <figcaption [innerHTML]="content.imageDescription | qtfTranslate" class="imageDesc"></figcaption>
                 </figure>
             </div>
@@ -33,7 +33,9 @@
             <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(content.value)">
                 <figure>
-                    <img [src]="'./media/helpImages/' + content.value + '_' + language + '.png'" class="image">
+                    <img [src]="'./media/helpImages/' + content.value + '_' + language + '.png'"
+                        [default]="'./media/helpImages/' + content.value + '_' + language + '.png'"
+                        [fallback]="'assets/image-fallback.svg'" class="image">
                     <figcaption [innerHTML]="content.imageDescription | qtfTranslate" class="imageDesc"></figcaption>
                 </figure>
             </div>
