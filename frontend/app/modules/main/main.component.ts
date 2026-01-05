@@ -8,6 +8,7 @@ import { ImagePickerDialogComponent, ImagePickerDialogData } from '~/app/dialogs
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogService } from '~/app/dialogs/confirmation-dialog/confirmation-dialog.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DeeplTranslationService } from '~shared/services/deepl-translation.service';
 
 @Component({
   selector: 'app-main',
@@ -26,6 +27,9 @@ export class MainComponent implements OnInit {
 
   languages = ['GERMAN', 'ENGLISH', 'FRENCH', 'CHINESE', 'RUSSIAN',  'SPANISH', 'ITALIAN', "JAPANESE", "KOREAN"];
   selectedLanguage = 'GERMAN';
+  deeplAuthKey = '';
+  isAutoTranslating = false;
+  autoTranslationMessage = '';
 
   // Aktuell gewählter Top-Level-Key (z. B. HELP_TEXT_DEVICE_CONCEPT)
   selectedTopLevelKey: string | null = null;
@@ -75,9 +79,14 @@ export class MainComponent implements OnInit {
   ];
 
   constructor(private fileService: FileIOService, private translateService: TranslateService,
-    private dialog: MatDialog, private confirmDialogService: ConfirmDialogService, private http: HttpClient) { }
+    private dialog: MatDialog, private confirmDialogService: ConfirmDialogService, private http: HttpClient,
+    private deeplTranslationService: DeeplTranslationService) { }
 
   ngOnInit(): void {
+    const storedKey = this.deeplTranslationService.getStoredAuthKey();
+    if (storedKey) {
+      this.deeplAuthKey = storedKey;
+    }
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -252,6 +261,7 @@ export class MainComponent implements OnInit {
     }
 
     this.saveCurrentSectionText();
+    this.autoTranslationMessage = '';
 
     console.log("Selection: ", contentId);
     this.selectedSection = this.currentMainHelpSection.findSectionById(contentId);
@@ -266,11 +276,12 @@ export class MainComponent implements OnInit {
   }
 
   onLanguageChange(event) {
+    this.autoTranslationMessage = '';
     this.loadTextsFromQtf(this.selectedLanguage);
-    this.selectedSection.getTranslationKey();
 
     if (this.selectedSection) {
-      this.loadTextFromQtf(this.selectedSection.getTranslationKey());
+      const translationKey = this.selectedSection.getTranslationKey();
+      this.loadTextFromQtf(translationKey);
     }
   }
 
@@ -284,7 +295,10 @@ export class MainComponent implements OnInit {
     let key: TextKey;
     for (key in this.qtfFile.TEXTS) {
       const entry: QtfTextEntry = this.qtfFile.TEXTS[key];
-      const translation = entry.TRANSLATIONS[this.selectedLanguage] || '[missing]';
+      if (!entry) {
+        continue;
+      }
+      const translation = entry.TRANSLATIONS[language] || entry.AUTOTRANSLATIONS?.[language] || '';
       this.translateService.set(key, translation);
     }
   }
@@ -296,9 +310,15 @@ export class MainComponent implements OnInit {
     }
 
     //console.log("Loading from key: ", key);
-    this.translateService.get(key).subscribe(res => {
-      this.selectedTextContent = res;
-    });
+    const entry = this.qtfFile.TEXTS[key];
+    if (!entry) {
+      this.selectedTextContent = '';
+      this.translateService.set(key, '');
+      return;
+    }
+    const translation = entry?.TRANSLATIONS?.[this.selectedLanguage] || entry?.AUTOTRANSLATIONS?.[this.selectedLanguage] || '';
+    this.translateService.set(key, translation || '');
+    this.selectedTextContent = translation;
   }
 
   saveCurrentSectionText() {
@@ -320,6 +340,12 @@ export class MainComponent implements OnInit {
         AUTOTRANSLATIONS: {},
         VERIFIED: {}
       };
+    }
+    if (!this.qtfFile.TEXTS[key].AUTOTRANSLATIONS) {
+      this.qtfFile.TEXTS[key].AUTOTRANSLATIONS = {};
+    }
+    if (!this.qtfFile.TEXTS[key].VERIFIED) {
+      this.qtfFile.TEXTS[key].VERIFIED = {};
     }
     if (this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] != this.selectedTextContent) {
       this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] = this.selectedTextContent;
@@ -531,7 +557,87 @@ export class MainComponent implements OnInit {
 
   onTranslationChanged(newText: string) {
     this.selectedTextContent = newText;
+    this.autoTranslationMessage = '';
     this.saveCurrentSectionText();
+  }
+
+  storeDeeplAuthKey() {
+    this.deeplTranslationService.storeAuthKey(this.deeplAuthKey.trim());
+    this.autoTranslationMessage = 'DeepL API-Token gespeichert.';
+  }
+
+  canAutoTranslateCurrentSelection(): boolean {
+    if (!this.selectedSection || !this.qtfFile) {
+      return false;
+    }
+
+    const key = this.getSelectedTranslationKey();
+    const entry = this.getTranslationEntryForSelection(key);
+    const hasToken = (this.deeplAuthKey || this.deeplTranslationService.getStoredAuthKey());
+    const targetLanguage = this.deeplTranslationService.mapLanguageToDeepL(this.selectedLanguage);
+    const sourceTranslation = this.getSourceTranslation(entry);
+
+    return !!(entry && !this.hasExistingTranslation(entry) && hasToken && targetLanguage && sourceTranslation);
+  }
+
+  autoTranslateCurrentSelection() {
+    if (!this.selectedSection || !this.qtfFile) {
+      return;
+    }
+
+    const key = this.getSelectedTranslationKey();
+    if (!key) {
+      this.autoTranslationMessage = 'Kein zu übersetzender Schlüssel gefunden.';
+      return;
+    }
+    const entry = this.getTranslationEntryForSelection(key);
+    if (!entry) {
+      this.autoTranslationMessage = 'Keine zugehörige Übersetzung gefunden.';
+      return;
+    }
+
+    const token = this.deeplAuthKey || this.deeplTranslationService.getStoredAuthKey();
+    if (!token) {
+      this.autoTranslationMessage = 'Bitte zuerst einen DeepL API-Token speichern.';
+      return;
+    }
+
+    const targetLanguage = this.deeplTranslationService.mapLanguageToDeepL(this.selectedLanguage);
+    if (!targetLanguage) {
+      this.autoTranslationMessage = 'Die ausgewählte Zielsprache wird von DeepL nicht unterstützt.';
+      return;
+    }
+
+    const sourceTranslation = this.getSourceTranslation(entry);
+    if (!sourceTranslation) {
+      this.autoTranslationMessage = 'Keine Ausgangssprache für die Übersetzung gefunden.';
+      return;
+    }
+
+    this.isAutoTranslating = true;
+    this.autoTranslationMessage = 'Übersetzung wird angefragt...';
+
+    this.deeplTranslationService.translateText(
+      sourceTranslation.text,
+      sourceTranslation.languageCode,
+      targetLanguage,
+      token
+    ).subscribe({
+      next: translatedText => {
+        entry.TRANSLATIONS[this.selectedLanguage] = translatedText;
+        entry.AUTOTRANSLATIONS[this.selectedLanguage] = translatedText;
+        this.translateService.set(key, translatedText);
+        this.selectedTextContent = translatedText;
+        this.isDirty = true;
+        this.autoTranslationMessage = 'Automatische Übersetzung gespeichert.';
+      },
+      error: (error) => {
+        console.error('DeepL translation failed', error);
+        this.autoTranslationMessage = 'Automatische Übersetzung fehlgeschlagen.';
+        this.isAutoTranslating = false;
+      },
+      complete: () => this.isAutoTranslating = false
+    });
   }
 
   onImageFileChanged(event) {
@@ -805,6 +911,64 @@ export class MainComponent implements OnInit {
     const pattern = this.allowedKeys.map(escape).join('|');
     const re = new RegExp(`^(?:${pattern})$|${pattern}`);
     return re.test(keyword);
+  }
+
+  private getSelectedTranslationKey(): string | null {
+    if (!this.selectedSection) {
+      return null;
+    }
+    const getter = (this.selectedSection as any).getTranslationKey;
+    if (typeof getter === 'function') {
+      return getter.call(this.selectedSection);
+    }
+    return this.selectedSection.value || null;
+  }
+
+  private getTranslationEntryForSelection(key: string | null): QtfTextEntry | null {
+    if (!key || !this.qtfFile || !this.qtfFile.TEXTS) {
+      return null;
+    }
+
+    return this.qtfFile.TEXTS[key] || null;
+  }
+
+  private hasExistingTranslation(entry: QtfTextEntry | null): boolean {
+    if (!entry) {
+      return false;
+    }
+
+    const translation = entry.TRANSLATIONS?.[this.selectedLanguage];
+    const autoTranslation = entry.AUTOTRANSLATIONS?.[this.selectedLanguage];
+    return !!(translation || autoTranslation);
+  }
+
+  hasMissingTranslationForSelection(): boolean {
+    const key = this.getSelectedTranslationKey();
+    const entry = this.getTranslationEntryForSelection(key);
+    return !!(entry && !this.hasExistingTranslation(entry));
+  }
+
+  private getSourceTranslation(entry: QtfTextEntry | null): { text: string; languageCode?: string } | null {
+    if (!entry) {
+      return null;
+    }
+
+    const preferredSources = ['GERMAN', 'ENGLISH'];
+    for (const lang of preferredSources) {
+      const text = entry.TRANSLATIONS?.[lang] || entry.AUTOTRANSLATIONS?.[lang];
+      if (text && lang !== this.selectedLanguage) {
+        return { text, languageCode: this.deeplTranslationService.mapLanguageToDeepL(lang) };
+      }
+    }
+
+    const combinedTranslations = { ...entry.TRANSLATIONS, ...entry.AUTOTRANSLATIONS };
+    for (const [lang, text] of Object.entries(combinedTranslations)) {
+      if (text && lang !== this.selectedLanguage) {
+        return { text: text as string, languageCode: this.deeplTranslationService.mapLanguageToDeepL(lang) };
+      }
+    }
+
+    return null;
   }
 
   wrapSelectionInBold(textArea: HTMLTextAreaElement): void {

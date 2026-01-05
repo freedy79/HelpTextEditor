@@ -85,6 +85,19 @@
           <button (click)="copyText(textArea)">Copy all</button>
         </div>
         <div>
+          <p><strong>DeepL API-Token:</strong></p>
+          <input type="password" [(ngModel)]="deeplAuthKey" (focusout)="storeDeeplAuthKey()" placeholder="Token eingeben">
+          <small>Token wird als Cookie gespeichert und beim Start geladen.</small>
+        </div>
+        <div *ngIf="hasMissingTranslationForSelection()">
+          <button (click)="autoTranslateCurrentSelection()" [disabled]="!canAutoTranslateCurrentSelection() || isAutoTranslating">
+            {{ isAutoTranslating ? 'Übersetze...' : 'Automatisch übersetzen' }}
+          </button>
+        </div>
+        <div *ngIf="autoTranslationMessage">
+          <small>{{ autoTranslationMessage }}</small>
+        </div>
+        <div>
           <button (click)="deleteItem(selectedSection)" style="margin-left: 4px;">delete</button>
         </div>
         <div>
@@ -104,6 +117,19 @@
           <label><strong>Translation ({{ selectedLanguage }}):</strong></label>
           <textarea [(ngModel)]="selectedTextContent" (ngModelChange)="onTranslationChanged($event)"
             style="width: 100%; height: 200px;"></textarea>
+          <div>
+            <p><strong>DeepL API-Token:</strong></p>
+            <input type="password" [(ngModel)]="deeplAuthKey" (focusout)="storeDeeplAuthKey()" placeholder="Token eingeben">
+            <small>Token wird als Cookie gespeichert und beim Start geladen.</small>
+          </div>
+          <div *ngIf="hasMissingTranslationForSelection()">
+            <button (click)="autoTranslateCurrentSelection()" [disabled]="!canAutoTranslateCurrentSelection() || isAutoTranslating">
+              {{ isAutoTranslating ? 'Übersetze...' : 'Automatisch übersetzen' }}
+            </button>
+          </div>
+          <div *ngIf="autoTranslationMessage">
+            <small>{{ autoTranslationMessage }}</small>
+          </div>
             <p><strong>Width:</strong> <input [value]="selectedSection.width" (focusout)="onImageWidthChanged($event)"></p>  
             <p><strong>Width (PDF):</strong> <input [value]="selectedSection.pdfWidth" (focusout)="onPdfWidthChanged($event)"></p>  
         </div>
