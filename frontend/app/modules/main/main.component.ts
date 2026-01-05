@@ -633,7 +633,14 @@ export class MainComponent implements OnInit {
       },
       error: (error) => {
         console.error('DeepL translation failed', error);
-        this.autoTranslationMessage = 'Automatische Übersetzung fehlgeschlagen.';
+        const deeplErrorMessage = error?.error?.message || error?.message || '';
+        const deeplDetails = error?.error?.details;
+        const deeplMessageSuffix = deeplDetails
+          ? `${deeplErrorMessage ? `${deeplErrorMessage} (${deeplDetails})` : deeplDetails}`
+          : deeplErrorMessage;
+        this.autoTranslationMessage = deeplMessageSuffix
+          ? `Automatische Übersetzung fehlgeschlagen. DeepL-Fehler: ${deeplMessageSuffix}`
+          : 'Automatische Übersetzung fehlgeschlagen.';
         this.isAutoTranslating = false;
       },
       complete: () => this.isAutoTranslating = false
