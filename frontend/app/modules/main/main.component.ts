@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FileIOService } from '~shared/services/file-io.service';
 import { HelpTextRoot, MainHelpSection, HelpTextSection, parseHelpTextRoot, parseMainHelpSection, HelpTextRootKey, HelpContentType, HelpTextStep, AbbreviationItem } from '~/app/models/help-text-structure.model';
 import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from '../../models/qtf-file.model';
@@ -20,6 +20,7 @@ import { ConfirmDialogService } from '~/app/dialogs/confirmation-dialog/confirma
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
+  @ViewChild('previewContainer') previewContainer: ElementRef<HTMLDivElement>;
 
   helpTextRoot: HelpTextRoot | null = null;
   qtfFile: QtfFile | null = null;
@@ -204,18 +205,39 @@ export class MainComponent implements OnInit {
     if (event) {
       this.onSelectSection(event as string);
 
-      // scroll to position
       const elementId = this.selectedSection?.value || (event as string);
-      const el = elementId ? document.getElementById(elementId) : null;
-      if (el) {
-        el.scrollIntoView();
-      }
+      this.scrollToSectionIfHidden(elementId);
     }
   }
 
   onAddSubsection(section: HelpTextSection) {
     this.selectedSection = section;
     this.createNewSubsection();
+  }
+
+  private scrollToSectionIfHidden(elementId: string | null) {
+    if (!elementId) {
+      return;
+    }
+
+    const sectionElement = document.getElementById(elementId);
+    if (!sectionElement) {
+      return;
+    }
+
+    const container = this.previewContainer?.nativeElement;
+    if (container) {
+      const sectionBounds = sectionElement.getBoundingClientRect();
+      const containerBounds = container.getBoundingClientRect();
+      const isFullyVisible = sectionBounds.top >= containerBounds.top && sectionBounds.bottom <= containerBounds.bottom;
+
+      if (!isFullyVisible) {
+        sectionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+
+    sectionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   onAddContent(section: HelpTextSection | MainHelpSection) {
