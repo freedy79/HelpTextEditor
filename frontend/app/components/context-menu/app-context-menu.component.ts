@@ -81,4 +81,10 @@ export class ContextMenuComponent implements OnInit, OnDestroy {
   onDocumentClick(): void {
     this.closeContextMenu();
   }
+
+  private onContextMenu = (event: MouseEvent): void => {
+    event.preventDefault();
+    event.stopPropagation();
+    this.openContextMenu(event.clientX, event.clientY, this.items);
+  };
 }
