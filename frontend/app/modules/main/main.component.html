@@ -84,11 +84,6 @@
           <button (click)="wrapSelectionInBold(textArea)">B</button>
           <button (click)="copyText(textArea)">Copy all</button>
         </div>
-        <div>
-          <p><strong>DeepL Einstellungen:</strong></p>
-          <button (click)="openDeeplSettingsDialog()">Dialog öffnen</button>
-          <small>Der Token wird über das Menü "File" hinterlegt.</small>
-        </div>
         <div *ngIf="hasMissingTranslationForSelection()">
           <button (click)="autoTranslateCurrentSelection()" [disabled]="!canAutoTranslateCurrentSelection() || isAutoTranslating">
             {{ isAutoTranslating ? 'Übersetze...' : 'Automatisch übersetzen' }}
@@ -117,11 +112,6 @@
           <label><strong>Translation ({{ selectedLanguage }}):</strong></label>
           <textarea [(ngModel)]="selectedTextContent" (ngModelChange)="onTranslationChanged($event)"
             style="width: 100%; height: 200px;"></textarea>
-          <div>
-            <p><strong>DeepL Einstellungen:</strong></p>
-            <button (click)="openDeeplSettingsDialog()">Dialog öffnen</button>
-            <small>Der Token wird über das Menü "File" hinterlegt.</small>
-          </div>
           <div *ngIf="hasMissingTranslationForSelection()">
             <button (click)="autoTranslateCurrentSelection()" [disabled]="!canAutoTranslateCurrentSelection() || isAutoTranslating">
               {{ isAutoTranslating ? 'Übersetze...' : 'Automatisch übersetzen' }}
