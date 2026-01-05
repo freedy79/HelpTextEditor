@@ -7,10 +7,12 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
 import { ConfirmDialogService } from './confirmation-dialog/confirmation-dialog.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { DeeplSettingsDialogComponent } from './deepl-settings-dialog/deepl-settings-dialog.component';
+import { CleanQtfDialogComponent } from './clean-qtf-dialog/clean-qtf-dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,13 +20,15 @@ import { DeeplSettingsDialogComponent } from './deepl-settings-dialog/deepl-sett
     AddContentOverlayComponent,
     ImagePickerDialogComponent,
     ConfirmationDialogComponent,
-    DeeplSettingsDialogComponent
+    DeeplSettingsDialogComponent,
+    CleanQtfDialogComponent
   ],
   imports: [
     BrowserModule,
     CommonModule,
     MatDialogModule,
     MatIconModule,
+    MatButtonModule,
     FormsModule
   ],
   exports: [
@@ -32,10 +36,11 @@ import { DeeplSettingsDialogComponent } from './deepl-settings-dialog/deepl-sett
     AddContentOverlayComponent,
     ImagePickerDialogComponent,
     ConfirmationDialogComponent,
-    DeeplSettingsDialogComponent
+    DeeplSettingsDialogComponent,
+    CleanQtfDialogComponent
   ],
   providers: [ConfirmDialogService],
-  entryComponents:[ImagePickerDialogComponent, ConfirmationDialogComponent],
+  entryComponents:[ImagePickerDialogComponent, ConfirmationDialogComponent, CleanQtfDialogComponent],
   bootstrap: []
 })
 export class DialogsModule { }

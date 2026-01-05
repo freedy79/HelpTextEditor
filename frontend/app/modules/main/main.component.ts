@@ -6,10 +6,11 @@ import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ImagePickerDialogComponent, ImagePickerDialogData } from '~/app/dialogs/image-picker-dialog/image-picker-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogService } from '~/app/dialogs/confirmation-dialog/confirmation-dialog.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DeeplTranslationService } from '~shared/services/deepl-translation.service';
 import { DeeplSettingsDialogComponent, DeeplSettingsDialogResult } from '~/app/dialogs/deepl-settings-dialog/deepl-settings-dialog.component';
+import { CleanQtfDialogComponent, CleanQtfDialogResult } from '~/app/dialogs/clean-qtf-dialog/clean-qtf-dialog.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -82,7 +83,7 @@ export class MainComponent implements OnInit {
   ];
 
   constructor(private fileService: FileIOService, private translateService: TranslateService,
-    private dialog: MatDialog, private confirmDialogService: ConfirmDialogService, private http: HttpClient,
+    private dialog: MatDialog, private http: HttpClient,
     private deeplTranslationService: DeeplTranslationService) { }
 
   ngOnInit(): void {
@@ -790,35 +791,27 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    let key: TextKey;
-    var deletedItems = 0;
-    var breakClean: boolean = false;
-    for (key in this.qtfFile.TEXTS) {
-      if (!this.keywordInList(key) && !this.helpTextRootIdExists(key)) {
-        console.log("Id ", key, " seems not to be used in helpText. Removing...");
+    const unusedKeys = this.getUnusedQtfKeys();
 
-        const result = await this.confirmDialogService.openConfirmDialog(key);
-
-        if (result === 'yes') {
-          deletedItems++;
-          this.qtfFile = removeQtfItem(this.qtfFile, key);
-        } else if (result === 'no') {
-          console.log(`User chose NO -> Do not delete "${key}"`);
-        } else {
-          breakClean = true;
-        }
+    const dialogRef = this.dialog.open(CleanQtfDialogComponent, {
+      width: '640px',
+      data: {
+        unusedKeys
       }
+    });
 
-      if (breakClean) {
-        console.log("break");
-        break;
-      }
+    const result = await firstValueFrom(dialogRef.afterClosed()) as CleanQtfDialogResult | undefined;
+    if (!result || !result.deletedKeys || result.deletedKeys.length === 0) {
+      return;
     }
 
-    console.log("Number of deleted items: ", deletedItems);
-    if (deletedItems > 0) {
-      this.isDirty = true;
-    }
+    result.deletedKeys.forEach(key => {
+      if (this.qtfFile && key in this.qtfFile.TEXTS) {
+        this.qtfFile = removeQtfItem(this.qtfFile, key as TextKey);
+      }
+    });
+
+    this.isDirty = true;
   }
 
   openDeeplSettingsDialog(): void {
@@ -924,6 +917,16 @@ export class MainComponent implements OnInit {
   private helpTextRootIdExists(key: string): boolean {
     const root = this.ensureParsedHelpTextRoot();
     return !!(root && typeof root.idExists === 'function' && root.idExists(key));
+  }
+
+  private getUnusedQtfKeys(): string[] {
+    if (!this.qtfFile || !this.qtfFile.TEXTS) {
+      return [];
+    }
+
+    return Object.keys(this.qtfFile.TEXTS).filter(key =>
+      !this.keywordInList(key) && !this.helpTextRootIdExists(key)
+    );
   }
 
   private ensureParsedHelpTextRoot(): HelpTextRoot | null {
