@@ -10,6 +10,19 @@ const cors=require('cors');
 const app: Application = express();
 const port: number = 3000;
 
+// Basic request/response logging to trace the path from the frontend
+app.use((req, res, next) => {
+  const start = Date.now();
+  console.log(`[HTTP] ${req.method} ${req.originalUrl}`);
+
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(`[HTTP] ${req.method} ${req.originalUrl} -> ${res.statusCode} (${duration}ms)`);
+  });
+
+  next();
+});
+
 // Configure CORS
 app.use(cors({
   origin: 'http://localhost:4200', // Allow requests from this origin
