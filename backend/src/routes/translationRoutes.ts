@@ -2,11 +2,12 @@ import express, { Request, Response } from 'express';
 
 const router = express.Router();
 
-router.post('/translate/deepl', async (req: Request, res: Response) => {
+router.post('/translate/deepl', async (req: Request, res: Response): Promise<void> => {
   const { text, sourceLang, targetLang, authKey } = req.body || {};
 
   if (!text || !targetLang || !authKey) {
-    return res.status(400).json({ message: 'Missing required fields for DeepL translation.' });
+    res.status(400).json({ message: 'Missing required fields for DeepL translation.' });
+    return;
   }
 
   try {
@@ -27,17 +28,18 @@ router.post('/translate/deepl', async (req: Request, res: Response) => {
 
     if (!deeplResponse.ok) {
       const errorText = await deeplResponse.text();
-      return res.status(deeplResponse.status || 502).json({
+      res.status(deeplResponse.status || 502).json({
         message: 'DeepL request failed.',
         details: errorText
       });
+      return;
     }
 
     const data = await deeplResponse.json();
-    return res.json(data);
+    res.json(data);
   } catch (error) {
     console.error('DeepL proxy error', error);
-    return res.status(500).json({ message: 'DeepL proxy failed. Please try again later.' });
+    res.status(500).json({ message: 'DeepL proxy failed. Please try again later.' });
   }
 });
 
