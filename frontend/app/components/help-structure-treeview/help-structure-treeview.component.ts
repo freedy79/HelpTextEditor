@@ -315,7 +315,7 @@ export class HelpStructureTreeviewComponent implements OnChanges {
     return !!collection && index < collection.length - 1;
   }
 
-  getDefaultChildContainer(section: TreeItem | ParentType): string | null {
+  getDefaultChildContainer(section: TreeItem): string | null {
     if (!section) { return null; }
     if (this.isHelpTextStep(section)) {
       return 'substeps';
