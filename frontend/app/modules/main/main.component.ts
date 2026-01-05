@@ -87,7 +87,7 @@ export class MainComponent implements OnInit {
     private deeplTranslationService: DeeplTranslationService) { }
 
   ngOnInit(): void {
-    const storedKey = this.deeplTranslationService.getStoredAuthKey();
+    const storedKey = this.deeplTranslationService.getStoredAuthKey()?.trim();
     if (storedKey) {
       this.deeplAuthKey = storedKey;
     }
@@ -574,7 +574,7 @@ export class MainComponent implements OnInit {
 
     const key = this.getSelectedTranslationKey();
     const entry = this.getTranslationEntryForSelection(key);
-    const hasToken = (this.deeplAuthKey || this.deeplTranslationService.getStoredAuthKey());
+    const hasToken = this.getActiveDeeplToken();
     const targetLanguage = this.deeplTranslationService.mapLanguageToDeepL(this.selectedLanguage);
     const sourceTranslation = this.getSourceTranslation(entry);
 
@@ -597,9 +597,9 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    const token = this.deeplAuthKey || this.deeplTranslationService.getStoredAuthKey();
+    const token = this.getActiveDeeplToken();
     if (!token) {
-      this.autoTranslationMessage = 'Bitte zuerst einen DeepL API-Token speichern.';
+      this.autoTranslationMessage = 'Automatische Übersetzung ist derzeit nicht verfügbar.';
       return;
     }
 
@@ -818,7 +818,7 @@ export class MainComponent implements OnInit {
     const dialogRef = this.dialog.open(DeeplSettingsDialogComponent, {
       width: '520px',
       data: {
-        token: this.deeplAuthKey || this.deeplTranslationService.getStoredAuthKey() || '',
+        token: this.getActiveDeeplToken(),
         rememberToken: !!this.deeplTranslationService.getStoredAuthKey()
       }
     });
@@ -831,14 +831,14 @@ export class MainComponent implements OnInit {
       if (result.clearToken) {
         this.deeplTranslationService.storeAuthKey('');
         this.deeplAuthKey = '';
-        this.autoTranslationMessage = 'DeepL API-Token wurde gelöscht.';
+        this.autoTranslationMessage = 'DeepL-Einstellungen wurden zurückgesetzt.';
         return;
       }
 
       this.deeplAuthKey = result.token || '';
       this.autoTranslationMessage = this.deeplAuthKey
-        ? 'DeepL API-Token aktualisiert.'
-        : 'Kein DeepL API-Token gesetzt.';
+        ? 'DeepL-Einstellungen aktualisiert.'
+        : 'DeepL-Einstellungen sind nicht gesetzt.';
 
       if (result.rememberToken && this.deeplAuthKey) {
         this.deeplTranslationService.storeAuthKey(this.deeplAuthKey);
@@ -846,6 +846,10 @@ export class MainComponent implements OnInit {
         this.deeplTranslationService.storeAuthKey('');
       }
     });
+  }
+
+  private getActiveDeeplToken(): string {
+    return (this.deeplAuthKey || this.deeplTranslationService.getStoredAuthKey() || '').trim();
   }
 
   private getInsertIndex(parentSection: HelpTextSection, insertPosition: string): number {
