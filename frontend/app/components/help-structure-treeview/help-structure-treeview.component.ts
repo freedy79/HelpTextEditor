@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep } from '~models/help-text-structure.model';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
 
@@ -9,7 +9,7 @@ type ParentType = HelpTextSection | MainHelpSection | HelpTextStep;
   templateUrl: './help-structure-treeview.component.html',
   styleUrls: ['./help-structure-treeview.component.scss'],
 })
-export class HelpStructureTreeviewComponent {
+export class HelpStructureTreeviewComponent implements OnChanges {
   @Input() helpItem: MainHelpSection;
   @Input() selectedHelpSection: HelpTextSection;
   @Output() onItemClicked: EventEmitter<any> = new EventEmitter();
@@ -29,6 +29,16 @@ export class HelpStructureTreeviewComponent {
 
   constructor() {
     this.expandedSections = [];
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['helpItem']) {
+      this.expandedSections = [];
+    }
+
+    if (this.selectedHelpSection?.value) {
+      this.expandToSelectedSection(this.selectedHelpSection.value);
+    }
   }
 
   getSelectedItem(): MainHelpSection {
@@ -189,5 +199,47 @@ export class HelpStructureTreeviewComponent {
 
   isHelpTextSection(item: HelpTextSection | HelpTextStep): item is HelpTextSection {
     return !!item && (item instanceof HelpTextSection || item.type !== 'STEP');
+  }
+
+  private expandToSelectedSection(selectedId: string) {
+    const path = this.findPathToSection(this.helpItem, selectedId);
+    if (!path || path.length === 0) {
+      return;
+    }
+
+    const parents = path.slice(0, -1);
+    parents.forEach(id => {
+      if (id && !this.expandedSections.includes(id)) {
+        this.expandedSections.push(id);
+      }
+    });
+  }
+
+  private findPathToSection(node: any, targetId: string): string[] | null {
+    if (!node) {
+      return null;
+    }
+
+    const nodeId = node.value;
+    if (nodeId === targetId) {
+      return [nodeId];
+    }
+
+    const containers = ['coversheet', 'content', 'subsections', 'steps', 'substeps'];
+    for (const container of containers) {
+      const items = node[container] as any[];
+      if (!items || items.length === 0) {
+        continue;
+      }
+
+      for (const child of items) {
+        const childPath = this.findPathToSection(child, targetId);
+        if (childPath) {
+          return nodeId ? [nodeId, ...childPath] : childPath;
+        }
+      }
+    }
+
+    return null;
   }
 }
