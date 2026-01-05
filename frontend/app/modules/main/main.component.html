@@ -27,6 +27,7 @@
       </div>
 
       <app-help-structure-treeview [helpItem]="getSelectedItem()" [selectedHelpSection]="selectedSection"
+        [topLevelKey]="selectedTopLevelKey"
         (onItemClicked)="onSelectTreeViewItem($event)"
         (addSubsection)="onAddSubsection($event)"
         (addContent)="onAddContent($event)"

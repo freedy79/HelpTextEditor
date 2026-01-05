@@ -11,6 +11,7 @@ import { DeeplTranslationService } from '~shared/services/deepl-translation.serv
 import { DeeplSettingsDialogComponent, DeeplSettingsDialogResult } from '~/app/dialogs/deepl-settings-dialog/deepl-settings-dialog.component';
 import { CleanQtfDialogComponent, CleanQtfDialogResult } from '~/app/dialogs/clean-qtf-dialog/clean-qtf-dialog.component';
 import { TranslationIssuesDialogComponent, TranslationIssuesDialogResult } from '~/app/dialogs/translation-issues-dialog/translation-issues-dialog.component';
+import { ConfirmDialogService } from '~/app/dialogs/confirmation-dialog/confirmation-dialog.service';
 
 @Component({
   selector: 'app-main',
@@ -85,7 +86,8 @@ export class MainComponent implements OnInit {
 
   constructor(private fileService: FileIOService, private translateService: TranslateService,
     private dialog: MatDialog, private http: HttpClient,
-    private deeplTranslationService: DeeplTranslationService) { }
+    private deeplTranslationService: DeeplTranslationService,
+    private confirmDialog: ConfirmDialogService) { }
 
   ngOnInit(): void {
     const storedKey = this.deeplTranslationService.getStoredAuthKey()?.trim();
@@ -226,8 +228,8 @@ export class MainComponent implements OnInit {
     this.createNewStep();
   }
 
-  onDeleteTreeSection(section: HelpTextSection | HelpTextStep) {
-    this.deleteItem(section);
+  async onDeleteTreeSection(section: HelpTextSection | HelpTextStep) {
+    await this.deleteItem(section);
   }
 
   onMoveSection(event: { parent: HelpTextSection | MainHelpSection | HelpTextStep; container: string; index: number; direction: 'up' | 'down' }) {
@@ -470,26 +472,68 @@ export class MainComponent implements OnInit {
     }
   }
 
-  deleteItem(sectionToDelete: HelpTextSection | HelpTextStep) {
+  async deleteItem(sectionToDelete: HelpTextSection | HelpTextStep) {
+    if (!sectionToDelete) {
+      return;
+    }
+
+    const elementName = sectionToDelete.value || sectionToDelete.type || 'item';
+    const confirmResult = await this.confirmDialog.openConfirmDialog(elementName);
+    if (confirmResult !== 'yes') {
+      return;
+    }
+
     let parentSection: HelpTextSection = null;
     if (this.currentMainHelpSection && this.currentMainHelpSection != null) {
       parentSection = this.currentMainHelpSection.findParentOfSectionById(sectionToDelete.value);
     }
-    if (!parentSection) {
+
+    let removed = false;
+    if (parentSection) {
+      removed = parentSection.removeId(sectionToDelete.value);
+    } else {
+      removed = this.removeFromMainSection(sectionToDelete);
+    }
+
+    if (!removed) {
       console.error("Parent not found for ", sectionToDelete.value);
       return;
     }
 
-    //console.log("Found parent: ", parentSection.value);
-
-    let removed = parentSection.removeId(sectionToDelete.value);
-    if (removed && this.selectedSection && (sectionToDelete.value == this.selectedSection.value)) {
-      this.selectedSection = undefined;
-    }
+    const currentSelectionId = this.selectedSection?.value;
+    const newSelectionId = (currentSelectionId && currentSelectionId !== sectionToDelete.value)
+      ? currentSelectionId
+      : parentSection?.value;
 
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.saveCurrentSectionText();
     this.onTopLevelChange(this.selectedTopLevelKey);
+    this.isDirty = true;
+
+    if (newSelectionId) {
+      this.onSelectSection(newSelectionId);
+    }
+  }
+
+  private removeFromMainSection(sectionToDelete: HelpTextSection | HelpTextStep): boolean {
+    if (!this.currentMainHelpSection || !sectionToDelete) {
+      return false;
+    }
+
+    const removeFromCollection = (collection?: Array<HelpTextSection | HelpTextStep>) => {
+      if (!collection) {
+        return false;
+      }
+      const index = collection.findIndex(item => item && (item as any).value === sectionToDelete.value);
+      if (index !== -1) {
+        collection.splice(index, 1);
+        return true;
+      }
+      return false;
+    };
+
+    return removeFromCollection(this.currentMainHelpSection.content)
+      || removeFromCollection(this.currentMainHelpSection.coversheet);
   }
 
   getImageLanguage(): String {

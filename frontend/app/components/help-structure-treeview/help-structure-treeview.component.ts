@@ -11,6 +11,7 @@ type ParentType = HelpTextSection | MainHelpSection | HelpTextStep;
 })
 export class HelpStructureTreeviewComponent implements OnChanges {
   @Input() helpItem: MainHelpSection;
+  @Input() topLevelKey: string;
   @Input() selectedHelpSection: HelpTextSection;
   @Output() onItemClicked: EventEmitter<any> = new EventEmitter();
   @Output() addSubsection: EventEmitter<HelpTextSection> = new EventEmitter();
@@ -32,7 +33,8 @@ export class HelpStructureTreeviewComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['helpItem']) {
+    if (changes['topLevelKey'] && !changes['topLevelKey'].firstChange
+      && changes['topLevelKey'].currentValue !== changes['topLevelKey'].previousValue) {
       this.expandedSections = [];
     }
 
