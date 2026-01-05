@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
 export interface ContextMenuItem {
   label: string;
@@ -16,6 +16,7 @@ export class ContextMenuComponent implements OnInit, OnDestroy {
   private _isOpen: boolean = false;
   private _positionX: number;
   private _positionY: number;
+  @ViewChild('menuElement') private menuElement: ElementRef<HTMLElement>;
 
   @Input()
   public items: ContextMenuItem[] = [];
@@ -57,6 +58,7 @@ export class ContextMenuComponent implements OnInit, OnDestroy {
     this._positionY = positionY;
     this.items = items;
     this._isOpen = true;
+    setTimeout(() => this.adjustMenuPosition());
   }
 
   /**
@@ -87,4 +89,26 @@ export class ContextMenuComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     this.openContextMenu(event.clientX, event.clientY, this.items);
   };
+
+  private adjustMenuPosition(): void {
+    if (!this.menuElement) { return; }
+
+    const menuRect = this.menuElement.nativeElement.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    let adjustedX = this._positionX;
+    let adjustedY = this._positionY;
+
+    if (menuRect.right > viewportWidth) {
+      adjustedX = Math.max(0, viewportWidth - menuRect.width);
+    }
+
+    if (menuRect.bottom > viewportHeight) {
+      adjustedY = Math.max(0, viewportHeight - menuRect.height);
+    }
+
+    this._positionX = adjustedX;
+    this._positionY = adjustedY;
+  }
 }

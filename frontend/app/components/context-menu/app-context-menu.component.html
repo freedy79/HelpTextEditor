@@ -1,5 +1,5 @@
 <!-- Kontextmenü, das relativ zur Schaltfläche positioniert wird -->
-<div class="context-menu" [ngStyle]="{ 'left.px': positionX, 'top.px': positionY }" *ngIf="isOpen"
+<div #menuElement class="context-menu" [ngStyle]="{ 'left.px': positionX, 'top.px': positionY }" *ngIf="isOpen"
      (mouseleave)="closeContextMenu()">
 
   <ul>
