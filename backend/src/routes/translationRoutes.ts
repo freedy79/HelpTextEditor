@@ -1,3 +1,4 @@
+import https from 'node:https';
 import express, { Request, Response } from 'express';
 
 const router = express.Router();
@@ -28,11 +29,7 @@ router.post('/translate/deepl', async (req: Request, res: Response): Promise<voi
       params.append('source_lang', sourceLang);
     }
 
-    const deeplResponse = await fetch('https://api-free.deepl.com/v2/translate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString()
-    });
+    const deeplResponse = await sendDeepLRequest(params.toString());
 
     console.log('[DeepL] Response status', deeplResponse.status);
 
@@ -41,20 +38,57 @@ router.post('/translate/deepl', async (req: Request, res: Response): Promise<voi
       console.error('[DeepL] Request failed', { status: deeplResponse.status, body: errorText });
       res.status(deeplResponse.status || 502).json({
         message: 'DeepL request failed.',
-        details: errorText
+        details: deeplResponse.body
       });
       return;
     }
 
-    const data = await deeplResponse.json();
-    console.log('[DeepL] Request successful', {
+    let data;
+    try {
+      data = JSON.parse(deeplResponse.body);
+      console.log('[DeepL] Request successful', {
       translationCount: Array.isArray(data?.translations) ? data.translations.length : 0
-    });
+    } catch (parseError) {
+      console.error('DeepL response parse error', parseError);
+      res.status(502).json({ message: 'Invalid response from DeepL.' });
+      return;
+    }
+
     res.json(data);
   } catch (error) {
     console.error('DeepL proxy error', error);
     res.status(500).json({ message: 'DeepL proxy failed. Please try again later.' });
   }
 });
+
+async function sendDeepLRequest(body: string): Promise<{ status: number; body: string }> {
+  return new Promise((resolve, reject) => {
+    const request = https.request(
+      'https://api-free.deepl.com/v2/translate',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': Buffer.byteLength(body)
+        }
+      },
+      response => {
+        let responseBody = '';
+
+        response.setEncoding('utf8');
+        response.on('data', chunk => {
+          responseBody += chunk;
+        });
+        response.on('end', () => {
+          resolve({ status: response.statusCode ?? 0, body: responseBody });
+        });
+      }
+    );
+
+    request.on('error', reject);
+    request.write(body);
+    request.end();
+  });
+}
 
 export default router;
