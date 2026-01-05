@@ -65,7 +65,6 @@ export class ContextMenuComponent implements OnInit, OnDestroy {
    * Schließt das Kontextmenü.
    */
   closeContextMenu(): void {
-    console.log("mouse left context");
     this._isOpen = false;
   }
 

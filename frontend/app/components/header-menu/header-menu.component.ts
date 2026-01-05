@@ -19,7 +19,6 @@ export class HeaderMenuComponent {
     public selectItem(item) {
       if (item.clickId) {
         if (this.onItemClicked) {
-          console.log("emit ", item.clickId);
           this.onItemClicked.emit(item);
         }
       }
