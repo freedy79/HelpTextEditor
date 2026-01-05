@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { DeeplSettingsDialogComponent } from './deepl-settings-dialog/deepl-settings-dialog.component';
 import { CleanQtfDialogComponent } from './clean-qtf-dialog/clean-qtf-dialog.component';
+import { TranslationIssuesDialogComponent } from './translation-issues-dialog/translation-issues-dialog.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { CleanQtfDialogComponent } from './clean-qtf-dialog/clean-qtf-dialog.com
     ImagePickerDialogComponent,
     ConfirmationDialogComponent,
     DeeplSettingsDialogComponent,
-    CleanQtfDialogComponent
+    CleanQtfDialogComponent,
+    TranslationIssuesDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -37,10 +39,11 @@ import { CleanQtfDialogComponent } from './clean-qtf-dialog/clean-qtf-dialog.com
     ImagePickerDialogComponent,
     ConfirmationDialogComponent,
     DeeplSettingsDialogComponent,
-    CleanQtfDialogComponent
+    CleanQtfDialogComponent,
+    TranslationIssuesDialogComponent
   ],
   providers: [ConfirmDialogService],
-  entryComponents:[ImagePickerDialogComponent, ConfirmationDialogComponent, CleanQtfDialogComponent],
+  entryComponents:[ImagePickerDialogComponent, ConfirmationDialogComponent, CleanQtfDialogComponent, TranslationIssuesDialogComponent],
   bootstrap: []
 })
 export class DialogsModule { }

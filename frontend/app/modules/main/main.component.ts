@@ -10,6 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DeeplTranslationService } from '~shared/services/deepl-translation.service';
 import { DeeplSettingsDialogComponent, DeeplSettingsDialogResult } from '~/app/dialogs/deepl-settings-dialog/deepl-settings-dialog.component';
 import { CleanQtfDialogComponent, CleanQtfDialogResult } from '~/app/dialogs/clean-qtf-dialog/clean-qtf-dialog.component';
+import { TranslationIssuesDialogComponent, TranslationIssuesDialogResult } from '~/app/dialogs/translation-issues-dialog/translation-issues-dialog.component';
 
 @Component({
   selector: 'app-main',
@@ -73,6 +74,7 @@ export class MainComponent implements OnInit {
       text: 'Edit',
       iconCss: 'em-icons e-file',
       items: [
+        { text: 'Translation issues', iconCss: 'em-icons e-open', clickId: 'translationIssues' },
         { text: 'Clean QTF', iconCss: 'em-icons e-open', clickId: 'cleanQtf' },
         { separator: true },
         { text: 'Copy', iconCss: 'em-icons e-open', clickId: 'copy', enabled: false },
@@ -127,6 +129,8 @@ export class MainComponent implements OnInit {
       this.createNewStep();
     } else if (item.clickId == "cleanQtf") {
       this.cleanQtf();
+    } else if (item.clickId == "translationIssues") {
+      this.openTranslationIssuesDialog();
     } else if (item.clickId == "copy") {
       this.copy();
     } else if (item.clickId == "deeplSettings") {
@@ -818,6 +822,30 @@ export class MainComponent implements OnInit {
     });
 
     this.isDirty = true;
+  }
+
+  openTranslationIssuesDialog(): void {
+    const dialogRef = this.dialog.open(TranslationIssuesDialogComponent, {
+      width: '720px',
+      data: {
+        helpTextRoot: this.helpTextRoot,
+        qtfFile: this.qtfFile,
+        selectedLanguage: this.selectedLanguage,
+        deeplToken: this.getActiveDeeplToken()
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: TranslationIssuesDialogResult) => {
+      if (!result) {
+        return;
+      }
+      if (result.qtfFile) {
+        this.qtfFile = result.qtfFile;
+      }
+      if (result.isDirty) {
+        this.isDirty = true;
+      }
+    });
   }
 
   openDeeplSettingsDialog(): void {
