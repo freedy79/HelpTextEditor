@@ -1,8 +1,8 @@
-<div class="treeview_main">
+<div class="treeview_main" cdkDropListGroup>
     <ng-container *ngIf="getSelectedItem() as item">
         <div *ngIf="item.coversheet?.length">
             <p class="section_header">Cover</p>
-            <div cdkDropList [cdkDropListData]="{ parent: item, container: 'coversheet' }" (cdkDropListDropped)="onDrop($event)">
+            <div cdkDropList [cdkDropListData]="{ parent: item, container: 'coversheet', mode: 'list' }" (cdkDropListDropped)="onDrop($event)">
                 <ng-container *ngFor="let sec of item.coversheet; let i = index">
                     <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: sec, level: 1, parent: item, container: 'coversheet', index: i }"></ng-container>
                 </ng-container>
@@ -10,7 +10,7 @@
         </div>
         <div *ngIf="item.content?.length">
             <p class="section_header">Content</p>
-            <div cdkDropList [cdkDropListData]="{ parent: item, container: 'content' }" (cdkDropListDropped)="onDrop($event)">
+            <div cdkDropList [cdkDropListData]="{ parent: item, container: 'content', mode: 'list' }" (cdkDropListDropped)="onDrop($event)">
                 <ng-container *ngFor="let sec of item.content; let i = index">
                     <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: sec, level: 1, parent: item, container: 'content', index: i }"></ng-container>
                 </ng-container>
@@ -36,7 +36,7 @@
 
     <!-- Rekursives Template für die Baumansicht -->
     <ng-template #recursiveTree let-parent let-section let-level="level" let-container="container" let-index="index">
-        <div class="tree-row" [ngStyle]="getMarginLeft(level)" cdkDrag [cdkDragData]="{ parent: parent, container: container, index: index }">
+        <div class="tree-row" [ngStyle]="getMarginLeft(level)" cdkDrag [cdkDragData]="{ parent: parent, container: container, index: index }" (cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded()">
             <span
                 *ngIf="hasChildren(section)"
                 class="tree-toggle material-icons"
@@ -60,40 +60,57 @@
                     [class.disabled]="!canMoveDown(parent, container, index)"
                     title="Move down"
                     (click)="onMoveClick($event, parent, container, index, 'down')">arrow_drop_down</span>
-                <span class="material-icons drag-handle" cdkDragHandle title="Drag to reorder">drag_indicator</span>
             </span>
+
+            <ng-template cdkDragPreview>
+                <div class="tree-row drag-preview">
+                    <span class="material-icons">{{ getTreeIcon(section) }}</span>
+                    <span class="tree_item">
+                        <div *ngIf="section.value">{{ section.value }}</div>
+                        <div *ngIf="!section.value">{{ section.type }}</div>
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template cdkDragPlaceholder>
+                <div class="tree-row drag-placeholder"></div>
+            </ng-template>
+        </div>
+
+        <div class="child-drop" *ngIf="getDefaultChildContainer(section)" cdkDropList [class.visible]="isDragging"
+            [cdkDropListData]="{ parent: section, container: getDefaultChildContainer(section), mode: 'child' }"
+            (cdkDropListDropped)="onDrop($event)">
         </div>
 
         <div *ngIf="getItemExpanded(section)">
-            <div *ngIf="section.coversheet?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'coversheet' }" (cdkDropListDropped)="onDrop($event)">
+            <div *ngIf="section.coversheet?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'coversheet', mode: 'list' }" (cdkDropListDropped)="onDrop($event)">
                 <ng-container *ngFor="let sub of section.coversheet; let j = index">
                     <ng-container
                         *ngTemplateOutlet="recursiveTree; context:{ $implicit: sub, level: level + 1, parent: section, index: j, container: 'coversheet'}"></ng-container>
                 </ng-container>
             </div>
 
-            <div *ngIf="section.content?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'content' }" (cdkDropListDropped)="onDrop($event)">
+            <div *ngIf="section.content?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'content', mode: 'list' }" (cdkDropListDropped)="onDrop($event)">
                 <ng-container *ngFor="let sub of section.content; let j = index">
                     <ng-container
                         *ngTemplateOutlet="recursiveTree; context:{ $implicit: sub, level: level + 1, parent: section, index: j, container: 'content'}"></ng-container>
                 </ng-container>
             </div>
 
-            <div *ngIf="section.subsections?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'subsections' }" (cdkDropListDropped)="onDrop($event)">
+            <div *ngIf="section.subsections?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'subsections', mode: 'list' }" (cdkDropListDropped)="onDrop($event)">
                 <ng-container *ngFor="let sub of section.subsections; let j = index">
                     <ng-container
                         *ngTemplateOutlet="recursiveTree; context:{ $implicit: sub, level: level + 1, parent: section, index: j, container: 'subsections'}"></ng-container>
                 </ng-container>
             </div>
 
-            <div *ngIf="section.steps?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'steps' }" (cdkDropListDropped)="onDrop($event)">
+            <div *ngIf="section.steps?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'steps', mode: 'list' }" (cdkDropListDropped)="onDrop($event)">
                 <ng-container *ngFor="let step of section.steps; let j = index">
                     <ng-container
                         *ngTemplateOutlet="recursiveTree; context:{ $implicit: step, level: level + 1, parent: section, index: j, container: 'steps'}"></ng-container>
                 </ng-container>
             </div>
 
-            <div *ngIf="section.substeps?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'substeps' }" (cdkDropListDropped)="onDrop($event)">
+            <div *ngIf="section.substeps?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'substeps', mode: 'list' }" (cdkDropListDropped)="onDrop($event)">
                 <ng-container *ngFor="let substep of section.substeps; let j = index">
                     <ng-container
                         *ngTemplateOutlet="recursiveTree; context:{ $implicit: substep, level: level + 1, parent: section, index: j, container: 'substeps'}"></ng-container>
