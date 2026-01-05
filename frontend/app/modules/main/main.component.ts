@@ -487,9 +487,23 @@ export class MainComponent implements OnInit {
         console.log("Id changed. Old: ", oldId, " -> ", newId, ": ", changed);
         this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
 
-        if (this.qtfFile && this.qtfFile.TEXTS && this.qtfFile.TEXTS[oldId]) {
-          this.qtfFile.TEXTS[newId] = this.qtfFile.TEXTS[oldId];
-          delete this.qtfFile.TEXTS[oldId];
+        if (this.qtfFile && this.qtfFile.TEXTS) {
+          const existingEntry = this.qtfFile.TEXTS[oldId];
+          if (existingEntry) {
+            this.qtfFile.TEXTS[newId] = {
+              ...existingEntry,
+              TRANSLATIONS: { ...existingEntry.TRANSLATIONS },
+              AUTOTRANSLATIONS: { ...existingEntry.AUTOTRANSLATIONS },
+              VERIFIED: { ...existingEntry.VERIFIED }
+            };
+            delete this.qtfFile.TEXTS[oldId];
+          } else {
+            this.qtfFile.TEXTS[newId] = createNewQtfItem(this.selectedLanguage, this.selectedTextContent);
+          }
+
+          const translatedText = this.qtfFile.TEXTS[newId].TRANSLATIONS[this.selectedLanguage] || '';
+          this.translateService.set(newId, translatedText);
+          this.selectedTextContent = translatedText;
         }
 
         this.saveCurrentSectionText();
