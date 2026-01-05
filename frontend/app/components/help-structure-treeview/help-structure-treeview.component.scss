@@ -14,6 +14,7 @@
 .tree-row {
     display: flex;
     align-items: center;
+    gap: 4px;
 }
 
 .tree-toggle {
@@ -44,6 +45,32 @@
     &:active {
         background-color: #FADD37;
     }
+}
+
+.tree-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 6px;
+}
+
+.action-icon {
+    cursor: pointer;
+    font-size: 18px;
+    color: #5f6368;
+
+    &:hover {
+        color: #202124;
+    }
+
+    &.disabled {
+        opacity: 0.35;
+        pointer-events: none;
+    }
+}
+
+.drag-handle {
+    cursor: grab;
 }
 
 .selected {

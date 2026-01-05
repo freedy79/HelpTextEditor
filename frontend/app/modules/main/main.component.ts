@@ -303,7 +303,7 @@ export class MainComponent implements OnInit {
     await this.deleteItem(section);
   }
 
-  onMoveSection(event: { parent: HelpTextSection | MainHelpSection | HelpTextStep; container: string; index: number; direction: 'up' | 'down' }) {
+  onMoveSection(event: { parent: HelpTextSection | MainHelpSection | HelpTextStep; container: string; index: number; direction?: 'up' | 'down'; newIndex?: number }) {
     if (!event || !event.parent || !event.container) {
       console.log('Move section aborted: missing event data', event);
       return;
@@ -315,7 +315,9 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    const targetIndex = event.direction === 'up' ? event.index - 1 : event.index + 1;
+    const targetIndex = (typeof event.newIndex === 'number')
+      ? event.newIndex
+      : (event.direction === 'up' ? event.index - 1 : event.index + 1);
     if (targetIndex < 0 || targetIndex >= collection.length) {
       console.log('Move section aborted: target index out of range', { targetIndex, event });
       return;
@@ -325,9 +327,7 @@ export class MainComponent implements OnInit {
     collection.splice(targetIndex, 0, item);
 
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-    this.isDirty = true;
     this.saveCurrentSectionText();
-    this.onTopLevelChange(this.selectedTopLevelKey);
     this.isDirty = true;
 
     if (item && (item as HelpTextSection).value) {
