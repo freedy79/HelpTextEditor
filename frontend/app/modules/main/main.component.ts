@@ -314,7 +314,7 @@ export class MainComponent implements OnInit {
     }
   }
 
-  loadTextFromQtf(key: string) {
+  loadTextFromQtf(key: string | null) {
     if (!this.qtfFile || !key) {
       this.selectedTextContent = '';
       return;
@@ -335,11 +335,11 @@ export class MainComponent implements OnInit {
   saveCurrentSectionText() {
     if (!this.selectedSection || !this.qtfFile) return;
 
-    this.isDirty = true;
-
-    const key: string = this.selectedSection.getTranslationKey();
+    const key = this.selectedSection.getTranslationKey();
     //console.log("saving: ", key, " - ", this.selectedTextContent);
     if (!key) return;
+
+    this.isDirty = true;
     if (!this.qtfFile.TEXTS[key]) {
       this.qtfFile.TEXTS[key] = {
         group: 'HELP_INSTRUCTION',
@@ -385,7 +385,10 @@ export class MainComponent implements OnInit {
     console.log("created: ", newItem);
 
     if (this.qtfFile) {
-      this.qtfFile.TEXTS[newKey] = createNewQtfItem(this.selectedLanguage, "new text");
+      const translationKey = newItem.getTranslationKey();
+      if (translationKey) {
+        this.qtfFile.TEXTS[translationKey] = createNewQtfItem(this.selectedLanguage, "new text");
+      }
     }
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.onTopLevelChange(this.selectedTopLevelKey);
@@ -424,7 +427,10 @@ export class MainComponent implements OnInit {
     console.log("created: ", newItem);
 
     if (this.qtfFile) {
-      this.qtfFile.TEXTS[newKey] = createNewQtfItem(this.selectedLanguage, "new text");
+      const translationKey = newItem.getTranslationKey();
+      if (translationKey) {
+        this.qtfFile.TEXTS[translationKey] = createNewQtfItem(this.selectedLanguage, "new text");
+      }
     }
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.onTopLevelChange(this.selectedTopLevelKey);
@@ -561,6 +567,9 @@ export class MainComponent implements OnInit {
 
     if (newId != "") {
       let oldId = this.selectedSection.getTranslationKey();
+      if (!oldId) {
+        return;
+      }
       let changed = this.currentMainHelpSection.changeValueId(oldId, newId);
       if (changed) {
         console.log("Id changed. Old: ", oldId, " -> ", newId, ": ", changed);
@@ -803,7 +812,10 @@ export class MainComponent implements OnInit {
 
     // Neuen Eintrag in der QTF-Struktur anlegen
     if (this.qtfFile) {
-      this.qtfFile.TEXTS[newKey] = createNewQtfItem(this.selectedLanguage, "new text");
+      const translationKey = newItem.getTranslationKey();
+      if (translationKey) {
+        this.qtfFile.TEXTS[translationKey] = createNewQtfItem(this.selectedLanguage, "new text");
+      }
     }
 
     if (data.type == HelpContentType.BULLET_ENUMERATION || data.type == HelpContentType.ENUMERATION) {
@@ -965,7 +977,8 @@ export class MainComponent implements OnInit {
 
     const getter = (item as any).getTranslationKey;
     if (typeof getter === 'function') {
-      return getter.call(item);
+      const key = getter.call(item);
+      return key || null;
     }
 
     return (item as any).value || null;
@@ -1038,9 +1051,14 @@ export class MainComponent implements OnInit {
     }
     const getter = (this.selectedSection as any).getTranslationKey;
     if (typeof getter === 'function') {
-      return getter.call(this.selectedSection);
+      const key = getter.call(this.selectedSection);
+      return key || null;
     }
     return this.selectedSection.value || null;
+  }
+
+  canEditTranslationForSelection(): boolean {
+    return !!this.getSelectedTranslationKey();
   }
 
   private getTranslationEntryForSelection(key: string | null): QtfTextEntry | null {
@@ -1161,14 +1179,24 @@ export class MainComponent implements OnInit {
   }
 
   copyGermanText(): void {
-    var textToCopy = this.qtfFile.TEXTS[this.selectedSection.value].TRANSLATIONS["GERMAN"];
+    const translationKey = this.getSelectedTranslationKey();
+    if (!translationKey || !this.qtfFile?.TEXTS?.[translationKey]) {
+      return;
+    }
+
+    const textToCopy = this.qtfFile.TEXTS[translationKey].TRANSLATIONS["GERMAN"];
     if (window.navigator && window.navigator['clipboard']) {
       window.navigator['clipboard'].writeText(textToCopy);
     }
   }
 
   copyEnglishText(): void {
-    var textToCopy = this.qtfFile.TEXTS[this.selectedSection.value].TRANSLATIONS["ENGLISH"];
+    const translationKey = this.getSelectedTranslationKey();
+    if (!translationKey || !this.qtfFile?.TEXTS?.[translationKey]) {
+      return;
+    }
+
+    const textToCopy = this.qtfFile.TEXTS[translationKey].TRANSLATIONS["ENGLISH"];
     if (window.navigator && window.navigator['clipboard']) {
       window.navigator['clipboard'].writeText(textToCopy);
     }

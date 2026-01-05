@@ -77,26 +77,36 @@
       <ng-template #defaultType>
         <div>
           <p><strong>ID/Name:</strong> <input [(ngModel)]="selectedSection.linkId" (focusout)="onLinkChanged($event)"></p>
-          <p><strong>Unique key:</strong> <input [value]="selectedSection.value" (focusout)="onIdChanged($event)"></p>
+          <p *ngIf="canEditTranslationForSelection(); else nonTranslatableKey">
+            <strong>Unique key:</strong> <input [value]="selectedSection.value" (focusout)="onIdChanged($event)">
+          </p>
+          <ng-template #nonTranslatableKey>
+            <p><strong>Unique key:</strong> <em>Not applicable for this type.</em></p>
+          </ng-template>
           <p><strong>Type:</strong> {{ selectedSection.type || '[nicht gesetzt]' }}</p>
-          <label><strong>Translation ({{ selectedLanguage }}):</strong></label>
-          <textarea #textArea [(ngModel)]="selectedTextContent" (ngModelChange)="onTranslationChanged($event)"
-            style="width: 100%; height: 200px;"></textarea>
-          <button (click)="wrapSelectionInBold(textArea)">B</button>
-          <button (click)="copyText(textArea)">Copy all</button>
+          <ng-container *ngIf="canEditTranslationForSelection(); else nonTranslatable">
+            <label><strong>Translation ({{ selectedLanguage }}):</strong></label>
+            <textarea #textArea [(ngModel)]="selectedTextContent" (ngModelChange)="onTranslationChanged($event)"
+              style="width: 100%; height: 200px;"></textarea>
+            <button (click)="wrapSelectionInBold(textArea)">B</button>
+            <button (click)="copyText(textArea)">Copy all</button>
+          </ng-container>
+          <ng-template #nonTranslatable>
+            <p><em>Translations are not applicable for this item type.</em></p>
+          </ng-template>
         </div>
-        <div *ngIf="hasMissingTranslationForSelection()">
+        <div *ngIf="hasMissingTranslationForSelection() && canEditTranslationForSelection()">
           <button (click)="autoTranslateCurrentSelection()" [disabled]="!canAutoTranslateCurrentSelection() || isAutoTranslating">
             {{ isAutoTranslating ? 'Übersetze...' : 'Automatisch übersetzen' }}
           </button>
         </div>
-        <div *ngIf="autoTranslationMessage">
+        <div *ngIf="autoTranslationMessage && canEditTranslationForSelection()">
           <small>{{ autoTranslationMessage }}</small>
         </div>
         <div>
           <button (click)="deleteItem(selectedSection)" style="margin-left: 4px;">delete</button>
         </div>
-        <div>
+        <div *ngIf="canEditTranslationForSelection()">
           <div class="PropertyAction" (click)="copyGermanText()" style="margin-left: 4px">Copy German</div>
           <div class="PropertyAction" (click)="copyEnglishText()" style="margin-left: 4px">Copy English</div>
         </div>
