@@ -2,6 +2,11 @@
 @import "@angular/material/_theming.scss";
 @import './material-icons.scss'; // url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   font-family: sans-serif;
