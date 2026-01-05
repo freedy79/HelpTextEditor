@@ -1,0 +1,18 @@
+<div class="statusbar" role="status" aria-live="polite">
+  <div class="status-item">
+    <span class="label">Top level:</span>
+    <span class="value">{{ topLevelLabel }}</span>
+  </div>
+  <div class="status-item">
+    <span class="label">Selection:</span>
+    <span class="value">{{ sectionLabel }}</span>
+  </div>
+  <div class="status-item">
+    <span class="label">Language:</span>
+    <span class="value">{{ language || 'Not set' }}</span>
+  </div>
+  <div class="status-item" [class.dirty]="isDirty">
+    <span class="label">Status:</span>
+    <span class="value">{{ statusLabel }}</span>
+  </div>
+</div>

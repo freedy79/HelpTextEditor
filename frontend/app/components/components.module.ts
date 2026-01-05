@@ -8,13 +8,15 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from '../shared/shared.module';
+import { StatusbarComponent } from './statusbar/statusbar.component';
 
 @NgModule({
   declarations: [
     ContextMenuComponent,
     HeaderMenuComponent,
     HelpSectionComponent,
-    HelpStructureTreeviewComponent
+    HelpStructureTreeviewComponent,
+    StatusbarComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +28,8 @@ import { SharedModule } from '../shared/shared.module';
     ContextMenuComponent,
     HeaderMenuComponent,
     HelpSectionComponent,
-    HelpStructureTreeviewComponent
+    HelpStructureTreeviewComponent,
+    StatusbarComponent
   ],
   providers: [
     

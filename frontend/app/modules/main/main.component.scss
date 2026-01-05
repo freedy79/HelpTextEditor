@@ -1,6 +1,11 @@
+$statusbar-height: 48px;
+
 .editor {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding-bottom: $statusbar-height;
 }
 
 .header {
@@ -14,7 +19,7 @@
 .editor-columns {
     //position: relative;
     display: flex;
-    height: calc(100vh - 68px);
+    height: calc(100vh - 68px - $statusbar-height);
     width: 100vw;
     overflow: hidden;
 
