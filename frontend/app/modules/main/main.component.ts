@@ -295,10 +295,6 @@ export class MainComponent implements OnInit {
     this.persistAbbreviationChange(targetSection);
   }
 
-  onDeleteTreeSection(section: HelpTextSection | HelpTextStep) {
-    this.deleteItem(section);
-  }
-  
   async onDeleteTreeSection(section: HelpTextSection | HelpTextStep) {
     await this.deleteItem(section);
   }

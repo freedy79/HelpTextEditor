@@ -36,7 +36,7 @@
 
     <!-- Rekursives Template für die Baumansicht -->
     <ng-template #recursiveTree let-parent let-section let-level="level" let-container="container" let-index="index">
-        <div class="tree-row" [ngStyle]="getMarginLeft(level)" cdkDrag [cdkDragData]="{ parent, container, index }">
+        <div class="tree-row" [ngStyle]="getMarginLeft(level)" cdkDrag [cdkDragData]="{ parent: parent, container: container, index: index }">
             <span
                 *ngIf="hasChildren(section)"
                 class="tree-toggle material-icons"

@@ -104,8 +104,8 @@ export class HelpStructureTreeviewComponent implements OnChanges {
     this.onMove(parent, container, index, direction);
   }
 
-  onDrop(event: CdkDragDrop<any[]>) {
-    const containerData = event.container.data as DropContainerContext | undefined;
+  onDrop(event: CdkDragDrop<DropContainerContext>) {
+    const containerData = event.container.data;
     const previousContainerData = event.previousContainer.data as DropContainerContext | undefined;
 
     if (!containerData || !previousContainerData) { return; }
@@ -195,7 +195,9 @@ export class HelpStructureTreeviewComponent implements OnChanges {
         if (this.isHelpTextSection(section)) { this.onAddStep(section); }
         break;
       case 'delete':
-        this.onDeleteSection(section);
+        if (this.isHelpTextSection(section) || this.isHelpTextStep(section)) {
+          this.onDeleteSection(section);
+        }
         break;
       default:
         break;
@@ -267,6 +269,10 @@ export class HelpStructureTreeviewComponent implements OnChanges {
 
   isHelpTextSection(item: TreeItem): item is HelpTextSection {
     return !!item && (item instanceof HelpTextSection || (item as any).type && (item as any).type !== 'STEP');
+  }
+
+  isHelpTextStep(item: TreeItem): item is HelpTextStep {
+    return !!item && (item as any).type === 'STEP';
   }
 
   isAbbreviation(item: TreeItem): item is AbbreviationItem {
