@@ -1,9 +1,18 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep, AbbreviationItem } from '~models/help-text-structure.model';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
 
 type ParentType = HelpTextSection | MainHelpSection | HelpTextStep;
 type TreeItem = HelpTextSection | HelpTextStep | AbbreviationItem | null;
+type MoveEvent = {
+  parent: ParentType;
+  container: string;
+  index: number;
+  direction?: 'up' | 'down';
+  newIndex?: number;
+};
+type DropContainerContext = { parent: ParentType; container: string };
 
 @Component({
   selector: 'app-help-structure-treeview',
@@ -19,8 +28,7 @@ export class HelpStructureTreeviewComponent implements OnChanges {
   @Output() addContent: EventEmitter<HelpTextSection | MainHelpSection> = new EventEmitter();
   @Output() addStep: EventEmitter<HelpTextSection> = new EventEmitter();
   @Output() deleteSection: EventEmitter<HelpTextSection | HelpTextStep> = new EventEmitter();
-  @Output() moveSection: EventEmitter<{ parent: ParentType; container: string; index: number; direction: 'up' | 'down' }>
-    = new EventEmitter();
+  @Output() moveSection: EventEmitter<MoveEvent> = new EventEmitter();
   @Output() addAbbreviation: EventEmitter<MainHelpSection> = new EventEmitter();
   @Output() editAbbreviation: EventEmitter<{ abbreviation: AbbreviationItem; parent: MainHelpSection; index: number; }> = new EventEmitter();
   @Output() deleteAbbreviation: EventEmitter<{ abbreviation: AbbreviationItem; parent: MainHelpSection; }> = new EventEmitter();
@@ -88,6 +96,32 @@ export class HelpStructureTreeviewComponent implements OnChanges {
 
   public onMove(parent: ParentType, container: string, index: number, direction: 'up' | 'down') {
     this.moveSection.emit({ parent, container, index, direction });
+  }
+
+  public onMoveClick(event: MouseEvent, parent: ParentType, container: string, index: number, direction: 'up' | 'down') {
+    event.preventDefault();
+    event.stopPropagation();
+    this.onMove(parent, container, index, direction);
+  }
+
+  onDrop(event: CdkDragDrop<any[]>) {
+    const containerData = event.container.data as DropContainerContext | undefined;
+    const previousContainerData = event.previousContainer.data as DropContainerContext | undefined;
+
+    if (!containerData || !previousContainerData) { return; }
+    const sameParent = containerData.parent === previousContainerData.parent;
+    const sameContainer = containerData.container === previousContainerData.container;
+
+    if (!sameParent || !sameContainer || event.previousIndex === event.currentIndex) {
+      return;
+    }
+
+    this.moveSection.emit({
+      parent: containerData.parent,
+      container: containerData.container,
+      index: event.previousIndex,
+      newIndex: event.currentIndex
+    });
   }
 
   openContextMenu(event: MouseEvent, section: TreeItem, parent: ParentType, container: string, index: number) {
@@ -243,6 +277,23 @@ export class HelpStructureTreeviewComponent implements OnChanges {
     return !!item &&
       ((item instanceof MainHelpSection) ||
         ((item as any).abbreviations !== undefined && (item as any).value === undefined));
+  }
+
+  canMoveUp(parent: ParentType, container: string, index: number): boolean {
+    const collection = this.getCollection(parent, container);
+    return !!collection && index > 0;
+  }
+
+  canMoveDown(parent: ParentType, container: string, index: number): boolean {
+    const collection = this.getCollection(parent, container);
+    return !!collection && index < collection.length - 1;
+  }
+
+  private getCollection(parent: ParentType, container: string): any[] | null {
+    if (!parent || !container || !(parent as any)[container]) {
+      return null;
+    }
+    return (parent as any)[container] as any[];
   }
 
   private expandToSelectedSection(selectedId: string) {

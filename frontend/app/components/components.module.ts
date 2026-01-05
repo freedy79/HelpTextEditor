@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from '../shared/shared.module';
 import { StatusbarComponent } from './statusbar/statusbar.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { StatusbarComponent } from './statusbar/statusbar.component';
     BrowserModule,
     CommonModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    DragDropModule
   ],
   exports: [
     ContextMenuComponent,
