@@ -18,6 +18,7 @@
     cursor: grab;
     width: 100%;
     min-height: 28px;
+    position: relative;
 }
 
 .treeview_main .cdk-drop-list {
@@ -164,4 +165,22 @@
 
 .treeview_main .cdk-drop-list-dragging .tree-row:not(.drag-placeholder) {
     opacity: 0.92;
+}
+
+.tree-row.drop-above::before,
+.tree-row.drop-below::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #1e88e5;
+}
+
+.tree-row.drop-above::before {
+    top: -1px;
+}
+
+.tree-row.drop-below::after {
+    bottom: -1px;
 }
