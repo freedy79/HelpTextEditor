@@ -28,6 +28,7 @@ import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-conte
 
 type ParentType = HelpTextSection | MainHelpSection | HelpTextStep;
 type TreeItem = HelpTextSection | HelpTextStep | AbbreviationItem | null;
+type DragContext = { item?: TreeItem; parent: ParentType; container: string; index: number };
 interface MoveEvent {
   parent: ParentType;
   container: string;
@@ -84,7 +85,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   private expandedSections: string[];
   private activeDropListId: string | null = null;
   private dragCancelled = false;
-  private currentDragContext: { parent: ParentType; container: string; index: number } | null = null;
+  private currentDragContext: DragContext | null = null;
   private parentIdMap = new WeakMap<object, number>();
   private parentIdCounter = 0;
   private dropListRefreshScheduled = false;
@@ -97,10 +98,12 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
    *   pointed at the dragged item instead of its parent and broke fromParent/fromContainer resolution.
    * - onDrop only emitted moveSection without mutating the local array, so the UI never re-ordered
    *   unless the parent re-supplied inputs.
+   * - Drag data omitted the item, so sourceId detection and branch validation could fail.
    * Fixes:
    * - Explicit template context aliases for section/parent/container/index/level.
    * - Added drop logging and immediate local move (moveItemInArray/transferArrayItem) before emitting
    *   moveSection.
+   * - cdkDragData now includes the dragged item for stable IDs and validation.
    */
 
   listEnterPredicate = (drag: CdkDrag, drop: CdkDropList<DropContainerContext>) => this.canEnterDropList(drag, drop, 'list');
@@ -199,11 +202,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
       return;
     }
     const previousContainerData = event.previousContainer.data as DropContainerContext | undefined;
-    const dragContext = (event.item.data as {
-      parent: ParentType;
-      container: string;
-      index: number;
-    } | undefined) || this.currentDragContext;
+    const dragContext = (event.item.data as DragContext | undefined) || this.currentDragContext;
 
     const fromParent = dragContext?.parent || previousContainerData?.parent;
     const fromContainer = dragContext?.container || previousContainerData?.container;
@@ -226,9 +225,14 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     if (draggedItem && this.isTargetInDraggedBranch(targetParent, draggedItem)) { return; }
     const isChildDrop = containerData.mode === 'child';
     const targetCollection = this.getCollection(targetParent, targetContainer);
+    if (!targetCollection) {
+      console.warn('[Treeview:onDrop] No target collection found, aborting drop.');
+      this.activeDropListId = null;
+      return;
+    }
 
     const targetIndex = isChildDrop
-      ? (targetCollection ? targetCollection.length : 0)
+      ? targetCollection.length
       : event.currentIndex;
     if (this.debugLogging) {
       console.log('[Treeview:onDrop:target]', {
@@ -241,12 +245,16 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     }
 
     const sourceCollection = this.getCollection(fromParent, fromContainer);
-    if (sourceCollection && targetCollection) {
-      if (sourceCollection === targetCollection) {
-        moveItemInArray(sourceCollection, fromIndex, targetIndex);
-      } else {
-        transferArrayItem(sourceCollection, targetCollection, fromIndex, targetIndex);
-      }
+    if (!sourceCollection) {
+      console.warn('[Treeview:onDrop] No source collection found, aborting drop.');
+      this.activeDropListId = null;
+      return;
+    }
+
+    if (sourceCollection === targetCollection) {
+      moveItemInArray(sourceCollection, fromIndex, targetIndex);
+    } else {
+      transferArrayItem(sourceCollection, targetCollection, fromIndex, targetIndex);
     }
 
     this.moveSection.emit({
@@ -264,11 +272,13 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   onDragStarted(event: CdkDragStart) {
     this.activeDropListId = null;
     this.dragCancelled = false;
-    this.currentDragContext = event.source?.data as { parent: ParentType; container: string; index: number } || null;
+    this.currentDragContext = event.source?.data as DragContext || null;
+    const item = this.currentDragContext?.item;
+    const sourceId = item?.id ?? (item as any)?.key ?? (item as any)?.titleKey ?? (item as any)?.value ?? null;
     if (this.debugLogging) {
       console.log('[Treeview:onDragStarted]', {
         dragData: this.currentDragContext,
-        sourceId: (event.source as any)?.id
+        sourceId
       });
     }
   }
@@ -601,7 +611,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     const dropData = drop.data;
     if (!dropData || !dropData.parent || !dropData.container) { return false; }
     if ((dropData.mode || 'list') !== mode) { return false; }
-    const dragContext = drag.data as { parent: ParentType; container: string; index: number } | undefined;
+    const dragContext = drag.data as DragContext | undefined;
     const draggedItem = this.getDraggedItem(dragContext);
     if (!dragContext || !draggedItem) { return false; }
 
@@ -622,9 +632,12 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     return true;
   }
 
-  private getDraggedItem(dragContext?: { parent: ParentType; container: string; index: number }) {
+  private getDraggedItem(dragContext?: DragContext) {
     if (!dragContext || dragContext.parent === undefined || dragContext.container === undefined || dragContext.index === undefined) {
       return null;
+    }
+    if (dragContext.item) {
+      return dragContext.item;
     }
     const collection = this.getCollection(dragContext.parent, dragContext.container);
     if (!collection) {
