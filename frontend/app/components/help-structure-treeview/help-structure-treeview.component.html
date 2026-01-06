@@ -1,8 +1,12 @@
-<div class="treeview_main" cdkDropListGroup>
+<div class="treeview_main" cdkDropListGroup #treeRoot>
     <ng-container *ngIf="getSelectedItem() as item">
         <div *ngIf="item.coversheet?.length">
             <p class="section_header">Cover</p>
-            <div cdkDropList [cdkDropListData]="{ parent: item, container: 'coversheet', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
+            <div cdkDropList [id]="getDropListId({ parent: item, container: 'coversheet', mode: 'list' })"
+                [cdkDropListConnectedTo]="getConnectedDropListIds(getDropListId({ parent: item, container: 'coversheet', mode: 'list' }))"
+                [cdkDropListEnterPredicate]="listEnterPredicate"
+                cdkDropListOrientation="vertical"
+                [cdkDropListData]="{ parent: item, container: 'coversheet', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
                 (cdkDropListEntered)="onDropListEntered($event)" (cdkDropListExited)="onDropListExited($event)">
                 <ng-container *ngFor="let sec of item.coversheet; let i = index">
                     <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: sec, level: 1, parent: item, container: 'coversheet', index: i }"></ng-container>
@@ -11,7 +15,11 @@
         </div>
         <div *ngIf="item.content?.length">
             <p class="section_header">Content</p>
-            <div cdkDropList [cdkDropListData]="{ parent: item, container: 'content', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
+            <div cdkDropList [id]="getDropListId({ parent: item, container: 'content', mode: 'list' })"
+                [cdkDropListConnectedTo]="getConnectedDropListIds(getDropListId({ parent: item, container: 'content', mode: 'list' }))"
+                [cdkDropListEnterPredicate]="listEnterPredicate"
+                cdkDropListOrientation="vertical"
+                [cdkDropListData]="{ parent: item, container: 'content', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
                 (cdkDropListEntered)="onDropListEntered($event)" (cdkDropListExited)="onDropListExited($event)">
                 <ng-container *ngFor="let sec of item.content; let i = index">
                     <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: sec, level: 1, parent: item, container: 'content', index: i }"></ng-container>
@@ -38,7 +46,8 @@
 
     <!-- Rekursives Template für die Baumansicht -->
     <ng-template #recursiveTree let-parent let-section let-level="level" let-container="container" let-index="index">
-        <div class="tree-row" [ngStyle]="getMarginLeft(level)" cdkDrag [cdkDragData]="{ parent: parent, container: container, index: index }" (cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded()">
+        <div class="tree-row" [ngStyle]="getMarginLeft(level)" cdkDrag [cdkDragData]="{ parent: parent, container: container, index: index }" (cdkDragStarted)="onDragStarted($event)"
+            (cdkDragEnded)="onDragEnded()" (cdkDragMoved)="onDragMoved($event)">
             <span
                 *ngIf="hasChildren(section)"
                 class="tree-toggle material-icons"
@@ -79,7 +88,12 @@
         </div>
 
         <ng-container *ngIf="getDefaultChildContainer(section) as childContainer">
-            <div class="child-drop" cdkDropList [class.visible]="isChildDropActive(section, childContainer)"
+            <div class="child-drop" cdkDropList [id]="getDropListId({ parent: section, container: childContainer, mode: 'child' })"
+                [cdkDropListConnectedTo]="getConnectedDropListIds(getDropListId({ parent: section, container: childContainer, mode: 'child' }))"
+                [cdkDropListEnterPredicate]="childEnterPredicate"
+                cdkDropListOrientation="vertical"
+                [cdkDropListDisabled]="!canAcceptChildDrop(section, childContainer)"
+                [class.visible]="isChildDropActive(section, childContainer)"
                 [cdkDropListData]="{ parent: section, container: childContainer, mode: 'child' }"
                 (cdkDropListEntered)="onDropListEntered($event)" (cdkDropListExited)="onDropListExited($event)"
                 (cdkDropListDropped)="onDrop($event)">
@@ -87,7 +101,11 @@
         </ng-container>
 
         <div *ngIf="getItemExpanded(section)">
-            <div *ngIf="section.coversheet?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'coversheet', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
+            <div *ngIf="section.coversheet?.length" cdkDropList [id]="getDropListId({ parent: section, container: 'coversheet', mode: 'list' })"
+                [cdkDropListConnectedTo]="getConnectedDropListIds(getDropListId({ parent: section, container: 'coversheet', mode: 'list' }))"
+                [cdkDropListEnterPredicate]="listEnterPredicate"
+                cdkDropListOrientation="vertical"
+                [cdkDropListData]="{ parent: section, container: 'coversheet', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
                 (cdkDropListEntered)="onDropListEntered($event)" (cdkDropListExited)="onDropListExited($event)">
                 <ng-container *ngFor="let sub of section.coversheet; let j = index">
                     <ng-container
@@ -95,7 +113,11 @@
                 </ng-container>
             </div>
 
-            <div *ngIf="section.content?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'content', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
+            <div *ngIf="section.content?.length" cdkDropList [id]="getDropListId({ parent: section, container: 'content', mode: 'list' })"
+                [cdkDropListConnectedTo]="getConnectedDropListIds(getDropListId({ parent: section, container: 'content', mode: 'list' }))"
+                [cdkDropListEnterPredicate]="listEnterPredicate"
+                cdkDropListOrientation="vertical"
+                [cdkDropListData]="{ parent: section, container: 'content', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
                 (cdkDropListEntered)="onDropListEntered($event)" (cdkDropListExited)="onDropListExited($event)">
                 <ng-container *ngFor="let sub of section.content; let j = index">
                     <ng-container
@@ -103,7 +125,11 @@
                 </ng-container>
             </div>
 
-            <div *ngIf="section.subsections?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'subsections', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
+            <div *ngIf="section.subsections?.length" cdkDropList [id]="getDropListId({ parent: section, container: 'subsections', mode: 'list' })"
+                [cdkDropListConnectedTo]="getConnectedDropListIds(getDropListId({ parent: section, container: 'subsections', mode: 'list' }))"
+                [cdkDropListEnterPredicate]="listEnterPredicate"
+                cdkDropListOrientation="vertical"
+                [cdkDropListData]="{ parent: section, container: 'subsections', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
                 (cdkDropListEntered)="onDropListEntered($event)" (cdkDropListExited)="onDropListExited($event)">
                 <ng-container *ngFor="let sub of section.subsections; let j = index">
                     <ng-container
@@ -111,7 +137,11 @@
                 </ng-container>
             </div>
 
-            <div *ngIf="section.steps?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'steps', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
+            <div *ngIf="section.steps?.length" cdkDropList [id]="getDropListId({ parent: section, container: 'steps', mode: 'list' })"
+                [cdkDropListConnectedTo]="getConnectedDropListIds(getDropListId({ parent: section, container: 'steps', mode: 'list' }))"
+                [cdkDropListEnterPredicate]="listEnterPredicate"
+                cdkDropListOrientation="vertical"
+                [cdkDropListData]="{ parent: section, container: 'steps', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
                 (cdkDropListEntered)="onDropListEntered($event)" (cdkDropListExited)="onDropListExited($event)">
                 <ng-container *ngFor="let step of section.steps; let j = index">
                     <ng-container
@@ -119,7 +149,11 @@
                 </ng-container>
             </div>
 
-            <div *ngIf="section.substeps?.length" cdkDropList [cdkDropListData]="{ parent: section, container: 'substeps', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
+            <div *ngIf="section.substeps?.length" cdkDropList [id]="getDropListId({ parent: section, container: 'substeps', mode: 'list' })"
+                [cdkDropListConnectedTo]="getConnectedDropListIds(getDropListId({ parent: section, container: 'substeps', mode: 'list' }))"
+                [cdkDropListEnterPredicate]="listEnterPredicate"
+                cdkDropListOrientation="vertical"
+                [cdkDropListData]="{ parent: section, container: 'substeps', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
                 (cdkDropListEntered)="onDropListEntered($event)" (cdkDropListExited)="onDropListExited($event)">
                 <ng-container *ngFor="let substep of section.substeps; let j = index">
                     <ng-container
