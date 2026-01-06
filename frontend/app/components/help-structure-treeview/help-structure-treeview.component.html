@@ -45,7 +45,7 @@
     </ng-container>
 
     <!-- Rekursives Template für die Baumansicht -->
-    <ng-template #recursiveTree let-parent let-section let-level="level" let-container="container" let-index="index">
+    <ng-template #recursiveTree let-section="$implicit" let-parent="parent" let-container="container" let-index="index" let-level="level">
         <div class="tree-row" [ngStyle]="getMarginLeft(level)" cdkDrag [cdkDragData]="{ parent: parent, container: container, index: index }" (cdkDragStarted)="onDragStarted($event)"
             (cdkDragEnded)="onDragEnded()" (cdkDragMoved)="onDragMoved($event)">
             <span

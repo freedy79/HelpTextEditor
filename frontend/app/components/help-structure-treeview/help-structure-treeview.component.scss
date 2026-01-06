@@ -20,6 +20,11 @@
     min-height: 28px;
 }
 
+.treeview_main .cdk-drop-list {
+    display: block;
+    width: 100%;
+}
+
 .tree-toggle {
     cursor: pointer;
     color: #5f6368;
