@@ -351,9 +351,6 @@ export class MainComponent implements OnInit {
       : (event.direction === 'up' ? event.index - 1 : event.index + 1);
 
     let targetIndex = Math.max(0, Math.min(requestedIndex, targetCollection.length));
-    if (sourceCollection === targetCollection && targetIndex > event.index) {
-      targetIndex = targetIndex - 1;
-    }
 
     if (targetIndex < 0 || targetIndex > targetCollection.length) {
       console.log('Move section aborted: target index out of range', { targetIndex, event });
