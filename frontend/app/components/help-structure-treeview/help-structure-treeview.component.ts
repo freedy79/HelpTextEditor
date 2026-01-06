@@ -1,5 +1,28 @@
-import { CdkDrag, CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragEnter,
+  CdkDragExit,
+  CdkDragMove,
+  CdkDragStart,
+  CdkDropList,
+  Point,
+  moveItemInArray,
+  transferArrayItem
+} from '@angular/cdk/drag-drop';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  QueryList,
+  SimpleChanges,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep, AbbreviationItem } from '~models/help-text-structure.model';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
 
@@ -61,6 +84,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   private expandedSections: string[];
   private activeDropListId: string | null = null;
   private dragCancelled = false;
+  private currentDragContext: { parent: ParentType; container: string; index: number } | null = null;
   private parentIdMap = new WeakMap<object, number>();
   private parentIdCounter = 0;
   private dropListRefreshScheduled = false;
@@ -69,15 +93,19 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
 
   /*
    * Diagnose (Root Causes):
-   * - Template context mixed $implicit and let-parent without explicit aliasing, so parent/drag context pointed at the dragged item instead of its parent. That broke fromParent/fromContainer resolution.
-   * - onDrop only emitted moveSection without mutating the local array, so the UI never re-ordered unless the parent re-supplied inputs.
+   * - Template context mixed $implicit and let-parent without explicit aliasing; parent/drag context
+   *   pointed at the dragged item instead of its parent and broke fromParent/fromContainer resolution.
+   * - onDrop only emitted moveSection without mutating the local array, so the UI never re-ordered
+   *   unless the parent re-supplied inputs.
    * Fixes:
    * - Explicit template context aliases for section/parent/container/index/level.
-   * - Added drop logging and immediate local move (moveItemInArray/transferArrayItem) before emitting moveSection.
+   * - Added drop logging and immediate local move (moveItemInArray/transferArrayItem) before emitting
+   *   moveSection.
    */
 
   listEnterPredicate = (drag: CdkDrag, drop: CdkDropList<DropContainerContext>) => this.canEnterDropList(drag, drop, 'list');
   childEnterPredicate = (drag: CdkDrag, drop: CdkDropList<DropContainerContext>) => this.canEnterDropList(drag, drop, 'child');
+  constrainY = (point: Point) => ({ x: 0, y: point.y });
 
   constructor() {
     this.expandedSections = [];
@@ -165,8 +193,17 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     }
 
     const containerData = event.container.data;
+    if (!containerData) {
+      this.activeDropListId = null;
+      console.warn('[Treeview:onDrop] Missing container data, aborting drop.');
+      return;
+    }
     const previousContainerData = event.previousContainer.data as DropContainerContext | undefined;
-    const dragContext = event.item.data as { parent: ParentType; container: string; index: number } | undefined;
+    const dragContext = (event.item.data as {
+      parent: ParentType;
+      container: string;
+      index: number;
+    } | undefined) || this.currentDragContext;
 
     const fromParent = dragContext?.parent || previousContainerData?.parent;
     const fromContainer = dragContext?.container || previousContainerData?.container;
@@ -227,16 +264,30 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   onDragStarted(event: CdkDragStart) {
     this.activeDropListId = null;
     this.dragCancelled = false;
+    this.currentDragContext = event.source?.data as { parent: ParentType; container: string; index: number } || null;
+    if (this.debugLogging) {
+      console.log('[Treeview:onDragStarted]', {
+        dragData: this.currentDragContext,
+        sourceId: (event.source as any)?.id
+      });
+    }
   }
 
   onDragEnded() {
     this.activeDropListId = null;
     this.dragCancelled = false;
+    this.currentDragContext = null;
   }
 
   onDragMoved(event: CdkDragMove) {
     if (!this.treeRootRef?.nativeElement || this.dragCancelled) {
       return;
+    }
+    if (this.debugLogging && this.activeDropListId) {
+      console.log('[Treeview:onDragMoved]', {
+        activeDropListId: this.activeDropListId,
+        dragCancelled: this.dragCancelled
+      });
     }
     const { x, y } = event.pointerPosition;
     const rect = this.treeRootRef.nativeElement.getBoundingClientRect();
@@ -541,6 +592,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   private cancelDrag(source: CdkDrag) {
     this.dragCancelled = true;
     this.activeDropListId = null;
+    this.currentDragContext = null;
     (source as any)?._dragRef?.reset();
   }
 
