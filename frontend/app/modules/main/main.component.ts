@@ -47,6 +47,12 @@ export class MainComponent implements OnInit {
 
   isDirty: boolean = false;
   appVersion = buildInfo.buildDateIso ? new Date(buildInfo.buildDateIso).toLocaleString() : 'Unknown';
+  leftColumnWidth = 320;
+  leftMinWidth = 220;
+  leftMaxWidth = 700;
+  isDraggingSplitter = false;
+  dragStartX = 0;
+  dragStartWidth = 0;
 
   // HTML-Preview des aktuell gewählten Top-Level-Teils
   previewHtml = '';
@@ -116,6 +122,29 @@ export class MainComponent implements OnInit {
       console.log("Saving before unload");
       this.onSave();
     }
+  }
+
+  @HostListener('window:mousemove', ['$event'])
+  onWindowMouseMove(event: MouseEvent) {
+    if (!this.isDraggingSplitter) {
+      return;
+    }
+
+    const delta = event.clientX - this.dragStartX;
+    const newWidth = Math.min(this.leftMaxWidth, Math.max(this.leftMinWidth, this.dragStartWidth + delta));
+    this.leftColumnWidth = newWidth;
+  }
+
+  @HostListener('window:mouseup')
+  onWindowMouseUp() {
+    this.isDraggingSplitter = false;
+  }
+
+  onSplitterMouseDown(event: MouseEvent) {
+    this.isDraggingSplitter = true;
+    this.dragStartX = event.clientX;
+    this.dragStartWidth = this.leftColumnWidth;
+    event.preventDefault();
   }
 
   public onMenuItemClicked(item) {
