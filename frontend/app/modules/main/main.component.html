@@ -57,10 +57,6 @@
             [language]="getImageLanguage()"></app-help-section>
         </div>
       </div>
-
-      <div>
-        <small>Build date: {{ buildDateLabel }}</small>
-      </div>
     </div>
 
     <!-- Third column (20%) Properties -->
@@ -151,6 +147,7 @@
     [selectedTopLevelKey]="selectedTopLevelKey"
     [selectedSectionId]="selectedSection?.value"
     [language]="selectedLanguage"
+    [version]="appVersion"
     [isDirty]="isDirty">
   </app-statusbar>
 </div>

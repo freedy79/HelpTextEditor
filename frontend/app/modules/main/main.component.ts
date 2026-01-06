@@ -46,7 +46,7 @@ export class MainComponent implements OnInit {
   selectedTextContent = '';
 
   isDirty: boolean = false;
-  buildDateLabel = buildInfo.buildDateIso ? new Date(buildInfo.buildDateIso).toLocaleString() : 'Unknown';
+  appVersion = buildInfo.buildDateIso ? new Date(buildInfo.buildDateIso).toLocaleString() : 'Unknown';
 
   // HTML-Preview des aktuell gewählten Top-Level-Teils
   previewHtml = '';
