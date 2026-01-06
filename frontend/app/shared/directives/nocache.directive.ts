@@ -1,5 +1,5 @@
-import { HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class NoCacheHeadersInterceptor implements HttpInterceptor {
@@ -10,6 +10,6 @@ export class NoCacheHeadersInterceptor implements HttpInterceptor {
                  Pragma: 'no-cache'
             }
         });
-        return next.handle(authReq);    
+        return next.handle(authReq);
     }
 }

@@ -46,7 +46,13 @@ import { AbbreviationDialogComponent } from './abbreviation-dialog/abbreviation-
     AbbreviationDialogComponent
   ],
   providers: [ConfirmDialogService],
-  entryComponents:[ImagePickerDialogComponent, ConfirmationDialogComponent, CleanQtfDialogComponent, TranslationIssuesDialogComponent, AbbreviationDialogComponent],
+  entryComponents: [
+    ImagePickerDialogComponent,
+    ConfirmationDialogComponent,
+    CleanQtfDialogComponent,
+    TranslationIssuesDialogComponent,
+    AbbreviationDialogComponent
+  ],
   bootstrap: []
 })
 export class DialogsModule { }

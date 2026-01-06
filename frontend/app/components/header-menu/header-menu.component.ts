@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { MenuItemModel } from "./menu-item.model";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MenuItemModel } from './menu-item.model';
 
 @Component({
   selector: 'app-header-menu',
@@ -10,7 +10,7 @@ export class HeaderMenuComponent {
 
     @Input() items: MenuItemModel[];
     @Input() title: string;
-    @Output() onItemClicked: EventEmitter<any> = new EventEmitter();
+    @Output() itemClicked: EventEmitter<any> = new EventEmitter();
 
     private currentHover: MenuItemModel;
 
@@ -18,14 +18,14 @@ export class HeaderMenuComponent {
 
     public selectItem(item) {
       if (item.clickId) {
-        if (this.onItemClicked) {
-          this.onItemClicked.emit(item);
+        if (this.itemClicked) {
+          this.itemClicked.emit(item);
         }
       }
     }
 
     public parentHovered(item) {
-      return item == this.currentHover;
+      return item === this.currentHover;
     }
 
     public hover_over(item) {

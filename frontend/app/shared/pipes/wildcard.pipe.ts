@@ -9,9 +9,9 @@ import { FontService } from '../services/font.service';
 })
 export class QtfTranslationPipe implements PipeTransform {
   private bracketRegex = /(\<(?!.*\>))/g;
-  
+
   constructor(private translateService: TranslateService, private fontService: FontService) {
-  
+
   }
 
   transform(value: string, args?: any, type?: any, replaceSymbol: boolean = true) {
@@ -42,7 +42,7 @@ export class QtfTranslationPipe implements PipeTransform {
         });
       }
       args.forEach((arg, i) => {
-        let wildcard = '%arg' + i + '%';
+        const wildcard = '%arg' + i + '%';
         let replaceValue = arg;
         if (this.fontService.isFontAvailable(arg)) {
           replaceValue = this.fontService.getFontCode(arg);
@@ -57,7 +57,7 @@ export class QtfTranslationPipe implements PipeTransform {
       if (type === 'SELECTION') {
         this.translateService.get(value).subscribe(res => (returnValue = res));
         args.forEach((arg, i) => {
-          let wildcard = '%arg' + i + '%';
+          const wildcard = '%arg' + i + '%';
           returnValue = returnValue.replace(wildcard, arg);
         });
       }
@@ -67,9 +67,8 @@ export class QtfTranslationPipe implements PipeTransform {
 
   private isValidHTML(elementToCheck: string) {
     try {
-      return document.createElement(elementToCheck.toUpperCase()).toString() != '[object HTMLUnknownElement]';
-    }
-    catch(e) {
+      return document.createElement(elementToCheck.toUpperCase()).toString() !== '[object HTMLUnknownElement]';
+    } catch (e) {
       return false;
     }
   }
@@ -77,8 +76,8 @@ export class QtfTranslationPipe implements PipeTransform {
   private handleBracketReplacement(value: string, shouldBeReplaced: boolean) {
     if (shouldBeReplaced && !(value.includes('</') || value.includes('/>'))) {
       value = value.replace(this.bracketRegex, '&lt;');
-      let possibleTags = value.match(/<(.*?)>/);
-      if (possibleTags != null) {
+      const possibleTags = value.match(/<(.*?)>/);
+      if (possibleTags !== null) {
         if (!this.isValidHTML(possibleTags.pop())) {
           value = value.replace(/</g, '&lt;');
         }

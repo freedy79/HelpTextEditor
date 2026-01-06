@@ -19,10 +19,10 @@ export class FileUploadOverlayComponent {
   private qtfData: any | null = null;
 
   // Gespeicherte Dateinamen (für die UI)
-  jsonFileName: string = '';
-  qtfFileName: string = '';
+  jsonFileName = '';
+  qtfFileName = '';
 
-  errorMessage: string = '';
+  errorMessage = '';
 
   constructor() {}
 
