@@ -16,6 +16,8 @@
     align-items: center;
     gap: 4px;
     cursor: grab;
+    width: 100%;
+    min-height: 28px;
 }
 
 .tree-toggle {
@@ -128,6 +130,7 @@
     border: 1px dashed #5f6368;
     border-radius: 4px;
     margin: 2px 0;
+    width: 100%;
 }
 
 .child-drop {
@@ -136,9 +139,24 @@
     border-radius: 3px;
     opacity: 0;
     transition: opacity 120ms ease-in-out, background-color 120ms ease-in-out;
+    width: calc(100% - 20px);
 }
 
 .child-drop.visible {
     opacity: 1;
     background-color: rgba(33, 150, 243, 0.25);
+}
+
+.child-drop.cdk-drop-list-dragging:not(.cdk-drop-list-disabled) {
+    opacity: 1;
+    background-color: rgba(33, 150, 243, 0.35);
+}
+
+.child-drop.cdk-drop-list-disabled {
+    opacity: 0;
+    cursor: not-allowed;
+}
+
+.treeview_main .cdk-drop-list-dragging .tree-row:not(.drag-placeholder) {
+    opacity: 0.92;
 }
