@@ -274,7 +274,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     this.dragCancelled = false;
     this.currentDragContext = event.source?.data as DragContext || null;
     const item = this.currentDragContext?.item;
-    const sourceId = item?.id ?? (item as any)?.key ?? (item as any)?.titleKey ?? (item as any)?.value ?? null;
+    const sourceId = this.getItemId(item);
     if (this.debugLogging) {
       console.log('[Treeview:onDragStarted]', {
         dragData: this.currentDragContext,
@@ -689,5 +689,28 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     }
     const base = (parent as any)?.value || (parent as any)?.type || 'root';
     return `${base}-${this.parentIdMap.get(parent as unknown as object)}`;
+  }
+
+  private getItemId(item: TreeItem | null | undefined): string | null {
+    if (!item) { return null; }
+    if (this.isHelpTextSection(item) || this.isHelpTextStep(item)) {
+      return item.value || null;
+    }
+    if (this.isAbbreviation(item)) {
+      return item.abbreviation || null;
+    }
+    if ('id' in (item as Record<string, unknown>) && typeof (item as Record<string, unknown>).id === 'string') {
+      return (item as { id: string }).id;
+    }
+    if ('key' in (item as Record<string, unknown>) && typeof (item as Record<string, unknown>).key === 'string') {
+      return (item as { key: string }).key;
+    }
+    if ('titleKey' in (item as Record<string, unknown>) && typeof (item as Record<string, unknown>).titleKey === 'string') {
+      return (item as { titleKey: string }).titleKey;
+    }
+    if ('value' in (item as Record<string, unknown>) && typeof (item as Record<string, unknown>).value === 'string') {
+      return (item as { value: string }).value;
+    }
+    return null;
   }
 }
