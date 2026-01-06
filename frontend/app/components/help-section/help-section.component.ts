@@ -1,23 +1,23 @@
 import { Component, EventEmitter, HostBinding, Input, OnChanges, Output } from '@angular/core';
-import { ImageDefault } from '~shared/directives/img.directive';
+import { ImageDefaultDirective } from '~shared/directives/img.directive';
 import { HelpTextSection } from '~models/help-text-structure.model';
 
 @Component({
   selector: 'app-help-section, json-pipe',
   templateUrl: './help-section.component.html',
   styleUrls: ['./help-section.component.scss'],
-  viewProviders: [ImageDefault]
+  viewProviders: [ImageDefaultDirective]
 })
 export class HelpSectionComponent implements OnChanges {
   @Input() section: HelpTextSection;
   @Input() sectionNumber: String;
   @Input() sectionLevel: number;
   @Input() selectedHelpSection: HelpTextSection;
-  @Output() onSelectContent = new EventEmitter<string>();
+  @Output() selectContent = new EventEmitter<string>();
   @Input() selectedLanguage: String;
 
   @Input() language: String;
-  
+
 
   constructor() {
     if (this.language === undefined) {
@@ -36,20 +36,16 @@ export class HelpSectionComponent implements OnChanges {
   ngOnChanges() {
   }
 
-  errorHandler(event) {
-    console.debug(event);
-  }
-
   onImgError(event, content) {
     // react on    (error)="onImgError($event, content)"
-    //console.log(JSON.stringify(content));
+    // console.log(JSON.stringify(content));
     event.target.src = '';
   }
 
   public forwardSectionClick(contentId) {
-    //console.log("forwardSectionClick ", contentId);
-    if (this.onSelectContent) {
-      this.onSelectContent.emit(contentId);
+    // console.log("forwardSectionClick ", contentId);
+    if (this.selectContent) {
+      this.selectContent.emit(contentId);
     }
   }
 
@@ -58,19 +54,17 @@ export class HelpSectionComponent implements OnChanges {
   }
 
   public isSelected(section) {
-    if ((section != undefined) && this.selectedHelpSection) {
-      const selected = section.value == this.selectedHelpSection.value;
-      //console.log("Selected: ", this.selectedHelpSection.value, " you asked for: ", section.value);
-      return selected;
+    if (section && this.selectedHelpSection) {
+      return section.value === this.selectedHelpSection.value;
     }
-    //console.log("section: ", section != null);
-    //console.log("selectedHelpSection: ", this.selectedHelpSection != null);
+    // console.log("section: ", section != null);
+    // console.log("selectedHelpSection: ", this.selectedHelpSection != null);
     return false;
   }
 
   public isIeOrEdge() {
-    const agent = window.navigator.userAgent.toLowerCase()
-    //console.log("isEdge: ", agent);
+    const agent = window.navigator.userAgent.toLowerCase();
+    // console.log("isEdge: ", agent);
     const isIEOrEdge = agent.indexOf('edg') > -1;
     return isIEOrEdge;
   }

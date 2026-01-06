@@ -13,7 +13,7 @@ export interface ContextMenuItem {
 })
 export class ContextMenuComponent implements OnInit, OnDestroy {
   private _target: ElementRef;
-  private _isOpen: boolean = false;
+  private _isOpen = false;
   private _positionX: number;
   private _positionY: number;
   @ViewChild('menuElement') private menuElement: ElementRef<HTMLElement>;
@@ -87,7 +87,7 @@ export class ContextMenuComponent implements OnInit, OnDestroy {
     event.preventDefault();
     event.stopPropagation();
     this.openContextMenu(event.clientX, event.clientY, this.items);
-  };
+  }
 
   private adjustMenuPosition(): void {
     if (!this.menuElement) { return; }

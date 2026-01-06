@@ -11,7 +11,7 @@ export enum Languages {
     KOREAN        = 'KOREAN'
 }
 
-type TextEntry = { 
+interface TextEntry {
     [key: string]: QtfTextEntry;
   }
 
@@ -33,8 +33,8 @@ export interface QtfTextEntry {
     VERIFIED: { [lang: string]: boolean };
 }
 
-export function createNewQtfItem(lang: string, text: string) : QtfTextEntry {
-  var newItem : QtfTextEntry;
+export function createNewQtfItem(lang: string, text: string): QtfTextEntry {
+  let newItem: QtfTextEntry;
 
   newItem = {
           group: 'HELP_INSTRUCTION',

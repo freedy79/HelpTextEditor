@@ -1,11 +1,37 @@
-import { CdkDrag, CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart, CdkDropList } from '@angular/cdk/drag-drop';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep, AbbreviationItem } from '~models/help-text-structure.model';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragEnter,
+  CdkDragExit,
+  CdkDragMove,
+  CdkDragStart,
+  CdkDropList
+} from '@angular/cdk/drag-drop';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  QueryList,
+  SimpleChanges,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
+import {
+  MainHelpSection,
+  HelpTextSection,
+  HelpContentType,
+  HelpTextStep,
+  AbbreviationItem
+} from '~models/help-text-structure.model';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
 
 type ParentType = HelpTextSection | MainHelpSection | HelpTextStep;
 type TreeItem = HelpTextSection | HelpTextStep | AbbreviationItem | null;
-type MoveEvent = {
+interface MoveEvent {
   parent: ParentType;
   container: string;
   index: number;
@@ -13,8 +39,12 @@ type MoveEvent = {
   newIndex?: number;
   fromParent?: ParentType;
   fromContainer?: string;
-};
-type DropContainerContext = { parent: ParentType; container: string; mode?: 'list' | 'child' };
+}
+interface DropContainerContext {
+  parent: ParentType;
+  container: string;
+  mode?: 'list' | 'child';
+}
 
 @Component({
   selector: 'app-help-structure-treeview',
@@ -25,22 +55,34 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   @Input() helpItem: MainHelpSection;
   @Input() topLevelKey: string;
   @Input() selectedHelpSection: HelpTextSection;
-  @Output() onItemClicked: EventEmitter<any> = new EventEmitter();
+  @Output() itemClicked: EventEmitter<any> = new EventEmitter();
   @Output() addSubsection: EventEmitter<HelpTextSection> = new EventEmitter();
   @Output() addContent: EventEmitter<HelpTextSection | MainHelpSection> = new EventEmitter();
   @Output() addStep: EventEmitter<HelpTextSection> = new EventEmitter();
   @Output() deleteSection: EventEmitter<HelpTextSection | HelpTextStep> = new EventEmitter();
   @Output() moveSection: EventEmitter<MoveEvent> = new EventEmitter();
   @Output() addAbbreviation: EventEmitter<MainHelpSection> = new EventEmitter();
-  @Output() editAbbreviation: EventEmitter<{ abbreviation: AbbreviationItem; parent: MainHelpSection; index: number; }> = new EventEmitter();
-  @Output() deleteAbbreviation: EventEmitter<{ abbreviation: AbbreviationItem; parent: MainHelpSection; }> = new EventEmitter();
+  @Output() editAbbreviation: EventEmitter<{
+    abbreviation: AbbreviationItem;
+    parent: MainHelpSection;
+    index: number;
+  }> = new EventEmitter();
+  @Output() deleteAbbreviation: EventEmitter<{
+    abbreviation: AbbreviationItem;
+    parent: MainHelpSection;
+  }> = new EventEmitter();
 
   @ViewChild('contextMenu') contextMenu: ContextMenuComponent;
   @ViewChild('treeRoot') treeRootRef: ElementRef<HTMLElement>;
   @ViewChildren(CdkDropList) dropLists: QueryList<CdkDropList<DropContainerContext>>;
 
   contextMenuItems: ContextMenuItem[] = [];
-  private contextMenuContext: { section: TreeItem; parent: ParentType; container: string; index: number; } | null = null;
+  private contextMenuContext: {
+    section: TreeItem;
+    parent: ParentType;
+    container: string;
+    index: number;
+  } | null = null;
 
   private expandedSections: string[];
   private activeDropListId: string | null = null;
@@ -49,10 +91,8 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   private parentIdCounter = 0;
   connectedDropListIds: string[] = [];
 
-  listEnterPredicate = (drag: CdkDrag, drop: CdkDropList<DropContainerContext>) =>
-    this.canEnterDropList(drag, drop, 'list');
-  childEnterPredicate = (drag: CdkDrag, drop: CdkDropList<DropContainerContext>) =>
-    this.canEnterDropList(drag, drop, 'child');
+  listEnterPredicate = (drag: CdkDrag, drop: CdkDropList<DropContainerContext>) => this.canEnterDropList(drag, drop, 'list');
+  childEnterPredicate = (drag: CdkDrag, drop: CdkDropList<DropContainerContext>) => this.canEnterDropList(drag, drop, 'child');
 
   constructor() {
     this.expandedSections = [];
@@ -79,9 +119,9 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   }
 
   public onSelectTreeItem(event) {
-    if (this.onItemClicked) {
-      //console.log("click ", event);
-      this.onItemClicked.emit(event);
+    if (this.itemClicked) {
+      // console.log("click ", event);
+      this.itemClicked.emit(event);
     }
   }
 
@@ -268,9 +308,9 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   }
 
   public getMarginLeft(level: number) {
-    let calc_margin = (level - 1) * 20;
+    const calc_margin = (level - 1) * 20;
 
-    let styles = {
+    const styles = {
       'margin-left': calc_margin + 'px',
     };
 
@@ -291,10 +331,10 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
 
   onOpenCloseSection(section) {
     if (this.expandedSections.find(x => x === section)) {
-      //console.log("closing ", section);
+      // console.log("closing ", section);
       this.expandedSections = this.expandedSections.filter(item => item !== section);
     } else {
-      //console.log("expanding ", section);
+      // console.log("expanding ", section);
       this.expandedSections.push(section);
     }
 
@@ -302,12 +342,11 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
 
   getItemExpanded(section) {
     if (section) {
-      //console.log("expanded? ", section.value);
+      // console.log("expanded? ", section.value);
       if (section.value) {
         return !!this.expandedSections.find(x => x === section.value);
-      } else 
-      {
-        return !!this.expandedSections.find(x => x === section.value)
+      } else {
+        return !!this.expandedSections.find(x => x === section.value);
       }
     }
     return false;
@@ -319,9 +358,9 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
 
   isSelectedSection(section) {
     if (this.selectedHelpSection && section) {
-      //console.log("isSelected", this.selectedHelpSection.value);
-      return (this.selectedHelpSection.value == section.value);
-    } else return false;
+      // console.log("isSelected", this.selectedHelpSection.value);
+      return this.selectedHelpSection.value === section.value;
+    } else { return false; }
   }
 
   showStepControls(section: HelpTextSection): boolean {

@@ -23,7 +23,7 @@
                 (click)="contentClick(content.value)">
                 <figure>
                     <img [src]="'./media/helpImages/' + content.value + '_' + language + '.svg'"
-                        [default]="'./media/helpImages/' + content.value + '_' + language + '.png'" class="image"
+                        [appDefault]="'./media/helpImages/' + content.value + '_' + language + '.png'" class="image"
                         [fallback]="'assets/image-fallback.svg'" [style.width]="content.width" [style.height]="content.height">
                     <figcaption [innerHTML]="content.imageDescription | qtfTranslate" class="imageDesc"></figcaption>
                 </figure>
@@ -34,7 +34,7 @@
                 (click)="contentClick(content.value)">
                 <figure>
                     <img [src]="'./media/helpImages/' + content.value + '_' + language + '.png'"
-                        [default]="'./media/helpImages/' + content.value + '_' + language + '.png'"
+                        [appDefault]="'./media/helpImages/' + content.value + '_' + language + '.png'"
                         [fallback]="'assets/image-fallback.svg'" class="image">
                     <figcaption [innerHTML]="content.imageDescription | qtfTranslate" class="imageDesc"></figcaption>
                 </figure>
@@ -91,6 +91,6 @@
 
 <div *ngFor="let subSection of section.subsections; let i = index">
     <app-help-section [section]="subSection" [sectionNumber]="(sectionNumber + '.') + (i + 1)"
-        [sectionLevel]="(sectionLevel + 1)" (onSelectContent)="forwardSectionClick($event)"
+        [sectionLevel]="(sectionLevel + 1)" (selectContent)="forwardSectionClick($event)"
         [selectedHelpSection]="selectedHelpSection"></app-help-section>
 </div>

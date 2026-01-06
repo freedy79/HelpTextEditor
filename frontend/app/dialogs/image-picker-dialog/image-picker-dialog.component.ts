@@ -45,7 +45,7 @@ export class ImagePickerDialogComponent implements OnInit {
    * Lädt die Liste der verfügbaren Bilder vom Server
    */
   private loadImages(): void {
-    // Hier den richtigen Endpunkt anpassen; 
+    // Hier den richtigen Endpunkt anpassen;
     // Beispiel: GET /api/images => gibt string[] mit Dateinamen zurück
     this.http.get<string[]>('/api/images').subscribe({
       next: (filenames) => {
