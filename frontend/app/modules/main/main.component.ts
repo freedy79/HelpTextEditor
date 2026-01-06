@@ -1,19 +1,44 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { FileIOService } from '~shared/services/file-io.service';
-import { HelpTextRoot, MainHelpSection, HelpTextSection, parseHelpTextRoot, parseMainHelpSection, HelpTextRootKey, HelpContentType, HelpTextStep, AbbreviationItem } from '~/app/models/help-text-structure.model';
-import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from '../../models/qtf-file.model';
-import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
-import { TranslateService } from '@ngx-translate/core';
-import { buildInfo } from '~/app/build-info.generated';
-import { ImagePickerDialogComponent, ImagePickerDialogData } from '~/app/dialogs/image-picker-dialog/image-picker-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { DeeplTranslationService } from '~shared/services/deepl-translation.service';
-import { DeeplSettingsDialogComponent, DeeplSettingsDialogResult } from '~/app/dialogs/deepl-settings-dialog/deepl-settings-dialog.component';
-import { CleanQtfDialogComponent, CleanQtfDialogResult } from '~/app/dialogs/clean-qtf-dialog/clean-qtf-dialog.component';
-import { TranslationIssuesDialogComponent, TranslationIssuesDialogResult } from '~/app/dialogs/translation-issues-dialog/translation-issues-dialog.component';
-import { AbbreviationDialogComponent, AbbreviationDialogResult } from '~/app/dialogs/abbreviation-dialog/abbreviation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
+import {
+  HelpTextRoot,
+  MainHelpSection,
+  HelpTextSection,
+  parseHelpTextRoot,
+  parseMainHelpSection,
+  HelpTextRootKey,
+  HelpContentType,
+  HelpTextStep,
+  AbbreviationItem
+} from '~/app/models/help-text-structure.model';
+import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
+import { buildInfo } from '~/app/build-info.generated';
+import {
+  ImagePickerDialogComponent,
+  ImagePickerDialogData
+} from '~/app/dialogs/image-picker-dialog/image-picker-dialog.component';
+import {
+  DeeplSettingsDialogComponent,
+  DeeplSettingsDialogResult
+} from '~/app/dialogs/deepl-settings-dialog/deepl-settings-dialog.component';
+import {
+  CleanQtfDialogComponent,
+  CleanQtfDialogResult
+} from '~/app/dialogs/clean-qtf-dialog/clean-qtf-dialog.component';
+import {
+  TranslationIssuesDialogComponent,
+  TranslationIssuesDialogResult
+} from '~/app/dialogs/translation-issues-dialog/translation-issues-dialog.component';
+import {
+  AbbreviationDialogComponent,
+  AbbreviationDialogResult
+} from '~/app/dialogs/abbreviation-dialog/abbreviation-dialog.component';
 import { ConfirmDialogService } from '~/app/dialogs/confirmation-dialog/confirmation-dialog.service';
+import { FileIOService } from '~shared/services/file-io.service';
+import { DeeplTranslationService } from '~shared/services/deepl-translation.service';
+import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from '../../models/qtf-file.model';
 
 @Component({
   selector: 'app-main',
@@ -26,12 +51,22 @@ export class MainComponent implements OnInit {
   helpTextRoot: HelpTextRoot | null = null;
   qtfFile: QtfFile | null = null;
 
-  allowedKeys = ['APPLICATION', '_FILE_NAME', 'TROUBLESHOOTING', 'ABBREVIATION_TITLE', 'SETTING_UP', 'USER_STEPS', 'APPENDIX', 'PASSWORD', 'OPEN_SETTINGS_MENU'] as const;
+  allowedKeys = [
+    'APPLICATION',
+    '_FILE_NAME',
+    'TROUBLESHOOTING',
+    'ABBREVIATION_TITLE',
+    'SETTING_UP',
+    'USER_STEPS',
+    'APPENDIX',
+    'PASSWORD',
+    'OPEN_SETTINGS_MENU'
+  ] as const;
 
   public showOverlayFileOpen = false;
   public showOverlayAddContent = false;
 
-  languages = ['GERMAN', 'ENGLISH', 'FRENCH', 'CHINESE', 'RUSSIAN',  'SPANISH', 'ITALIAN', "JAPANESE", "KOREAN"];
+  languages = ['GERMAN', 'ENGLISH', 'FRENCH', 'CHINESE', 'RUSSIAN', 'SPANISH', 'ITALIAN', 'JAPANESE', 'KOREAN'];
   selectedLanguage = 'GERMAN';
   deeplAuthKey = '';
   isAutoTranslating = false;
@@ -45,7 +80,7 @@ export class MainComponent implements OnInit {
   selectedSection: HelpTextSection | null = null;
   selectedTextContent = '';
 
-  isDirty: boolean = false;
+  isDirty = false;
   appVersion = buildInfo.buildDateIso ? new Date(buildInfo.buildDateIso).toLocaleString() : 'Unknown';
   leftColumnWidth = 320;
   leftMinWidth = 220;
@@ -110,8 +145,8 @@ export class MainComponent implements OnInit {
   onBeforeUnload($event: BeforeUnloadEvent) {
     if (this.isDirty) {
       $event.preventDefault();
-      //$event.returnValue = "";
-      console.log("Triggered beforeunload");
+      // $event.returnValue = "";
+      console.log('Triggered beforeunload');
       this.onSave();
     }
   }
@@ -119,7 +154,7 @@ export class MainComponent implements OnInit {
   @HostListener('window:unload', ['$event'])
   beforeunload($event: any) {
     if (this.isDirty) {
-      console.log("Saving before unload");
+      console.log('Saving before unload');
       this.onSave();
     }
   }
@@ -148,33 +183,33 @@ export class MainComponent implements OnInit {
   }
 
   public onMenuItemClicked(item) {
-    if (item.clickId == "openfile") {
+    if (item.clickId === 'openfile') {
       this.openOverlayFileOpen();
-    } else if (item.clickId == "savefile") {
+    } else if (item.clickId === 'savefile') {
       this.onSave();
-    } else if (item.clickId == "openasset") {
+    } else if (item.clickId === 'openasset') {
       this.onLoadFromAsset();
-    } else if (item.clickId == "addMainSection") {
+    } else if (item.clickId === 'addMainSection') {
       this.createNewMainsection();
-    } else if (item.clickId == "addSubsection" && this.selectedSection) {
+    } else if (item.clickId === 'addSubsection' && this.selectedSection) {
       this.createNewSubsection();
-    } else if (item.clickId == "addContent" && this.selectedSection) {
+    } else if (item.clickId === 'addContent' && this.selectedSection) {
       this.openOverlayAddContent();
-    } else if (item.clickId == "addStep" && this.selectedSection) {
+    } else if (item.clickId === 'addStep' && this.selectedSection) {
       this.createNewStep();
-    } else if (item.clickId == "cleanQtf") {
+    } else if (item.clickId === 'cleanQtf') {
       this.cleanQtf();
-    } else if (item.clickId == "translationIssues") {
+    } else if (item.clickId === 'translationIssues') {
       this.openTranslationIssuesDialog();
-    } else if (item.clickId == "copy") {
+    } else if (item.clickId === 'copy') {
       this.copy();
-    } else if (item.clickId == "deeplSettings") {
+    } else if (item.clickId === 'deeplSettings') {
       this.openDeeplSettingsDialog();
     }
   }
 
   copy() {
-    const apiUrl = "http://localhost:3000/api/upload";
+    const apiUrl = 'http://localhost:3000/api/upload';
 
     const corsHeaders = new HttpHeaders({
       'Content-Type': 'application/text',
@@ -182,16 +217,16 @@ export class MainComponent implements OnInit {
       'Access-Control-Allow-Origin': 'http://localhost:3000'
     });
 
-    console.log("send request");
+    console.log('send request');
     this.http.get(apiUrl, { headers: corsHeaders, responseType: 'text' }).subscribe(config => {
-      console.log("Config: ", config);
+      console.log('Config: ', config);
     }, (error) => {
       console.error(error);
     });
   }
 
   onLoadFromAsset() {
-    console.log("load asset");
+    console.log('load asset');
     this.fileService.loadHelpTextStructure().subscribe(data => {
       this.helpTextRoot = data;
       const keys = this.getRootKeys();
@@ -219,7 +254,7 @@ export class MainComponent implements OnInit {
   }
 
   getRootKeys(): string[] {
-    if (!this.helpTextRoot) return [];
+    if (!this.helpTextRoot) { return []; }
     return Object.keys(this.helpTextRoot);
   }
 
@@ -352,7 +387,15 @@ export class MainComponent implements OnInit {
     await this.deleteItem(section);
   }
 
-  onMoveSection(event: { parent: HelpTextSection | MainHelpSection | HelpTextStep; container: string; index: number; direction?: 'up' | 'down'; newIndex?: number; fromParent?: HelpTextSection | MainHelpSection | HelpTextStep; fromContainer?: string }) {
+  onMoveSection(event: {
+    parent: HelpTextSection | MainHelpSection | HelpTextStep;
+    container: string;
+    index: number;
+    direction?: 'up' | 'down';
+    newIndex?: number;
+    fromParent?: HelpTextSection | MainHelpSection | HelpTextStep;
+    fromContainer?: string;
+  }) {
     if (!event || !event.parent || !event.container) {
       console.log('Move section aborted: missing event data', event);
       return;
@@ -385,7 +428,7 @@ export class MainComponent implements OnInit {
       ? event.newIndex
       : (event.direction === 'up' ? event.index - 1 : event.index + 1);
 
-    let targetIndex = Math.max(0, Math.min(requestedIndex, targetCollection.length));
+    const targetIndex = Math.max(0, Math.min(requestedIndex, targetCollection.length));
 
     if (targetIndex < 0 || targetIndex > targetCollection.length) {
       console.log('Move section aborted: target index out of range', { targetIndex, event });
@@ -440,8 +483,8 @@ export class MainComponent implements OnInit {
   }
 
   onSelectSection(contentId: string) {
-    if (!this.currentMainHelpSection || contentId == "") {
-      console.log("currenthelp text item is undefined.");
+    if (!this.currentMainHelpSection || contentId === '') {
+      console.log('currenthelp text item is undefined.');
       this.selectedSection = undefined;
       return;
     }
@@ -449,15 +492,14 @@ export class MainComponent implements OnInit {
     this.saveCurrentSectionText();
     this.autoTranslationMessage = '';
 
-    console.log("Selection: ", contentId);
+    console.log('Selection: ', contentId);
     this.selectedSection = this.currentMainHelpSection.findSectionById(contentId);
     if (this.selectedSection) {
-      if (this.selectedSection.type == "TABLE") {
+      if (this.selectedSection.type === 'TABLE') {
         this.loadTextFromQtf(contentId);
-      }
-      else this.loadTextFromQtf(this.selectedSection.getTranslationKey());
+      } else { this.loadTextFromQtf(this.selectedSection.getTranslationKey()); }
     } else {
-      console.error("Could not find ", contentId, " in ", this.currentMainHelpSection);
+      console.error('Could not find ', contentId, ' in ', this.currentMainHelpSection);
     }
   }
 
@@ -476,10 +518,13 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    console.log("Website load user language: " + language);
+    console.log('Website load user language: ' + language);
 
     let key: TextKey;
     for (key in this.qtfFile.TEXTS) {
+      if (!Object.prototype.hasOwnProperty.call(this.qtfFile.TEXTS, key)) {
+        continue;
+      }
       const entry: QtfTextEntry = this.qtfFile.TEXTS[key];
       if (!entry) {
         continue;
@@ -495,7 +540,7 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    //console.log("Loading from key: ", key);
+    // console.log("Loading from key: ", key);
     const entry = this.qtfFile.TEXTS[key];
     if (!entry) {
       this.selectedTextContent = '';
@@ -508,11 +553,11 @@ export class MainComponent implements OnInit {
   }
 
   saveCurrentSectionText() {
-    if (!this.selectedSection || !this.qtfFile) return;
+    if (!this.selectedSection || !this.qtfFile) { return; }
 
     const key = this.selectedSection.getTranslationKey();
-    //console.log("saving: ", key, " - ", this.selectedTextContent);
-    if (!key) return;
+    // console.log("saving: ", key, " - ", this.selectedTextContent);
+    if (!key) { return; }
 
     this.isDirty = true;
     if (!this.qtfFile.TEXTS[key]) {
@@ -533,14 +578,14 @@ export class MainComponent implements OnInit {
     if (!this.qtfFile.TEXTS[key].VERIFIED) {
       this.qtfFile.TEXTS[key].VERIFIED = {};
     }
-    if (this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] != this.selectedTextContent) {
+    if (this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] !== this.selectedTextContent) {
       this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] = this.selectedTextContent;
       this.translateService.set(key, this.selectedTextContent);
 
-      if (this.selectedLanguage == "GERMAN") {
+      if (this.selectedLanguage === 'GERMAN') {
         this.languages.forEach(language => {
-          if (language != "GERMAN") {
-            this.qtfFile.TEXTS[key].TRANSLATIONS[language] = "";
+          if (language !== 'GERMAN') {
+            this.qtfFile.TEXTS[key].TRANSLATIONS[language] = '';
             this.qtfFile.TEXTS[key].AUTOTRANSLATIONS[language] = undefined;
           }
         });
@@ -555,14 +600,14 @@ export class MainComponent implements OnInit {
     this.saveCurrentSectionText();
 
     const previousKey = this.getLastSiblingKey(this.currentMainHelpSection.content);
-    const newKey = this.generateIdFromPrevious(previousKey) || ("NEW_SECTION_" + Math.random().toString(20).substring(2, 4));
-    var newItem: HelpTextSection = this.currentMainHelpSection.addSection(newKey);
-    console.log("created: ", newItem);
+    const newKey = this.generateIdFromPrevious(previousKey) || ('NEW_SECTION_' + Math.random().toString(20).substring(2, 4));
+    const newItem: HelpTextSection = this.currentMainHelpSection.addSection(newKey);
+    console.log('created: ', newItem);
 
     if (this.qtfFile) {
       const translationKey = newItem.getTranslationKey();
       if (translationKey) {
-        this.qtfFile.TEXTS[translationKey] = createNewQtfItem(this.selectedLanguage, "new text");
+        this.qtfFile.TEXTS[translationKey] = createNewQtfItem(this.selectedLanguage, 'new text');
       }
     }
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
@@ -585,7 +630,7 @@ export class MainComponent implements OnInit {
     if (createAsSibling) {
       targetParent = this.currentMainHelpSection.findParentOfSectionById(this.selectedSection.value);
       if (!targetParent) {
-        console.error("Parent not found for ", this.selectedSection.value);
+        console.error('Parent not found for ', this.selectedSection.value);
         return;
       }
     }
@@ -594,17 +639,17 @@ export class MainComponent implements OnInit {
     const siblingIndex = siblings ? siblings.findIndex(section => section === this.selectedSection) : -1;
     const insertIndex = createAsSibling && siblingIndex >= 0 ? siblingIndex + 1 : (siblings?.length || 0);
     const previousKey = this.getPreviousSiblingKey(siblings, insertIndex);
-    const newKey = this.generateIdFromPrevious(previousKey) || ("NEW_SECTION_" + Math.random().toString(20).substring(2, 4));
+    const newKey = this.generateIdFromPrevious(previousKey) || ('NEW_SECTION_' + Math.random().toString(20).substring(2, 4));
 
     const newItem: HelpTextSection = createAsSibling
       ? targetParent.addSubsectionAfter(newKey, this.selectedSection.value)
       : targetParent.addSubsection(newKey);
-    console.log("created: ", newItem);
+    console.log('created: ', newItem);
 
     if (this.qtfFile) {
       const translationKey = newItem.getTranslationKey();
       if (translationKey) {
-        this.qtfFile.TEXTS[translationKey] = createNewQtfItem(this.selectedLanguage, "new text");
+        this.qtfFile.TEXTS[translationKey] = createNewQtfItem(this.selectedLanguage, 'new text');
       }
     }
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
@@ -618,38 +663,38 @@ export class MainComponent implements OnInit {
     }
     this.saveCurrentSectionText();
 
-    console.log("Create step near by ", this.selectedSection.value);
+    console.log('Create step near by ', this.selectedSection.value);
 
     let parentSection: HelpTextSection = null;
-    if (this.currentMainHelpSection && this.currentMainHelpSection != null) {
-      if (this.selectedSection.type == HelpContentType.ENUMERATION || this.selectedSection.type == HelpContentType.BULLET_ENUMERATION) {
+    if (this.currentMainHelpSection && this.currentMainHelpSection !== null) {
+      if (this.selectedSection.type === HelpContentType.ENUMERATION || this.selectedSection.type === HelpContentType.BULLET_ENUMERATION) {
         parentSection = this.selectedSection;
       } else {
-        console.log("searching in HelpSection");
+        console.log('searching in HelpSection');
         parentSection = this.currentMainHelpSection.findParentOfSectionById(this.selectedSection.value);
       }
 
       if (!parentSection) {
-        console.log("Parent not found for ", this.selectedSection.value);
+        console.log('Parent not found for ', this.selectedSection.value);
         return;
       }
 
-      if (parentSection.type == HelpContentType.ENUMERATION || parentSection.type == HelpContentType.BULLET_ENUMERATION) {
+      if (parentSection.type === HelpContentType.ENUMERATION || parentSection.type === HelpContentType.BULLET_ENUMERATION) {
         const insertIndex = parentSection.steps ? parentSection.steps.length : 0;
         const previousKey = this.getPreviousSiblingKey(parentSection.steps, insertIndex);
-        const newStepId = this.generateIdFromPrevious(previousKey) || parentSection.value + "_ENUM_123";
+        const newStepId = this.generateIdFromPrevious(previousKey) || parentSection.value + '_ENUM_123';
         parentSection.addStep(newStepId);
-        console.log("Step created ");
+        console.log('Step created ');
         this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
         this.saveCurrentSectionText();
         this.onTopLevelChange(this.selectedTopLevelKey);
         this.onSelectSection(newStepId);
       } else {
-        console.error("Parent is not an enumeration type. ", parentSection.value, " Type: ", parentSection.type);
+        console.error('Parent is not an enumeration type. ', parentSection.value, ' Type: ', parentSection.type);
         return;
       }
     } else {
-      console.log("No currentMainHelpSection");
+      console.log('No currentMainHelpSection');
     }
   }
 
@@ -665,7 +710,7 @@ export class MainComponent implements OnInit {
     }
 
     let parentSection: HelpTextSection = null;
-    if (this.currentMainHelpSection && this.currentMainHelpSection != null) {
+    if (this.currentMainHelpSection && this.currentMainHelpSection !== null) {
       parentSection = this.currentMainHelpSection.findParentOfSectionById(sectionToDelete.value);
     }
 
@@ -677,7 +722,7 @@ export class MainComponent implements OnInit {
     }
 
     if (!removed) {
-      console.error("Parent not found for ", sectionToDelete.value);
+      console.error('Parent not found for ', sectionToDelete.value);
       return;
     }
 
@@ -718,36 +763,36 @@ export class MainComponent implements OnInit {
   }
 
   getImageLanguage(): String {
-    if (this.selectedLanguage == "ENGLISH") {
-      return "EN"
-    } else if (this.selectedLanguage == "GERMAN") {
-      return "DE"
-    } else if (this.selectedLanguage == "FRENCH") {
-      return "FR"
+    if (this.selectedLanguage === 'ENGLISH') {
+      return 'EN';
+    } else if (this.selectedLanguage === 'GERMAN') {
+      return 'DE';
+    } else if (this.selectedLanguage === 'FRENCH') {
+      return 'FR';
     }
-    return "EN";
+    return 'EN';
   }
 
   onIdChanged(event) {
-    let newId = event.target.value;
-    //console.log("old id ", this.selectedSection.value, " - new id", newId);
+    const newId = event.target.value;
+    // console.log("old id ", this.selectedSection.value, " - new id", newId);
 
-    if (this.selectedSection.getTranslationKey() == newId) {
+    if (this.selectedSection.getTranslationKey() === newId) {
       return;
     }
 
     if (this.currentMainHelpSection.idExists(newId)) {
-      alert("Id already exists.");
+      alert('Id already exists.');
     }
 
-    if (newId != "") {
-      let oldId = this.selectedSection.getTranslationKey();
+    if (newId !== '') {
+      const oldId = this.selectedSection.getTranslationKey();
       if (!oldId) {
         return;
       }
-      let changed = this.currentMainHelpSection.changeValueId(oldId, newId);
+      const changed = this.currentMainHelpSection.changeValueId(oldId, newId);
       if (changed) {
-        console.log("Id changed. Old: ", oldId, " -> ", newId, ": ", changed);
+        console.log('Id changed. Old: ', oldId, ' -> ', newId, ': ', changed);
         this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
 
         if (this.qtfFile && this.qtfFile.TEXTS) {
@@ -777,14 +822,14 @@ export class MainComponent implements OnInit {
   }
 
   onLinkChanged(event) {
-    let newLink = event.target.value;
+    const newLink = event.target.value;
 
-    if ((this.selectedSection.linkId != newLink) && (newLink != "")) {
-      console.log("onLinkChanged");
-      let currentValue = this.selectedSection.value;
+    if ((this.selectedSection.linkId !== newLink) && (newLink !== '')) {
+      console.log('onLinkChanged');
+      const currentValue = this.selectedSection.value;
 
       this.selectedSection.linkId = newLink;
-      console.log("New link id: ", newLink, " for section: ", this.selectedSection.value);
+      console.log('New link id: ', newLink, ' for section: ', this.selectedSection.value);
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
       this.saveCurrentSectionText();
       this.onTopLevelChange(this.selectedTopLevelKey);
@@ -880,11 +925,11 @@ export class MainComponent implements OnInit {
   }
 
   onImageFileChanged(event) {
-    let newImageFile = event.target.value;
-    //console.log("Image to change: ", this.selectedSection.value, " new: ", newImageFile);
-    if (newImageFile != "" && this.selectedSection.value != newImageFile) {
-      let changed = this.currentMainHelpSection.changeValueId(this.selectedSection.value, newImageFile);
-      console.log("Image changed: ", changed, " new: ", newImageFile);
+    const newImageFile = event.target.value;
+    // console.log("Image to change: ", this.selectedSection.value, " new: ", newImageFile);
+    if (newImageFile !== '' && this.selectedSection.value !== newImageFile) {
+      const changed = this.currentMainHelpSection.changeValueId(this.selectedSection.value, newImageFile);
+      console.log('Image changed: ', changed, ' new: ', newImageFile);
       if (changed) {
         this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
         this.saveCurrentSectionText();
@@ -899,10 +944,10 @@ export class MainComponent implements OnInit {
   onTopLevelChange(key: string) {
     this.selectedTopLevelKey = key;
     this.currentMainHelpSection = parseMainHelpSection(this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey]);
-    //console.log("Top key: ", this.selectedTopLevelKey, typeof (this.currentMainHelpSection));
-    //console.log("item class: ", this.currentMainHelpSection.constructor.name);
-    //console.log(this.currentMainHelpSection instanceof MainHelpSection);
-    //console.log(this.currentMainHelpSection);
+    // console.log("Top key: ", this.selectedTopLevelKey, typeof (this.currentMainHelpSection));
+    // console.log("item class: ", this.currentMainHelpSection.constructor.name);
+    // console.log(this.currentMainHelpSection instanceof MainHelpSection);
+    // console.log(this.currentMainHelpSection);
     this.selectedSection = undefined;
     this.selectedTextContent = '';
   }
@@ -935,7 +980,7 @@ export class MainComponent implements OnInit {
 
   closeOverlayAddContent(data: { cancelled: boolean; type?: string, insertPosition?: string }) {
     this.showOverlayAddContent = false;
-    console.log("Cancelled ", data.cancelled, " type: ", data.type, " pos: ", data.insertPosition);
+    console.log('Cancelled ', data.cancelled, ' type: ', data.type, ' pos: ', data.insertPosition);
 
     if (!data || data.cancelled || !data.type || !data.insertPosition) {
       return;
@@ -943,42 +988,47 @@ export class MainComponent implements OnInit {
 
     this.saveCurrentSectionText(); // Änderungen des aktuellen Editors sichern
 
-    console.debug("Creating new for parent: ", this.selectedSection.value);
+    console.log('Creating new for parent: ', this.selectedSection.value);
 
     let parentSection: HelpTextSection = null;
 
-    if (!this.selectedSection.type || this.selectedSection.type == "") {
+    if (!this.selectedSection.type || this.selectedSection.type === '') {
       parentSection = this.selectedSection;
-    }
-    else if (data.type == "STEP" && (this.selectedSection.type == HelpContentType.ENUMERATION) || (this.selectedSection.type == HelpContentType.BULLET_ENUMERATION)) {
+    } else if (
+      data.type === 'STEP'
+      && (
+        this.selectedSection.type === HelpContentType.ENUMERATION
+        || this.selectedSection.type === HelpContentType.BULLET_ENUMERATION
+      )
+    ) {
       parentSection = this.selectedSection;
-    }
-    else if (this.currentMainHelpSection) {
+    } else if (this.currentMainHelpSection) {
       parentSection = this.currentMainHelpSection.findParentOfSectionById(this.selectedSection.value);
     }
 
     if (!parentSection) {
-      console.log("Parent not found for ", this.selectedSection.value);
+      console.log('Parent not found for ', this.selectedSection.value);
       return;
     }
 
     const insertIndex = this.getInsertIndex(parentSection, data.insertPosition);
     const previousKey = this.getPreviousSiblingKey(parentSection.content, insertIndex);
-    const newKey = this.generateIdFromPrevious(previousKey) || parentSection.value + '_' + data.type + "_" + Math.random().toString(36).substring(2);
+    const newKey = this.generateIdFromPrevious(previousKey)
+      || `${parentSection.value}_${data.type}_${Math.random().toString(36).substring(2)}`;
     const newLinkId = 'LINK_' + Math.random().toString(36).substring(2);
-    const newItem: HelpTextSection = new HelpTextSection;
+    const newItem: HelpTextSection = new HelpTextSection();
     newItem.linkId = newLinkId;
     newItem.value = newKey;
 
-    newItem.linkId = "";
+    newItem.linkId = '';
     newItem.type = data.type;
 
-    if (data.type == "IMAGE" || data.type == "SPLITIMAGE") {
-      newItem.value = "empty";
+    if (data.type === 'IMAGE' || data.type === 'SPLITIMAGE') {
+      newItem.value = 'empty';
       newItem.imageDescription = newKey;
     }
 
-    console.log("parent ", parentSection.constructor.name, " value: ", parentSection.value);
+    console.log('parent ', parentSection.constructor.name, ' value: ', parentSection.value);
     if (!parentSection.content) {
       parentSection.content = [];
     }
@@ -989,12 +1039,12 @@ export class MainComponent implements OnInit {
     if (this.qtfFile) {
       const translationKey = newItem.getTranslationKey();
       if (translationKey) {
-        this.qtfFile.TEXTS[translationKey] = createNewQtfItem(this.selectedLanguage, "new text");
+        this.qtfFile.TEXTS[translationKey] = createNewQtfItem(this.selectedLanguage, 'new text');
       }
     }
 
-    if (data.type == HelpContentType.BULLET_ENUMERATION || data.type == HelpContentType.ENUMERATION) {
-      newItem.addStep("New step");
+    if (data.type === HelpContentType.BULLET_ENUMERATION || data.type === HelpContentType.ENUMERATION) {
+      newItem.addStep('New step');
     }
 
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
@@ -1416,7 +1466,7 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    const textToCopy = this.qtfFile.TEXTS[translationKey].TRANSLATIONS["GERMAN"];
+    const textToCopy = this.qtfFile.TEXTS[translationKey].TRANSLATIONS['GERMAN'];
     if (window.navigator && window.navigator['clipboard']) {
       window.navigator['clipboard'].writeText(textToCopy);
     }
@@ -1428,17 +1478,17 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    const textToCopy = this.qtfFile.TEXTS[translationKey].TRANSLATIONS["ENGLISH"];
+    const textToCopy = this.qtfFile.TEXTS[translationKey].TRANSLATIONS['ENGLISH'];
     if (window.navigator && window.navigator['clipboard']) {
       window.navigator['clipboard'].writeText(textToCopy);
     }
   }
 
   onImageWidthChanged(event) {
-    //console.log("width changed: ", this.selectedSection.type, " ", this.selectedSection.value);
-    let newWidth = event.target.value;
-    let imageValue = this.selectedSection.value;
-    if ((this.selectedSection.type == "IMAGE") && (newWidth != "undefined")) {
+    // console.log("width changed: ", this.selectedSection.type, " ", this.selectedSection.value);
+    const newWidth = event.target.value;
+    const imageValue = this.selectedSection.value;
+    if ((this.selectedSection.type === 'IMAGE') && (newWidth !== 'undefined')) {
       this.selectedSection.width = newWidth;
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
       this.saveCurrentSectionText();
@@ -1448,10 +1498,10 @@ export class MainComponent implements OnInit {
   }
 
   onPdfWidthChanged(event) {
-    //console.log("pdf width changed: ", this.selectedSection.type, " ", this.selectedSection.value);
-    let newWidth = event.target.value;
-    let imageValue = this.selectedSection.value;
-    if ((this.selectedSection.type == "IMAGE") && (newWidth != "undefined")) {
+    // console.log("pdf width changed: ", this.selectedSection.type, " ", this.selectedSection.value);
+    const newWidth = event.target.value;
+    const imageValue = this.selectedSection.value;
+    if ((this.selectedSection.type === 'IMAGE') && (newWidth !== 'undefined')) {
       this.selectedSection.pdfWidth = newWidth;
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
       this.saveCurrentSectionText();

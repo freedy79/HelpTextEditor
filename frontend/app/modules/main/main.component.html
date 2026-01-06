@@ -2,7 +2,7 @@
 <div class="editor">
   <div class="header">
     <div class="menu-control">
-      <app-header-menu (onItemClicked)="onMenuItemClicked($event)" title="HelpTextEditor+"
+      <app-header-menu (itemClicked)="onMenuItemClicked($event)" title="HelpTextEditor+"
         [items]='menuItems'></app-header-menu>
     </div>
 
@@ -28,7 +28,7 @@
 
       <app-help-structure-treeview [helpItem]="getSelectedItem()" [selectedHelpSection]="selectedSection"
         [topLevelKey]="selectedTopLevelKey"
-        (onItemClicked)="onSelectTreeViewItem($event)"
+        (itemClicked)="onSelectTreeViewItem($event)"
         (addSubsection)="onAddSubsection($event)"
         (addContent)="onAddContent($event)"
         (addStep)="onAddStep($event)"
@@ -57,7 +57,7 @@
         <!-- <div aria-pressed="false" tabindex="0" role="button" aria-label="Page contents" aria-describedby="page-outline__assistive-description" class="PageOutline__Button"><i color="var(--colors-ui-element-text-secondary, #605f60)" size="6" class="Iconstyled__IconStyled-cGkYxe fPXPVt"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" vector-effect="non-scaling-stroke"><path fill-rule="evenodd" clip-rule="evenodd" d="M3 6c0-.55228.44772-1 1-1h10c.5523 0 1 .44772 1 1s-.4477 1-1 1H4c-.55228 0-1-.44772-1-1zM3 10c0-.55228.44772-1 1-1h16c.5523 0 1 .44772 1 1 0 .5523-.4477 1-1 1H4c-.55228 0-1-.4477-1-1zM3 14c0-.5523.44772-1 1-1h12c.5523 0 1 .4477 1 1s-.4477 1-1 1H4c-.55228 0-1-.4477-1-1zM3 18c0-.5523.44772-1 1-1h10c.5523 0 1 .4477 1 1s-.4477 1-1 1H4c-.55228 0-1-.4477-1-1z" fill="#212121" vector-effect="non-scaling-stroke"></path></svg></i></div> -->
         <div *ngFor="let mainSection of getSelectedItem()?.content  let i = index">
           <app-help-section [section]="mainSection" [sectionNumber]="i + 1" [sectionLevel]=1
-            (onSelectContent)="onSelectSection($event)" [selectedHelpSection]="selectedSection"
+            (selectContent)="onSelectSection($event)" [selectedHelpSection]="selectedSection"
             [language]="getImageLanguage()"></app-help-section>
         </div>
       </div>

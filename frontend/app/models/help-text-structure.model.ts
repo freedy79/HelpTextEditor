@@ -50,99 +50,15 @@ class SectionCollections {
   }
 }
 
-export class HelpTextRoot {
-  [key: string]: unknown;
+export class HelpTextStep {
+  value: string;
+  type = 'STEP';
+  substeps?: HelpTextStep[];
 
-  constructor(initialSections: Partial<Record<HelpTextRootKey, MainHelpSection>> = {}) {
-    Object.assign(this, initialSections);
-  }
-
-  public getSectionKeys(): HelpTextRootKey[] {
-    return HELP_TEXT_ROOT_KEYS.filter(key => !!(this as any)[key]);
-  }
-
-  public getSections(): MainHelpSection[] {
-    return this.getSectionKeys()
-      .map(key => (this as any)[key] as MainHelpSection)
-      .filter((section): section is MainHelpSection => !!section);
-  }
-
-  public getSection(key: HelpTextRootKey): MainHelpSection | undefined {
-    return (this as any)[key] as MainHelpSection;
-  }
-
-  public setSection(key: HelpTextRootKey, section: MainHelpSection | null | undefined): void {
-    if (!section) {
-      delete (this as any)[key];
-      return;
-    }
-
-    (this as any)[key] = section;
-  }
-
-  public forEachSection(handler: (section: MainHelpSection, key: HelpTextRootKey) => void): void {
-    this.getSectionKeys().forEach(key => {
-      const section = this.getSection(key);
-      if (section) {
-        handler(section, key);
-      }
-    });
-  }
-
-  public idExists(key: string): boolean {
-    return this.getSections().some(section => section?.idExists(key));
+  public getTranslationKey(): string {
+    return this.value;
   }
 }
-
-export class MainHelpSection {
-  coversheet?: HelpTextSection[];
-  abbreviations?: AbbreviationItem[];
-  content?: HelpTextSection[];
-
-  private get collections(): SectionCollections {
-    return new SectionCollections(() => [this.coversheet, this.content]);
-  }
-
-  public addSection(contentId: string, index: number = -1): HelpTextSection {
-    if (!this.content) {
-      this.content = [];
-    }
-
-    var newSection: HelpTextSection = new HelpTextSection;
-    newSection.linkId = "";
-    newSection.value = contentId;
-
-    if (index == -1) {
-      this.content.push(newSection);
-    } else {
-      this.content.splice(index, 0, newSection);
-    }
-
-    return newSection;
-  }
-
-  public findSectionById(contentId: string): HelpTextSection | null {
-    return this.collections.findSectionById(contentId);
-  }
-
-  public findParentOfSectionById(contentId: string): HelpTextSection | null {
-    return this.collections.findParentOfSectionById(contentId, null);
-  }
-
-  public changeValueId(oldId: string, newId: string): boolean {
-    return this.collections.changeValueId(oldId, newId);
-  }
-
-  public idExists(key: string): boolean {
-    const existsInSections = this.collections.idExists(key);
-    const existsInAbbreviations = (this.abbreviations || []).some(item =>
-      item.abbreviation === key || item.longDescription === key || item.shortDescription === key
-    );
-
-    return existsInSections || existsInAbbreviations;
-  }
-}
-
 
 export class HelpTextSection {
   linkId: string;
@@ -166,7 +82,7 @@ export class HelpTextSection {
       return null;
     }
 
-    if (this.type === "IMAGE" || this.type === "SPLITIMAGE") {
+    if (this.type === 'IMAGE' || this.type === 'SPLITIMAGE') {
       return this.imageDescription;
     }
 
@@ -222,7 +138,7 @@ export class HelpTextSection {
       this.subsections = [];
     }
 
-    var newItem = new HelpTextSection;
+    const newItem = new HelpTextSection;
     newItem.value = contentId;
 
     if (index === -1 || index > this.subsections.length) {
@@ -245,8 +161,8 @@ export class HelpTextSection {
   }
 
   public addStep(contentId: string) {
-    if (this.type == HelpContentType.ENUMERATION || this.type == HelpContentType.BULLET_ENUMERATION) {
-      let newStep = new HelpTextStep;
+    if (this.type === HelpContentType.ENUMERATION || this.type === HelpContentType.BULLET_ENUMERATION) {
+      const newStep = new HelpTextStep;
       newStep.value = contentId;
       if (!this.steps) {
         this.steps = [];
@@ -265,7 +181,7 @@ export class HelpTextSection {
   }
 
   public getIndexOfId(contentId: string): number {
-    var idx = 0;
+    let idx = 0;
 
     if (this.content) {
       for (const item of this.content) {
@@ -282,22 +198,12 @@ export class HelpTextSection {
     const existsInCollections = this.collections.idExists(key);
     const existsInSteps = stepIdExists(this.steps, key);
     const existsInImageDescription = this.imageDescription === key;
-    const existsInTable = this.type === "TABLE" && (this as unknown as HelpTextTable).idExists(key);
+    const existsInTable = this.type === 'TABLE' && (this as unknown as HelpTextTable).idExists(key);
 
     return !!(existsInCollections || existsInSteps || existsInImageDescription || existsInTable);
   }
 }
 
-
-export class HelpTextStep {
-  value: string;
-  type: string = "STEP";
-  substeps?: HelpTextStep[];
-
-  public getTranslationKey(): string {
-    return this.value;
-  }
-}
 
 export interface RowItem {
   rowValues: string[];
@@ -308,14 +214,14 @@ export class HelpTextTable extends HelpTextSection {
   rows?: RowItem[];
 
   public idExists(key: string): boolean {
-    for (var headerItem of this.header) {
+    for (const headerItem of this.header) {
       if (headerItem === key) {
         return true;
       }
     }
 
-    for (var row of this.rows) {
-      for (var rowItem of row.rowValues) {
+    for (const row of this.rows) {
+      for (const rowItem of row.rowValues) {
         if (rowItem === key) {
           return true;
         }
@@ -333,6 +239,99 @@ export interface AbbreviationItem {
   referenceAbbreviation?: string;
 }
 
+export class MainHelpSection {
+  coversheet?: HelpTextSection[];
+  abbreviations?: AbbreviationItem[];
+  content?: HelpTextSection[];
+
+  private get collections(): SectionCollections {
+    return new SectionCollections(() => [this.coversheet, this.content]);
+  }
+
+  public addSection(contentId: string, index: number = -1): HelpTextSection {
+    if (!this.content) {
+      this.content = [];
+    }
+
+    const newSection = new HelpTextSection();
+    newSection.linkId = '';
+    newSection.value = contentId;
+
+    if (index === -1) {
+      this.content.push(newSection);
+    } else {
+      this.content.splice(index, 0, newSection);
+    }
+
+    return newSection;
+  }
+
+  public findSectionById(contentId: string): HelpTextSection | null {
+    return this.collections.findSectionById(contentId);
+  }
+
+  public findParentOfSectionById(contentId: string): HelpTextSection | null {
+    return this.collections.findParentOfSectionById(contentId, null);
+  }
+
+  public changeValueId(oldId: string, newId: string): boolean {
+    return this.collections.changeValueId(oldId, newId);
+  }
+
+  public idExists(key: string): boolean {
+    const existsInSections = this.collections.idExists(key);
+    const existsInAbbreviations = (this.abbreviations || []).some(item =>
+      item.abbreviation === key || item.longDescription === key || item.shortDescription === key
+    );
+
+    return existsInSections || existsInAbbreviations;
+  }
+}
+
+export class HelpTextRoot {
+  [key: string]: unknown;
+
+  constructor(initialSections: Partial<Record<HelpTextRootKey, MainHelpSection>> = {}) {
+    Object.assign(this, initialSections);
+  }
+
+  public getSectionKeys(): HelpTextRootKey[] {
+    return HELP_TEXT_ROOT_KEYS.filter(key => !!(this as any)[key]);
+  }
+
+  public getSections(): MainHelpSection[] {
+    return this.getSectionKeys()
+      .map(key => (this as any)[key] as MainHelpSection)
+      .filter((section): section is MainHelpSection => !!section);
+  }
+
+  public getSection(key: HelpTextRootKey): MainHelpSection | undefined {
+    return (this as any)[key] as MainHelpSection;
+  }
+
+  public setSection(key: HelpTextRootKey, section: MainHelpSection | null | undefined): void {
+    if (!section) {
+      delete (this as any)[key];
+      return;
+    }
+
+    (this as any)[key] = section;
+  }
+
+  public forEachSection(handler: (section: MainHelpSection, key: HelpTextRootKey) => void): void {
+    this.getSectionKeys().forEach(key => {
+      const section = this.getSection(key);
+      if (section) {
+        handler(section, key);
+      }
+    });
+  }
+
+  public idExists(key: string): boolean {
+    return this.getSections().some(section => section?.idExists(key));
+  }
+}
+
 function findSectionInCollections(collections: SectionCollection[], contentId: string): HelpTextSection | null {
   for (const collection of collections) {
     if (!collection) { continue; }
@@ -342,7 +341,7 @@ function findSectionInCollections(collections: SectionCollection[], contentId: s
       if (section.value === contentId) {
         return section;
       }
-      if (section.type === "TABLE") {
+      if (section.type === 'TABLE') {
         const tableSection = section as HelpTextTable;
         if (tableSection.header?.includes(contentId)) {
           return tableSection;
@@ -362,7 +361,11 @@ function findSectionInCollections(collections: SectionCollection[], contentId: s
   return null;
 }
 
-function findParentInCollections(collections: SectionCollection[], contentId: string, directParent: HelpTextSection | null): HelpTextSection | null {
+function findParentInCollections(
+  collections: SectionCollection[],
+  contentId: string,
+  directParent: HelpTextSection | null
+): HelpTextSection | null {
   for (const collection of collections) {
     if (!collection) { continue; }
 
@@ -371,7 +374,7 @@ function findParentInCollections(collections: SectionCollection[], contentId: st
       if (section.value === contentId) {
         return directParent;
       }
-      if (section.type === "TABLE") {
+      if (section.type === 'TABLE') {
         const tableSection = section as HelpTextTable;
         if (tableSection.header?.includes(contentId) || tableSection.rows?.some(row => row.rowValues?.includes(contentId))) {
           return section;
@@ -552,7 +555,7 @@ export function parseMainHelpSection(obj: any): MainHelpSection {
 }
 
 export function parseHelpTextSection(obj: any): HelpTextSection {
-  if (obj.type === "TABLE") {
+  if (obj.type === 'TABLE') {
     return parseHelpTextTable(obj);
   }
 
@@ -564,8 +567,8 @@ export function parseHelpTextSection(obj: any): HelpTextSection {
   sec.pdfWidth = obj.pdfWidth;
   sec.width = obj.width;
 
-  if (((!sec.type) || (sec.type == "")) && (!sec.linkId || sec.linkId == "")) {
-    console.error("JSON error. Section link ID is undefined or empty. Section value: ", sec.value);
+  if (((!sec.type) || (sec.type === '')) && (!sec.linkId || sec.linkId === '')) {
+    console.error('JSON error. Section link ID is undefined or empty. Section value: ', sec.value);
   }
 
   /*if (obj.type == "IMAGE") {

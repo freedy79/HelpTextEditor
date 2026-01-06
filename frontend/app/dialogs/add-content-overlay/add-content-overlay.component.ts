@@ -12,15 +12,15 @@ export class AddContentOverlayComponent {
     insertPosition?: string;
   }>();
 
-  public contentType: string = "INSTRUCTION";
-  public insertPosition: string = "after";
+  public contentType = 'INSTRUCTION';
+  public insertPosition = 'after';
 
   public contentTypes = [
-    "INSTRUCTION", "INSTRUCTION_BOLD", "BULLET_ENUMERATION", "ENUMERATION", "IMAGE", "SPLITIMAGE", "TABLE"
-  ]
+    'INSTRUCTION', 'INSTRUCTION_BOLD', 'BULLET_ENUMERATION', 'ENUMERATION', 'IMAGE', 'SPLITIMAGE', 'TABLE'
+  ];
 
   onOk() {
-    console.log("contentType ", this.contentType, " - ", this.insertPosition);
+    console.log('contentType ', this.contentType, ' - ', this.insertPosition);
     this.closeOverlay.emit({
       cancelled: false,
       type: this.contentType,
