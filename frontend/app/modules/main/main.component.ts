@@ -358,6 +358,12 @@ export class MainComponent implements OnInit {
       return;
     }
 
+    const movedMainSection = this.tryMoveMainSection(event);
+    if (movedMainSection) {
+      this.afterSectionMoved(movedMainSection);
+      return;
+    }
+
     const sourceParent = event.fromParent || event.parent;
     const sourceContainer = event.fromContainer || event.container;
     const sourceCollection = (sourceParent as any)[sourceContainer] as any[];
@@ -389,6 +395,41 @@ export class MainComponent implements OnInit {
 
     targetCollection.splice(targetIndex, 0, item);
 
+    this.afterSectionMoved(item);
+  }
+
+  private tryMoveMainSection(event: { parent: HelpTextSection | MainHelpSection | HelpTextStep; container: string; index: number; direction?: 'up' | 'down'; newIndex?: number; }): HelpTextSection | null {
+    if (!(event.parent instanceof MainHelpSection)) {
+      return null;
+    }
+
+    if (event.container !== 'content' && event.container !== 'coversheet') {
+      return null;
+    }
+
+    const collection = (event.parent as any)[event.container] as HelpTextSection[] | undefined;
+    if (!collection || event.index < 0 || event.index >= collection.length) {
+      return null;
+    }
+
+    const requestedIndex = typeof event.newIndex === 'number'
+      ? event.newIndex
+      : event.direction === 'up'
+        ? event.index - 1
+        : event.index + 1;
+
+    const targetIndex = Math.max(0, Math.min(requestedIndex, collection.length - 1));
+    if (targetIndex === event.index) {
+      return collection[event.index];
+    }
+
+    const [item] = collection.splice(event.index, 1);
+    collection.splice(targetIndex, 0, item);
+
+    return item;
+  }
+
+  private afterSectionMoved(item: HelpTextSection | HelpTextStep | undefined) {
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.saveCurrentSectionText();
     this.isDirty = true;
