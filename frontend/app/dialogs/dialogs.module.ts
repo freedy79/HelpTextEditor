@@ -15,6 +15,7 @@ import { DeeplSettingsDialogComponent } from './deepl-settings-dialog/deepl-sett
 import { CleanQtfDialogComponent } from './clean-qtf-dialog/clean-qtf-dialog.component';
 import { TranslationIssuesDialogComponent } from './translation-issues-dialog/translation-issues-dialog.component';
 import { AbbreviationDialogComponent } from './abbreviation-dialog/abbreviation-dialog.component';
+import { SharedModule } from '~/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { AbbreviationDialogComponent } from './abbreviation-dialog/abbreviation-
     MatDialogModule,
     MatIconModule,
     MatButtonModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ],
   exports: [
     FileUploadOverlayComponent,

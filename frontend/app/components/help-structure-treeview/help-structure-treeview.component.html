@@ -34,7 +34,7 @@
                     <span class="tree_item abbreviation-label">
                         <div class="abbreviation-title">{{ ab.abbreviation }}</div>
                         <div class="abbreviation-desc" *ngIf="ab.referenceAbbreviation">↪ {{ ab.referenceAbbreviation }}</div>
-                        <div class="abbreviation-desc" *ngIf="!ab.referenceAbbreviation">{{ ab.shortDescription }}</div>
+                        <div class="abbreviation-desc" *ngIf="ab.shortDescription">{{ ab.shortDescription | qtfTranslate }}</div>
                     </span>
                 </li>
                 <li *ngIf="!item.abbreviations?.length" class="abbreviation-empty">
