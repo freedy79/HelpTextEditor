@@ -16,7 +16,7 @@
   <div class="editor-columns">
 
     <!-- Spalte 1: Baumansicht (20%) -->
-    <div class="column left">
+    <div class="column left" [style.width.px]="leftColumnWidth" [style.minWidth.px]="leftMinWidth">
       <div class="structure-header">
         <h3>Help parts</h3>
         <!-- Auswahlbox für Top-Level-Keys -->
@@ -39,6 +39,10 @@
         (moveSection)="onMoveSection($event)"
         class="structure-treeview"></app-help-structure-treeview>
     </div>
+
+    <div class="vertical-splitter" role="separator" aria-orientation="vertical" tabindex="0"
+      [class.active]="isDraggingSplitter"
+      (mousedown)="onSplitterMouseDown($event)"></div>
 
     <!-- Second column (auto) Preview -->
     <div class="column main">

@@ -27,10 +27,10 @@ $statusbar-height: 48px;
         display: flex;
         flex-direction: column;
         min-height: 0;
+        flex: 0 0 auto;
     }
 
     .left {
-        width: 20%;
         border-right: 1px solid #ccc;
         background-color: #eeeeee;
 
@@ -47,12 +47,29 @@ $statusbar-height: 48px;
     }
 
     .main {
-        width: 60%;
+        flex: 1 1 auto;
+        min-width: 320px;
         border-right: 1px solid #ccc;
     }
 
     .right {
-        width: 20%;
+        flex: 0 0 22%;
+        min-width: 260px;
+        max-width: 420px;
+    }
+
+    .vertical-splitter {
+        width: 8px;
+        cursor: col-resize;
+        background-color: #e0e0e0;
+        border-left: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        flex: 0 0 auto;
+        transition: background-color 0.2s ease-in-out;
+
+        &:hover, &.active {
+            background-color: #d0d0d0;
+        }
     }
 }
 
