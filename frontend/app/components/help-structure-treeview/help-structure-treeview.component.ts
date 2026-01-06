@@ -204,7 +204,6 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     }
 
     const sourceCollection = this.getCollection(fromParent, fromContainer);
-    const targetCollection = this.getCollection(targetParent, targetContainer);
     if (sourceCollection && targetCollection) {
       if (sourceCollection === targetCollection) {
         moveItemInArray(sourceCollection, fromIndex, targetIndex);
