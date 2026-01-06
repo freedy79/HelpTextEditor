@@ -10,6 +10,7 @@ export class StatusbarComponent {
   @Input() selectedSectionId: string | null = null;
   @Input() language: string | null = null;
   @Input() isDirty = false;
+  @Input() version: string | null = null;
 
   get statusLabel(): string {
     if (this.isDirty) {
@@ -25,5 +26,9 @@ export class StatusbarComponent {
 
   get sectionLabel(): string {
     return this.selectedSectionId || 'No selection';
+  }
+
+  get versionLabel(): string {
+    return this.version || 'Not set';
   }
 }

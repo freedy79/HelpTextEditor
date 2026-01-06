@@ -45,6 +45,7 @@ export class MainComponent implements OnInit {
   selectedTextContent = '';
 
   isDirty: boolean = false;
+  readonly appVersion = '30.04.2025';
 
   // HTML-Preview des aktuell gewählten Top-Level-Teils
   previewHtml = '';
