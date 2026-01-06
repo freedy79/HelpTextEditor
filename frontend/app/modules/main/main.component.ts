@@ -75,6 +75,10 @@ export class MainComponent implements OnInit {
   // Aktuell gewählter Top-Level-Key (z. B. HELP_TEXT_DEVICE_CONCEPT)
   selectedTopLevelKey: string | null = null;
 
+  /**
+   * Holds the currently selected main section. Drag/drop used to crash because this stayed null
+   * after loading a file via the overlay; keep it initialized before tree interactions.
+   */
   currentMainHelpSection: MainHelpSection = null;
 
   selectedSection: HelpTextSection | null = null;
@@ -396,6 +400,12 @@ export class MainComponent implements OnInit {
     fromParent?: HelpTextSection | MainHelpSection | HelpTextStep;
     fromContainer?: string;
   }) {
+    const ensuredSection = this.ensureCurrentMainSection();
+    if (!ensuredSection) {
+      console.warn('Move section aborted: no current main section available', event);
+      return;
+    }
+
     if (!event || !event.parent || !event.container) {
       console.log('Move section aborted: missing event data', event);
       return;
@@ -441,7 +451,13 @@ export class MainComponent implements OnInit {
     this.afterSectionMoved(item);
   }
 
-  private tryMoveMainSection(event: { parent: HelpTextSection | MainHelpSection | HelpTextStep; container: string; index: number; direction?: 'up' | 'down'; newIndex?: number; }): HelpTextSection | null {
+  private tryMoveMainSection(event: {
+    parent: HelpTextSection | MainHelpSection | HelpTextStep;
+    container: string;
+    index: number;
+    direction?: 'up' | 'down';
+    newIndex?: number;
+  }): HelpTextSection | null {
     if (!(event.parent instanceof MainHelpSection)) {
       return null;
     }
@@ -483,7 +499,8 @@ export class MainComponent implements OnInit {
   }
 
   onSelectSection(contentId: string) {
-    if (!this.currentMainHelpSection || contentId === '') {
+    const activeMainSection = this.ensureCurrentMainSection();
+    if (!activeMainSection || contentId === '') {
       console.log('currenthelp text item is undefined.');
       this.selectedSection = undefined;
       return;
@@ -493,7 +510,7 @@ export class MainComponent implements OnInit {
     this.autoTranslationMessage = '';
 
     console.log('Selection: ', contentId);
-    this.selectedSection = this.currentMainHelpSection.findSectionById(contentId);
+    this.selectedSection = activeMainSection.findSectionById(contentId);
     if (this.selectedSection) {
       if (this.selectedSection.type === 'TABLE') {
         this.loadTextFromQtf(contentId);
@@ -968,7 +985,9 @@ export class MainComponent implements OnInit {
       this.helpTextRoot = parseHelpTextRoot(data.files.jsonData);
       const keys = this.getRootKeys();
       if (keys.length > 0) {
-        this.selectedTopLevelKey = keys[0];
+        // We must immediately parse and select the first key; otherwise currentMainHelpSection stays null
+        // and drag/drop handlers end up with undefined access.
+        this.onTopLevelChange(keys[0]);
       }
       this.qtfFile = data.files.qtfData;
 
@@ -1237,6 +1256,20 @@ export class MainComponent implements OnInit {
   private helpTextRootIdExists(key: string): boolean {
     const root = this.ensureParsedHelpTextRoot();
     return !!(root && typeof root.idExists === 'function' && root.idExists(key));
+  }
+
+  private ensureCurrentMainSection(): MainHelpSection | null {
+    if (this.currentMainHelpSection) {
+      return this.currentMainHelpSection;
+    }
+    if (this.helpTextRoot && this.selectedTopLevelKey) {
+      const parsed = parseMainHelpSection(this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey]);
+      this.currentMainHelpSection = parsed;
+      if (parsed) {
+        this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = parsed;
+      }
+    }
+    return this.currentMainHelpSection;
   }
 
   private getUnusedQtfKeys(): string[] {
