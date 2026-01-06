@@ -521,7 +521,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
       if (child === target) {
         return true;
       }
-      if (this.isDescendant(target, child as ParentType)) {
+      if (this.isDescendant(target, child)) {
         return true;
       }
     }
