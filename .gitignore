@@ -40,3 +40,4 @@ Thumbs.db
 
 *:sec.endpointdlp
 /backend/node_modules/*
+frontend/app/build-info.generated.ts

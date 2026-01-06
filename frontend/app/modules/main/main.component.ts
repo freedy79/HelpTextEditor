@@ -4,6 +4,7 @@ import { HelpTextRoot, MainHelpSection, HelpTextSection, parseHelpTextRoot, pars
 import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from '../../models/qtf-file.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { TranslateService } from '@ngx-translate/core';
+import { buildInfo } from '~/app/build-info.generated';
 import { ImagePickerDialogComponent, ImagePickerDialogData } from '~/app/dialogs/image-picker-dialog/image-picker-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -45,6 +46,7 @@ export class MainComponent implements OnInit {
   selectedTextContent = '';
 
   isDirty: boolean = false;
+  buildDateLabel = buildInfo.buildDateIso ? new Date(buildInfo.buildDateIso).toLocaleString() : 'Unknown';
 
   // HTML-Preview des aktuell gewählten Top-Level-Teils
   previewHtml = '';

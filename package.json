@@ -6,10 +6,16 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prestart": "npm run generate-build-info",
     "build": "NODE_OPTIONS=--openssl-legacy-provider ng build --source-map=false --prod --build-optimizer --output-hashing=all",
+    "prebuild": "npm run generate-build-info",
     "test": "NODE_OPTIONS=--openssl-legacy-provider ng test --watch=false --browsers=ChromeHeadlessNoSandbox",
+    "pretest": "npm run generate-build-info",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "prelint": "npm run generate-build-info",
+    "e2e": "ng e2e",
+    "pree2e": "npm run generate-build-info",
+    "generate-build-info": "node scripts/generate-build-info.js"
   },
   "private": true,
   "dependencies": {
