@@ -47,6 +47,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   private dragCancelled = false;
   private parentIdMap = new WeakMap<object, number>();
   private parentIdCounter = 0;
+  private dropListRefreshScheduled = false;
   connectedDropListIds: string[] = [];
 
   listEnterPredicate = (drag: CdkDrag, drop: CdkDropList<DropContainerContext>) =>
@@ -70,8 +71,8 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   }
 
   ngAfterViewInit(): void {
-    this.refreshConnectedDropLists();
-    this.dropLists?.changes.subscribe(() => this.refreshConnectedDropLists());
+    this.scheduleRefreshConnectedDropLists();
+    this.dropLists?.changes.subscribe(() => this.scheduleRefreshConnectedDropLists());
   }
 
   getSelectedItem(): MainHelpSection {
@@ -460,6 +461,18 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     this.connectedDropListIds = lists
       .map(list => list.id)
       .filter(id => !!id);
+  }
+
+  private scheduleRefreshConnectedDropLists() {
+    if (this.dropListRefreshScheduled) {
+      return;
+    }
+
+    this.dropListRefreshScheduled = true;
+    Promise.resolve().then(() => {
+      this.dropListRefreshScheduled = false;
+      this.refreshConnectedDropLists();
+    });
   }
 
   getConnectedDropListIds(currentId: string | null): string[] {
