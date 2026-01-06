@@ -1,4 +1,4 @@
-import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragStart } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep, AbbreviationItem } from '~models/help-text-structure.model';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
@@ -41,7 +41,7 @@ export class HelpStructureTreeviewComponent implements OnChanges {
   private contextMenuContext: { section: TreeItem; parent: ParentType; container: string; index: number; } | null = null;
 
   private expandedSections: string[];
-  public isDragging = false;
+  private activeDropListId: string | null = null;
 
   constructor() {
     this.expandedSections = [];
@@ -114,8 +114,9 @@ export class HelpStructureTreeviewComponent implements OnChanges {
 
     const fromParent = dragContext?.parent || previousContainerData?.parent;
     const fromContainer = dragContext?.container || previousContainerData?.container;
+    const fromIndex = typeof event.previousIndex === 'number' ? event.previousIndex : dragContext?.index;
 
-    if (!containerData || !fromParent || !fromContainer) { return; }
+    if (!containerData || !fromParent || !fromContainer || fromIndex === undefined) { return; }
 
     const targetParent = containerData.parent;
     const targetContainer = containerData.container || fromContainer;
@@ -129,19 +130,21 @@ export class HelpStructureTreeviewComponent implements OnChanges {
     this.moveSection.emit({
       parent: targetParent,
       container: targetContainer,
-      index: dragContext?.index ?? event.previousIndex,
+      index: fromIndex,
       newIndex: targetIndex,
       fromParent,
       fromContainer
     });
+
+    this.activeDropListId = null;
   }
 
   onDragStarted(event: CdkDragStart) {
-    this.isDragging = true;
+    this.activeDropListId = null;
   }
 
   onDragEnded() {
-    this.isDragging = false;
+    this.activeDropListId = null;
   }
 
   openContextMenu(event: MouseEvent, section: TreeItem, parent: ParentType, container: string, index: number) {
@@ -305,6 +308,22 @@ export class HelpStructureTreeviewComponent implements OnChanges {
         ((item as any).abbreviations !== undefined && (item as any).value === undefined));
   }
 
+  onDropListEntered(event: CdkDragEnter<DropContainerContext>) {
+    this.activeDropListId = this.getDropListId(event.container.data);
+  }
+
+  onDropListExited(event: CdkDragExit<DropContainerContext>) {
+    const id = this.getDropListId(event.container.data);
+    if (id && this.activeDropListId === id) {
+      this.activeDropListId = null;
+    }
+  }
+
+  isChildDropActive(section: TreeItem, container: string): boolean {
+    const context: DropContainerContext = { parent: section as ParentType, container, mode: 'child' };
+    return this.activeDropListId === this.getDropListId(context);
+  }
+
   canMoveUp(parent: ParentType, container: string, index: number): boolean {
     const collection = this.getCollection(parent, container);
     return !!collection && index > 0;
@@ -336,6 +355,14 @@ export class HelpStructureTreeviewComponent implements OnChanges {
       return null;
     }
     return (parent as any)[container] as any[];
+  }
+
+  private getDropListId(context?: DropContainerContext | null): string | null {
+    if (!context) {
+      return null;
+    }
+    const parentId = (context.parent as any)?.value || (context.parent as any)?.type || 'root';
+    return `${parentId}-${context.container}-${context.mode || 'list'}`;
   }
 
   private expandToSelectedSection(selectedId: string) {
