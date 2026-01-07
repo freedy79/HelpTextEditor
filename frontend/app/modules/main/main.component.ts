@@ -1149,7 +1149,8 @@ export class MainComponent implements OnInit {
     const dialogRef = this.dialog.open(CleanQtfDialogComponent, {
       width: '640px',
       data: {
-        unusedKeys
+        unusedKeys,
+        qtfFile: this.qtfFile
       }
     });
 
