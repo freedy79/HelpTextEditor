@@ -58,7 +58,7 @@
         <div *ngFor="let mainSection of getSelectedItem()?.content  let i = index">
           <app-help-section [section]="mainSection" [sectionNumber]="i + 1" [sectionLevel]=1
             (selectContent)="onSelectSection($event)" [selectedHelpSection]="selectedSection"
-            [language]="getImageLanguage()"></app-help-section>
+            [selectedContentKey]="selectedContentKey" [language]="getImageLanguage()"></app-help-section>
         </div>
       </div>
     </div>
@@ -81,7 +81,7 @@
         <div>
           <p><strong>ID/Name:</strong> <input [(ngModel)]="selectedSection.linkId" (focusout)="onLinkChanged($event)"></p>
           <p *ngIf="canEditTranslationForSelection(); else nonTranslatableKey">
-            <strong>Unique key:</strong> <input [value]="selectedSection.value" (focusout)="onIdChanged($event)">
+            <strong>Unique key:</strong> <input [value]="getSelectedTranslationKey()" (focusout)="onIdChanged($event)">
           </p>
           <ng-template #nonTranslatableKey>
             <p><strong>Unique key:</strong> <em>Not applicable for this type.</em></p>
@@ -149,7 +149,7 @@
 
   <app-statusbar
     [selectedTopLevelKey]="selectedTopLevelKey"
-    [selectedSectionId]="selectedSection?.value"
+    [selectedSectionId]="getSelectedTranslationKey() || selectedSection?.value"
     [language]="selectedLanguage"
     [version]="appVersion"
     [isDirty]="isDirty">
