@@ -206,6 +206,9 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   }
 
   public onMove(parent: ParentType, container: string, index: number, direction: 'up' | 'down') {
+    if (this.isCoverContainer(container)) {
+      return;
+    }
     this.moveSection.emit({ parent, container, index, direction });
   }
 
@@ -257,6 +260,14 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
 
     if (!containerData || !fromParent || !fromContainer || fromIndex === undefined) {
       console.warn('[Treeview:onDrop] Missing drop or drag context', { containerData, fromParent, fromContainer, fromIndex });
+      return;
+    }
+    if (this.isCoverContainer(containerData.container) || this.isCoverContainer(fromContainer)) {
+      if (this.debugLogging) {
+        console.log('[Treeview:onDrop] Cover container drop blocked', { containerData, fromContainer });
+      }
+      this.activeDropListId = null;
+      this.resetPreview();
       return;
     }
     if (containerData.mode === 'child' && !this.canAcceptChildDrop(containerData.parent, containerData.container)) {
@@ -409,8 +420,10 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
       return items;
     }
 
-    items.push({ label: 'Move up', action: 'moveUp', disabled: !hasContainer || index === 0 });
-    items.push({ label: 'Move down', action: 'moveDown', disabled: !hasContainer || index >= collection.length - 1 });
+    if (!this.isCoverContainer(container)) {
+      items.push({ label: 'Move up', action: 'moveUp', disabled: !hasContainer || index === 0 });
+      items.push({ label: 'Move down', action: 'moveDown', disabled: !hasContainer || index >= collection.length - 1 });
+    }
 
     if (this.isHelpTextSection(section)) {
       const canAddChildren = !isNonNestableType(section.type);
@@ -593,11 +606,17 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   }
 
   canMoveUp(parent: ParentType, container: string, index: number): boolean {
+    if (this.isCoverContainer(container)) {
+      return false;
+    }
     const collection = this.getCollection(parent, container);
     return !!collection && index > 0;
   }
 
   canMoveDown(parent: ParentType, container: string, index: number): boolean {
+    if (this.isCoverContainer(container)) {
+      return false;
+    }
     const collection = this.getCollection(parent, container);
     return !!collection && index < collection.length - 1;
   }
@@ -716,9 +735,11 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     const dropData = drop.data;
     if (!dropData || !dropData.parent || !dropData.container) { return false; }
     if ((dropData.mode || 'list') !== mode) { return false; }
+    if (this.isCoverContainer(dropData.container)) { return false; }
     const dragContext = drag.data as DragContext | undefined;
     const draggedItem = this.getDraggedItem(dragContext);
     if (!dragContext || !draggedItem) { return false; }
+    if (this.isCoverContainer(dragContext.container)) { return false; }
 
     if (mode === 'child' && !this.canAcceptChildDrop(dropData.parent, dropData.container)) {
       return false;
@@ -1002,5 +1023,9 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
       this.dropIndicator.container === container &&
       this.dropIndicator.index === index &&
       this.dropIndicator.position === 'below';
+  }
+
+  private isCoverContainer(container: string | null | undefined): boolean {
+    return container === 'coversheet';
   }
 }
