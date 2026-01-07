@@ -80,7 +80,7 @@
 
       <ng-template #defaultType>
         <div>
-          <p><strong>ID/Name:</strong> <input [(ngModel)]="selectedSection.linkId" (focusout)="onLinkChanged($event)"></p>
+          <p *ngIf="showIdNameProperty()"><strong>ID/Name:</strong> <input [(ngModel)]="selectedSection.linkId" (focusout)="onLinkChanged($event)"></p>
           <p *ngIf="canEditTranslationForSelection(); else nonTranslatableKey">
             <strong>Unique key:</strong> <input [value]="getSelectedTranslationKey()" (focusout)="onIdChanged($event)">
           </p>
