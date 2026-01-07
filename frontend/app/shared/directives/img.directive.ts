@@ -1,9 +1,9 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Directive({
   selector: 'img[appDefault]'
 })
-export class ImageDefaultDirective {
+export class ImageDefaultDirective implements OnChanges {
 
   @Input() appDefault: string;
   @Input() fallback: string;
@@ -13,6 +13,13 @@ export class ImageDefaultDirective {
   private lastErrorMessage: string | null = null;
 
   constructor(private eRef: ElementRef) { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.appDefault || changes.fallback) {
+      this.hasTriedDefault = false;
+      this.lastErrorMessage = null;
+    }
+  }
 
   @HostListener('error')
   loadFallbackOnError() {
