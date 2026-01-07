@@ -327,6 +327,7 @@ export class MainComponent implements OnInit {
 
   onAddSubsection(section: HelpTextSection) {
     this.selectedSection = section;
+    this.syncSelectionForContextAction(section);
     if (this.canAddSubsectionForSection(section)) {
       this.createNewSubsection();
     } else {
@@ -361,7 +362,7 @@ export class MainComponent implements OnInit {
 
   onAddContent(section: HelpTextSection | MainHelpSection) {
     if (!section) { return; }
-    this.selectedSection = section as HelpTextSection;
+    this.syncSelectionForContextAction(section);
     this.openOverlayAddContent();
   }
 
@@ -394,8 +395,22 @@ export class MainComponent implements OnInit {
   }
 
   onAddStep(section: HelpTextSection) {
-    this.selectedSection = section;
+    this.syncSelectionForContextAction(section);
     this.createNewStep();
+  }
+
+  private syncSelectionForContextAction(section: HelpTextSection | MainHelpSection) {
+    const selectionId = getSectionSelectionId(section as HelpTextSection);
+    if (selectionId) {
+      this.onSelectSection(selectionId);
+      return;
+    }
+
+    this.selectedSection = section as HelpTextSection;
+    this.selectedTableCell = null;
+    this.selectedContentKey = null;
+    const translationKey = this.selectedSection?.getTranslationKey?.() || null;
+    this.loadTextFromQtf(translationKey);
   }
 
   onAddAbbreviation(mainSection: MainHelpSection) {
