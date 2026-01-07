@@ -31,6 +31,15 @@
     </section>
 
     <section class="issue-section">
+      <h3>Structure issues</h3>
+      <p *ngIf="structureIssues.length === 0">No structure issues found.</p>
+      <div *ngFor="let issue of structureIssues" class="issue-row stacked">
+        <div class="issue-key">{{ issue.sectionKey }}</div>
+        <div class="issue-error">{{ issue.message }}</div>
+      </div>
+    </section>
+
+    <section class="issue-section">
       <h3>Doubled translations</h3>
       <p *ngIf="doubledTranslationIssues.length === 0">No doubled translations found.</p>
       <div *ngFor="let issue of doubledTranslationIssues" class="issue-row stacked">
