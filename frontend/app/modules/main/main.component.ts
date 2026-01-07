@@ -1512,6 +1512,14 @@ export class MainComponent implements OnInit {
     return key !== null && key !== undefined;
   }
 
+  showIdNameProperty(): boolean {
+    if (!this.selectedSection) {
+      return false;
+    }
+
+    return !(this.selectedSection.type === 'TABLE' && this.selectedTableCell);
+  }
+
   private getTranslationEntryForSelection(key: string | null): QtfTextEntry | null {
     if (!key || !this.qtfFile || !this.qtfFile.TEXTS) {
       return null;
