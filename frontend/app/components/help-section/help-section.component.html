@@ -73,11 +73,15 @@
             <div class="help-table-container">
                 <table class="help-table">
                     <tr>
-                        <th *ngFor="let header of content.header" (click)="contentClick(header)" [innerHTML]="header | qtfTranslate"></th>
+                        <th *ngFor="let header of content.header" (click)="contentClick(header)"
+                            [ngClass]="{'selected': isTableCellSelected(header)}"
+                            [innerHTML]="header | qtfTranslate"></th>
                     </tr>
                     <tr *ngFor="let row of content.rows; let i = index" class="help-table"
                         [ngClass]="{'table-even-row': (i % 2 == 0), 'table-odd-row': (i % 2 == 1)}">
-                        <td *ngFor="let rowValue of row.rowValues" (click)="contentClick(rowValue)" [innerHTML]="rowValue | qtfTranslate"></td>
+                        <td *ngFor="let rowValue of row.rowValues" (click)="contentClick(rowValue)"
+                            [ngClass]="{'selected': isTableCellSelected(rowValue)}"
+                            [innerHTML]="rowValue | qtfTranslate"></td>
                     </tr>
                 </table>
             </div>

@@ -12,7 +12,8 @@ import {
   HelpContentType,
   HelpTextStep,
   AbbreviationItem,
-  isNonNestableType
+  isNonNestableType,
+  HelpTextTable
 } from '~/app/models/help-text-structure.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { buildInfo } from '~/app/build-info.generated';
@@ -85,6 +86,13 @@ export class MainComponent implements OnInit {
   currentMainHelpSection: MainHelpSection = null;
 
   selectedSection: HelpTextSection | null = null;
+  selectedContentKey: string | null = null;
+  selectedTableCell: {
+    table: HelpTextTable;
+    rowIndex?: number;
+    colIndex: number;
+    isHeader: boolean;
+  } | null = null;
   selectedTextContent = '';
 
   isDirty = false;
@@ -537,6 +545,8 @@ export class MainComponent implements OnInit {
     if (!activeMainSection || contentId === '') {
       console.log('currenthelp text item is undefined.');
       this.selectedSection = undefined;
+      this.selectedContentKey = null;
+      this.selectedTableCell = null;
       return;
     }
 
@@ -545,13 +555,22 @@ export class MainComponent implements OnInit {
 
     console.log('Selection: ', contentId);
     this.selectedSection = activeMainSection.findSectionById(contentId);
-    if (this.selectedSection) {
-      if (this.selectedSection.type === 'TABLE') {
-        this.loadTextFromQtf(contentId);
-      } else { this.loadTextFromQtf(this.selectedSection.getTranslationKey()); }
-    } else {
+    if (!this.selectedSection) {
       console.error('Could not find ', contentId, ' in ', this.currentMainHelpSection);
+      return;
     }
+
+    if (this.selectedSection.type === 'TABLE') {
+      const table = this.selectedSection as HelpTextTable;
+      this.selectedTableCell = this.findTableCellContext(table, contentId);
+      this.selectedContentKey = this.selectedTableCell ? contentId : null;
+      this.loadTextFromQtf(this.selectedContentKey);
+      return;
+    }
+
+    this.selectedTableCell = null;
+    this.selectedContentKey = null;
+    this.loadTextFromQtf(this.selectedSection.getTranslationKey());
   }
 
   onLanguageChange(event) {
@@ -559,7 +578,7 @@ export class MainComponent implements OnInit {
     this.loadTextsFromQtf(this.selectedLanguage);
 
     if (this.selectedSection) {
-      const translationKey = this.selectedSection.getTranslationKey();
+      const translationKey = this.getSelectedTranslationKey();
       this.loadTextFromQtf(translationKey);
     }
   }
@@ -606,7 +625,7 @@ export class MainComponent implements OnInit {
   saveCurrentSectionText() {
     if (!this.selectedSection || !this.qtfFile) { return; }
 
-    const key = this.selectedSection.getTranslationKey();
+    const key = this.getSelectedTranslationKey();
     // console.log("saving: ", key, " - ", this.selectedTextContent);
     if (!key) { return; }
 
@@ -833,7 +852,8 @@ export class MainComponent implements OnInit {
     const newId = event.target.value;
     // console.log("old id ", this.selectedSection.value, " - new id", newId);
 
-    if (this.selectedSection.getTranslationKey() === newId) {
+    const currentKey = this.getSelectedTranslationKey();
+    if (currentKey === newId) {
       return;
     }
 
@@ -842,11 +862,11 @@ export class MainComponent implements OnInit {
     }
 
     if (newId !== '') {
-      const oldId = this.selectedSection.getTranslationKey();
+      const oldId = currentKey;
       if (!oldId) {
         return;
       }
-      const changed = this.currentMainHelpSection.changeValueId(oldId, newId);
+      const changed = this.updateSelectedTranslationKey(oldId, newId);
       if (changed) {
         console.log('Id changed. Old: ', oldId, ' -> ', newId, ': ', changed);
         this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
@@ -875,6 +895,65 @@ export class MainComponent implements OnInit {
         this.onSelectSection(newId);
       }
     }
+  }
+
+  private findTableCellContext(table: HelpTextTable, key: string): {
+    table: HelpTextTable;
+    rowIndex?: number;
+    colIndex: number;
+    isHeader: boolean;
+  } | null {
+    if (!table || !key) {
+      return null;
+    }
+
+    const headerIndex = table.header?.indexOf(key) ?? -1;
+    if (headerIndex >= 0) {
+      return { table, colIndex: headerIndex, isHeader: true };
+    }
+
+    if (table.rows) {
+      for (let rowIndex = 0; rowIndex < table.rows.length; rowIndex += 1) {
+        const row = table.rows[rowIndex];
+        const colIndex = row?.rowValues?.indexOf(key) ?? -1;
+        if (colIndex >= 0) {
+          return { table, rowIndex, colIndex, isHeader: false };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  private updateSelectedTranslationKey(oldId: string, newId: string): boolean {
+    if (!this.currentMainHelpSection) {
+      return false;
+    }
+
+    if (this.selectedSection?.type === 'TABLE' && this.selectedTableCell) {
+      const table = this.selectedTableCell.table;
+      if (this.selectedTableCell.isHeader) {
+        if (table.header && this.selectedTableCell.colIndex < table.header.length) {
+          table.header[this.selectedTableCell.colIndex] = newId;
+          this.selectedContentKey = newId;
+          return true;
+        }
+        return false;
+      }
+
+      const rowIndex = this.selectedTableCell.rowIndex ?? -1;
+      if (table.rows && rowIndex >= 0 && rowIndex < table.rows.length) {
+        const row = table.rows[rowIndex];
+        if (row?.rowValues && this.selectedTableCell.colIndex < row.rowValues.length) {
+          row.rowValues[this.selectedTableCell.colIndex] = newId;
+          this.selectedContentKey = newId;
+          return true;
+        }
+      }
+      return false;
+    }
+
+    return this.currentMainHelpSection.changeValueId(oldId, newId);
   }
 
   onLinkChanged(event) {
@@ -1005,6 +1084,8 @@ export class MainComponent implements OnInit {
     // console.log(this.currentMainHelpSection instanceof MainHelpSection);
     // console.log(this.currentMainHelpSection);
     this.selectedSection = undefined;
+    this.selectedContentKey = null;
+    this.selectedTableCell = null;
     this.selectedTextContent = '';
   }
 
@@ -1403,9 +1484,12 @@ export class MainComponent implements OnInit {
     }
   }
 
-  private getSelectedTranslationKey(): string | null {
+  public getSelectedTranslationKey(): string | null {
     if (!this.selectedSection) {
       return null;
+    }
+    if (this.selectedContentKey) {
+      return this.selectedContentKey;
     }
     const getter = (this.selectedSection as any).getTranslationKey;
     if (typeof getter === 'function') {

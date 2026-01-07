@@ -13,6 +13,7 @@ export class HelpSectionComponent implements OnChanges {
   @Input() sectionNumber: String;
   @Input() sectionLevel: number;
   @Input() selectedHelpSection: HelpTextSection;
+  @Input() selectedContentKey: string | null = null;
   @Output() selectContent = new EventEmitter<string>();
   @Input() selectedLanguage: String;
 
@@ -60,6 +61,10 @@ export class HelpSectionComponent implements OnChanges {
     // console.log("section: ", section != null);
     // console.log("selectedHelpSection: ", this.selectedHelpSection != null);
     return false;
+  }
+
+  public isTableCellSelected(cellKey: string): boolean {
+    return !!cellKey && cellKey === this.selectedContentKey;
   }
 
   public isIeOrEdge() {
