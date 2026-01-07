@@ -1,7 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DeeplTranslationService } from '~shared/services/deepl-translation.service';
-import { HelpTextRoot, MainHelpSection, HelpTextSection, HelpTextStep, HelpTextTable } from '~/app/models/help-text-structure.model';
+import {
+  HelpTextRoot,
+  MainHelpSection,
+  HelpTextSection,
+  HelpTextStep,
+  HelpTextTable,
+  StructureIssue,
+  collectStructureIssues
+} from '~/app/models/help-text-structure.model';
 import { QtfFile, QtfTextEntry, createNewQtfItem } from '~/app/models/qtf-file.model';
 
 export interface TranslationIssuesDialogData {
@@ -38,6 +46,7 @@ export class TranslationIssuesDialogComponent implements OnInit {
   emptyTranslationIssues: EmptyTranslationIssue[] = [];
   missingTextIds: string[] = [];
   doubledTranslationIssues: DoubledTranslationIssue[] = [];
+  structureIssues: StructureIssue[] = [];
   hasChanges = false;
 
   constructor(
@@ -53,7 +62,8 @@ export class TranslationIssuesDialogComponent implements OnInit {
   get noIssuesFound(): boolean {
     return this.emptyTranslationIssues.length === 0
       && this.missingTextIds.length === 0
-      && this.doubledTranslationIssues.length === 0;
+      && this.doubledTranslationIssues.length === 0
+      && this.structureIssues.length === 0;
   }
 
   get hasLoadedData(): boolean {
@@ -64,10 +74,13 @@ export class TranslationIssuesDialogComponent implements OnInit {
     this.emptyTranslationIssues = [];
     this.missingTextIds = [];
     this.doubledTranslationIssues = [];
+    this.structureIssues = [];
 
     if (!this.data.helpTextRoot) {
       return;
     }
+
+    this.structureIssues = collectStructureIssues(this.data.helpTextRoot);
 
     const usedKeys = this.collectUsedTextIds();
     const textEntries = this.data.qtfFile?.TEXTS || {};

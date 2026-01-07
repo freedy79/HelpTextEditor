@@ -11,7 +11,8 @@ import {
   HelpTextRootKey,
   HelpContentType,
   HelpTextStep,
-  AbbreviationItem
+  AbbreviationItem,
+  isNonNestableType
 } from '~/app/models/help-text-structure.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { buildInfo } from '~/app/build-info.generated';
@@ -669,6 +670,11 @@ export class MainComponent implements OnInit {
     if (!this.currentMainHelpSection || !this.selectedSection) {
       return;
     }
+
+    if (isNonNestableType(this.selectedSection.type)) {
+      console.warn('Cannot add subsections to non-nestable content type: ', this.selectedSection.type);
+      return;
+    }
     this.saveCurrentSectionText();
 
     const createAsSibling = this.selectedSection.type === HelpContentType.INSTRUCTION
@@ -1007,6 +1013,10 @@ export class MainComponent implements OnInit {
   }
 
   openOverlayAddContent() {
+    if (this.selectedSection && isNonNestableType(this.selectedSection.type)) {
+      console.warn('Cannot add content to non-nestable content type: ', this.selectedSection.type);
+      return;
+    }
     this.showOverlayAddContent = true;
   }
 

@@ -9,6 +9,26 @@ export enum HelpContentType {
   TABLE = 'TABLE',
 }
 
+export const NON_NESTABLE_CONTENT_TYPES = new Set<HelpContentType>([
+  HelpContentType.INSTRUCTION,
+  HelpContentType.INSTRUCTION_BOLD,
+  HelpContentType.IMAGE,
+  HelpContentType.SPLITIMAGE,
+]);
+
+export interface StructureIssue {
+  sectionKey: string;
+  message: string;
+}
+
+export function isNonNestableType(type?: string): boolean {
+  if (!type) {
+    return false;
+  }
+
+  return NON_NESTABLE_CONTENT_TYPES.has(type as HelpContentType);
+}
+
 export const HELP_TEXT_ROOT_KEYS = [
   'HELP_TEXT_DEVICE_CONCEPT',
   'HELP_TEXT_TASKS_CONCEPT',
@@ -614,4 +634,57 @@ export function parseHelpTextTable(obj: any): HelpTextTable {
   newTable.subsections = undefined;
 
   return newTable;
+}
+
+export function collectStructureIssues(root: HelpTextRoot | null | undefined): StructureIssue[] {
+  if (!root) {
+    return [];
+  }
+
+  const issues: StructureIssue[] = [];
+
+  const addIssue = (section: HelpTextSection, invalidContainers: string[]) => {
+    const displayKey = section.imageDescription || section.value || section.linkId || 'unknown';
+    const typeLabel = section.type || 'unknown';
+    issues.push({
+      sectionKey: displayKey,
+      message: `Element vom Typ ${typeLabel} darf keine Unterelemente besitzen (gefunden: ${invalidContainers.join(', ')}).`
+    });
+  };
+
+  const collectSectionIssues = (section?: HelpTextSection) => {
+    if (!section) {
+      return;
+    }
+
+    if (isNonNestableType(section.type)) {
+      const invalidContainers = [];
+      if (section.coversheet?.length) {
+        invalidContainers.push('coversheet');
+      }
+      if (section.content?.length) {
+        invalidContainers.push('content');
+      }
+      if (section.subsections?.length) {
+        invalidContainers.push('subsections');
+      }
+      if (section.steps?.length) {
+        invalidContainers.push('steps');
+      }
+      if (invalidContainers.length > 0) {
+        addIssue(section, invalidContainers);
+      }
+    }
+
+    section.coversheet?.forEach(collectSectionIssues);
+    section.content?.forEach(collectSectionIssues);
+    section.subsections?.forEach(collectSectionIssues);
+  };
+
+  root.getSections().forEach(mainSection => {
+    mainSection?.coversheet?.forEach(collectSectionIssues);
+    mainSection?.content?.forEach(collectSectionIssues);
+  });
+
+  return issues;
 }

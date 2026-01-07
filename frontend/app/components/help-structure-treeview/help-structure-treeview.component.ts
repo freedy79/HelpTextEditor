@@ -24,7 +24,14 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep, AbbreviationItem } from '~models/help-text-structure.model';
+import {
+  MainHelpSection,
+  HelpTextSection,
+  HelpContentType,
+  HelpTextStep,
+  AbbreviationItem,
+  isNonNestableType
+} from '~models/help-text-structure.model';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
 
 type ParentType = HelpTextSection | MainHelpSection | HelpTextStep;
@@ -406,8 +413,11 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     items.push({ label: 'Move down', action: 'moveDown', disabled: !hasContainer || index >= collection.length - 1 });
 
     if (this.isHelpTextSection(section)) {
-      items.push({ label: 'Add subsection', action: 'addSubsection' });
-      items.push({ label: 'Add content', action: 'addContent' });
+      const canAddChildren = !isNonNestableType(section.type);
+      if (canAddChildren) {
+        items.push({ label: 'Add subsection', action: 'addSubsection' });
+        items.push({ label: 'Add content', action: 'addContent' });
+      }
       if (this.showStepControls(section)) {
         items.push({ label: 'Add step', action: 'addStep' });
       }
@@ -575,6 +585,9 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   }
 
   canAcceptChildDrop(section: ParentType, container: string): boolean {
+    if (this.isHelpTextSection(section) && isNonNestableType(section.type)) {
+      return false;
+    }
     return !!container && this.getDefaultChildContainer(section as unknown as TreeItem) === container
       && Object.prototype.hasOwnProperty.call(section as any, container);
   }
@@ -595,6 +608,9 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
       return 'substeps';
     }
     if (this.isHelpTextSection(section)) {
+      if (isNonNestableType(section.type)) {
+        return null;
+      }
       if (this.showStepControls(section)) { return 'steps'; }
       if ((section as any).subsections !== undefined) { return 'subsections'; }
       if ((section as any).content !== undefined) { return 'content'; }
