@@ -7,10 +7,10 @@ import { Component, Input } from '@angular/core';
 })
 export class StatusbarComponent {
   @Input() selectedTopLevelKey: string | null = null;
-  @Input() selectedSectionId: string | null = null;
   @Input() language: string | null = null;
   @Input() isDirty = false;
   @Input() version: string | null = null;
+  @Input() translationIdCount: number | null = null;
 
   get statusLabel(): string {
     if (this.isDirty) {
@@ -24,11 +24,15 @@ export class StatusbarComponent {
     return this.selectedTopLevelKey || 'No file loaded';
   }
 
-  get sectionLabel(): string {
-    return this.selectedSectionId || 'No selection';
-  }
-
   get versionLabel(): string {
     return this.version || 'Not set';
+  }
+
+  get translationIdCountLabel(): string {
+    if (this.translationIdCount === null || this.translationIdCount === undefined) {
+      return 'Not available';
+    }
+
+    return String(this.translationIdCount);
   }
 }
