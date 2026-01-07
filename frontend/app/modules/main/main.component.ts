@@ -15,6 +15,8 @@ import {
   isNonNestableType,
   HelpTextTable,
   TableCellSelection,
+  getSectionSelectionId,
+  isValuelessContentType,
   serializeHelpTextRoot
 } from '~/app/models/help-text-structure.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
@@ -314,7 +316,7 @@ export class MainComponent implements OnInit {
     if (event) {
       this.onSelectSection(event as string);
 
-      const elementId = this.selectedSection?.value || (event as string);
+      const elementId = this.getSelectedSectionId() || (event as string);
       this.scrollToSectionIfHidden(elementId);
     }
   }
@@ -532,8 +534,9 @@ export class MainComponent implements OnInit {
     this.saveCurrentSectionText();
     this.isDirty = true;
 
-    if (item && (item as HelpTextSection).value) {
-      this.onSelectSection((item as HelpTextSection).value);
+    const selectionId = getSectionSelectionId(item as HelpTextSection | HelpTextStep);
+    if (selectionId) {
+      this.onSelectSection(selectionId);
     }
   }
 
@@ -693,7 +696,10 @@ export class MainComponent implements OnInit {
     }
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.onTopLevelChange(this.selectedTopLevelKey);
-    this.onSelectSection(newItem.value);
+    const selectionId = getSectionSelectionId(newItem);
+    if (selectionId) {
+      this.onSelectSection(selectionId);
+    }
   }
 
   createNewSubsection() {
@@ -714,9 +720,10 @@ export class MainComponent implements OnInit {
 
     let targetParent: HelpTextSection = this.selectedSection;
     if (createAsSibling) {
-      targetParent = this.currentMainHelpSection.findParentOfSectionById(this.selectedSection.value);
+      const selectedId = this.getSelectedSectionId();
+      targetParent = selectedId ? this.currentMainHelpSection.findParentOfSectionById(selectedId) : null;
       if (!targetParent) {
-        console.error('Parent not found for ', this.selectedSection.value);
+        console.error('Parent not found for ', selectedId || this.selectedSection.type);
         return;
       }
     }
@@ -727,8 +734,9 @@ export class MainComponent implements OnInit {
     const previousKey = this.getPreviousSiblingKey(siblings, insertIndex);
     const newKey = this.generateIdFromPrevious(previousKey) || ('NEW_SECTION_' + Math.random().toString(20).substring(2, 4));
 
+    const selectedId = this.getSelectedSectionId();
     const newItem: HelpTextSection = createAsSibling
-      ? targetParent.addSubsectionAfter(newKey, this.selectedSection.value)
+      ? (selectedId ? targetParent.addSubsectionAfter(newKey, selectedId) : targetParent.addSubsection(newKey))
       : targetParent.addSubsection(newKey);
     console.log('created: ', newItem);
 
@@ -740,7 +748,10 @@ export class MainComponent implements OnInit {
     }
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.onTopLevelChange(this.selectedTopLevelKey);
-    this.onSelectSection(newItem.value);
+    const selectionId = getSectionSelectionId(newItem);
+    if (selectionId) {
+      this.onSelectSection(selectionId);
+    }
   }
 
   createNewStep() {
@@ -749,7 +760,7 @@ export class MainComponent implements OnInit {
     }
     this.saveCurrentSectionText();
 
-    console.log('Create step near by ', this.selectedSection.value);
+    console.log('Create step near by ', this.getSelectedSectionId());
 
     let parentSection: HelpTextSection = null;
     if (this.currentMainHelpSection && this.currentMainHelpSection !== null) {
@@ -757,18 +768,20 @@ export class MainComponent implements OnInit {
         parentSection = this.selectedSection;
       } else {
         console.log('searching in HelpSection');
-        parentSection = this.currentMainHelpSection.findParentOfSectionById(this.selectedSection.value);
+        const selectedId = this.getSelectedSectionId();
+        parentSection = selectedId ? this.currentMainHelpSection.findParentOfSectionById(selectedId) : null;
       }
 
       if (!parentSection) {
-        console.log('Parent not found for ', this.selectedSection.value);
+        console.log('Parent not found for ', this.getSelectedSectionId() || this.selectedSection.type);
         return;
       }
 
       if (parentSection.type === HelpContentType.ENUMERATION || parentSection.type === HelpContentType.BULLET_ENUMERATION) {
         const insertIndex = parentSection.steps ? parentSection.steps.length : 0;
         const previousKey = this.getPreviousSiblingKey(parentSection.steps, insertIndex);
-        const newStepId = this.generateIdFromPrevious(previousKey) || parentSection.value + '_ENUM_123';
+        const parentKey = parentSection.value || parentSection.linkId || parentSection.type || 'ENUMERATION';
+        const newStepId = this.generateIdFromPrevious(previousKey) || `${parentKey}_ENUM_123`;
         parentSection.addStep(newStepId);
         console.log('Step created ');
         this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
@@ -797,12 +810,14 @@ export class MainComponent implements OnInit {
 
     let parentSection: HelpTextSection = null;
     if (this.currentMainHelpSection && this.currentMainHelpSection !== null) {
-      parentSection = this.currentMainHelpSection.findParentOfSectionById(sectionToDelete.value);
+      const deleteId = getSectionSelectionId(sectionToDelete as HelpTextSection | HelpTextStep);
+      parentSection = deleteId ? this.currentMainHelpSection.findParentOfSectionById(deleteId) : null;
     }
 
     let removed = false;
     if (parentSection) {
-      removed = parentSection.removeId(sectionToDelete.value);
+      const deleteId = getSectionSelectionId(sectionToDelete as HelpTextSection | HelpTextStep);
+      removed = deleteId ? parentSection.removeId(deleteId) : false;
     } else {
       removed = this.removeFromMainSection(sectionToDelete);
     }
@@ -812,10 +827,11 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    const currentSelectionId = this.selectedSection?.value;
-    const newSelectionId = (currentSelectionId && currentSelectionId !== sectionToDelete.value)
+    const currentSelectionId = this.getSelectedSectionId();
+    const deletedId = getSectionSelectionId(sectionToDelete as HelpTextSection | HelpTextStep);
+    const newSelectionId = (currentSelectionId && deletedId && currentSelectionId !== deletedId)
       ? currentSelectionId
-      : parentSection?.value;
+      : getSectionSelectionId(parentSection);
 
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.saveCurrentSectionText();
@@ -836,7 +852,11 @@ export class MainComponent implements OnInit {
       if (!collection) {
         return false;
       }
-      const index = collection.findIndex(item => item && (item as any).value === sectionToDelete.value);
+      const deleteId = getSectionSelectionId(sectionToDelete as HelpTextSection | HelpTextStep);
+      const index = collection.findIndex(item => {
+        const itemId = getSectionSelectionId(item as HelpTextSection | HelpTextStep);
+        return !!deleteId && itemId === deleteId;
+      });
       if (index !== -1) {
         collection.splice(index, 1);
         return true;
@@ -913,9 +933,10 @@ export class MainComponent implements OnInit {
       return null;
     }
 
+    const tableId = getSectionSelectionId(table) || '';
     const headerIndex = table.header?.indexOf(key) ?? -1;
     if (headerIndex >= 0) {
-      return { tableId: table.value, colIndex: headerIndex, isHeader: true, key };
+      return { tableId, colIndex: headerIndex, isHeader: true, key };
     }
 
     if (table.rows) {
@@ -923,7 +944,7 @@ export class MainComponent implements OnInit {
         const row = table.rows[rowIndex];
         const colIndex = row?.rowValues?.indexOf(key) ?? -1;
         if (colIndex >= 0) {
-          return { tableId: table.value, rowIndex, colIndex, isHeader: false, key };
+          return { tableId, rowIndex, colIndex, isHeader: false, key };
         }
       }
     }
@@ -969,14 +990,16 @@ export class MainComponent implements OnInit {
 
     if ((this.selectedSection.linkId !== newLink) && (newLink !== '')) {
       console.log('onLinkChanged');
-      const currentValue = this.selectedSection.value;
+      const currentValue = this.getSelectedSectionId();
 
       this.selectedSection.linkId = newLink;
       console.log('New link id: ', newLink, ' for section: ', this.selectedSection.value);
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
       this.saveCurrentSectionText();
       this.onTopLevelChange(this.selectedTopLevelKey);
-      this.onSelectSection(currentValue);
+      if (currentValue) {
+        this.onSelectSection(currentValue);
+      }
     }
   }
 
@@ -1139,7 +1162,7 @@ export class MainComponent implements OnInit {
 
     this.saveCurrentSectionText(); // Änderungen des aktuellen Editors sichern
 
-    console.log('Creating new for parent: ', this.selectedSection.value);
+    console.log('Creating new for parent: ', this.getSelectedSectionId());
 
     let parentSection: HelpTextSection = null;
 
@@ -1154,23 +1177,24 @@ export class MainComponent implements OnInit {
     ) {
       parentSection = this.selectedSection;
     } else if (this.currentMainHelpSection) {
-      parentSection = this.currentMainHelpSection.findParentOfSectionById(this.selectedSection.value);
+      const selectedId = this.getSelectedSectionId();
+      parentSection = selectedId ? this.currentMainHelpSection.findParentOfSectionById(selectedId) : null;
     }
 
     if (!parentSection) {
-      console.log('Parent not found for ', this.selectedSection.value);
+      console.log('Parent not found for ', this.getSelectedSectionId() || this.selectedSection.type);
       return;
     }
 
     const insertIndex = this.getInsertIndex(parentSection, data.insertPosition);
     const previousKey = this.getPreviousSiblingKey(parentSection.content, insertIndex);
+    const parentKey = parentSection.value || parentSection.linkId || parentSection.type || 'SECTION';
     const newKey = this.generateIdFromPrevious(previousKey)
-      || `${parentSection.value}_${data.type}_${Math.random().toString(36).substring(2)}`;
+      || `${parentKey}_${data.type}_${Math.random().toString(36).substring(2)}`;
     const newLinkId = 'LINK_' + Math.random().toString(36).substring(2);
     const newItem: HelpTextSection = new HelpTextSection();
     newItem.linkId = newLinkId;
     newItem.value = newKey;
-
     newItem.linkId = '';
     newItem.type = data.type;
 
@@ -1178,6 +1202,10 @@ export class MainComponent implements OnInit {
       newItem.value = 'empty';
       newItem.imageDescription = newKey;
       newItem.border = false;
+    }
+
+    if (isValuelessContentType(data.type)) {
+      newItem.value = undefined;
     }
 
     console.log('parent ', parentSection.constructor.name, ' value: ', parentSection.value);
@@ -1202,7 +1230,10 @@ export class MainComponent implements OnInit {
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     this.saveCurrentSectionText();
     this.onTopLevelChange(this.selectedTopLevelKey);
-    this.onSelectSection(newItem.value);
+    const selectionId = getSectionSelectionId(newItem);
+    if (selectionId) {
+      this.onSelectSection(selectionId);
+    }
   }
 
   openImagePicker(): void {
@@ -1479,7 +1510,7 @@ export class MainComponent implements OnInit {
   }
 
   private persistAbbreviationChange(mainSection: MainHelpSection): void {
-    const selectedId = this.selectedSection?.value;
+    const selectedId = this.getSelectedSectionId();
     this.currentMainHelpSection = mainSection;
     if (this.selectedTopLevelKey) {
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
@@ -1507,6 +1538,10 @@ export class MainComponent implements OnInit {
       return key || null;
     }
     return this.selectedSection.value || null;
+  }
+
+  public getSelectedSectionId(): string | null {
+    return getSectionSelectionId(this.selectedSection as HelpTextSection | HelpTextStep);
   }
 
   canEditTranslationForSelection(): boolean {

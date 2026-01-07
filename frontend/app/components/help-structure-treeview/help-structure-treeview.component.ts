@@ -30,7 +30,8 @@ import {
   HelpContentType,
   HelpTextStep,
   AbbreviationItem,
-  isNonNestableType
+  isNonNestableType,
+  getSectionSelectionId
 } from '~models/help-text-structure.model';
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
 
@@ -156,8 +157,9 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
       this.expandedSections = [];
     }
 
-    if (this.selectedHelpSection?.value) {
-      this.expandToSelectedSection(this.selectedHelpSection.value);
+    const selectedId = getSectionSelectionId(this.selectedHelpSection);
+    if (selectedId) {
+      this.expandToSelectedSection(selectedId);
     }
   }
 
@@ -493,6 +495,22 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     return styles;
   }
 
+  getItemSelectionId(item: TreeItem): string | null {
+    if (!item) {
+      return null;
+    }
+    if (this.isHelpTextStep(item)) {
+      return item.value || null;
+    }
+    if (this.isHelpTextSection(item)) {
+      return getSectionSelectionId(item);
+    }
+    if (this.isAbbreviation(item)) {
+      return item.abbreviation || null;
+    }
+    return null;
+  }
+
   hasChildren(section: HelpTextSection | HelpTextStep) {
     if (section instanceof HelpTextSection) {
       return (section as HelpTextSection).hasChildren();
@@ -505,27 +523,23 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     return false;
   }
 
-  onOpenCloseSection(section) {
-    if (this.expandedSections.find(x => x === section)) {
+  onOpenCloseSection(sectionId: string | null) {
+    if (!sectionId) {
+      return;
+    }
+    if (this.expandedSections.find(x => x === sectionId)) {
       // console.log("closing ", section);
-      this.expandedSections = this.expandedSections.filter(item => item !== section);
+      this.expandedSections = this.expandedSections.filter(item => item !== sectionId);
     } else {
       // console.log("expanding ", section);
-      this.expandedSections.push(section);
+      this.expandedSections.push(sectionId);
     }
 
   }
 
   getItemExpanded(section) {
-    if (section) {
-      // console.log("expanded? ", section.value);
-      if (section.value) {
-        return !!this.expandedSections.find(x => x === section.value);
-      } else {
-        return !!this.expandedSections.find(x => x === section.value);
-      }
-    }
-    return false;
+    const sectionId = this.getItemSelectionId(section);
+    return !!sectionId && !!this.expandedSections.find(x => x === sectionId);
   }
 
   getTreeIcon(section: HelpTextSection | HelpTextStep): string {
@@ -533,10 +547,9 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   }
 
   isSelectedSection(section) {
-    if (this.selectedHelpSection && section) {
-      // console.log("isSelected", this.selectedHelpSection.value);
-      return this.selectedHelpSection.value === section.value;
-    } else { return false; }
+    const selectedId = getSectionSelectionId(this.selectedHelpSection);
+    const sectionId = this.getItemSelectionId(section);
+    return !!selectedId && selectedId === sectionId;
   }
 
   showStepControls(section: HelpTextSection): boolean {
@@ -675,7 +688,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
       return null;
     }
 
-    const nodeId = node.value;
+    const nodeId = this.getItemSelectionId(node);
     if (nodeId === targetId) {
       return [nodeId];
     }
@@ -832,7 +845,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
   private getItemId(item: TreeItem | null | undefined): string | null {
     if (!item) { return null; }
     if (this.isHelpTextSection(item) || this.isHelpTextStep(item)) {
-      return item.value || null;
+      return this.getItemSelectionId(item) || null;
     }
     if (this.isAbbreviation(item)) {
       return item.abbreviation || null;

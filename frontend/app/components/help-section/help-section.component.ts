@@ -1,6 +1,6 @@
 import { Component, EventEmitter, HostBinding, Input, OnChanges, Output } from '@angular/core';
 import { ImageDefaultDirective } from '~shared/directives/img.directive';
-import { HelpTextSection, TableCellSelection } from '~models/help-text-structure.model';
+import { HelpTextSection, TableCellSelection, HelpTextStep, getSectionSelectionId } from '~models/help-text-structure.model';
 
 @Component({
   selector: 'app-help-section, json-pipe',
@@ -51,6 +51,10 @@ export class HelpSectionComponent implements OnChanges {
     }
   }
 
+  public getSectionId(section: HelpTextSection | HelpTextStep): string {
+    return getSectionSelectionId(section) || '';
+  }
+
   public contentClick(contentId) {
     this.forwardSectionClick(contentId);
   }
@@ -72,12 +76,9 @@ export class HelpSectionComponent implements OnChanges {
   }
 
   public isSelected(section) {
-    if (section && this.selectedHelpSection) {
-      return section.value === this.selectedHelpSection.value;
-    }
-    // console.log("section: ", section != null);
-    // console.log("selectedHelpSection: ", this.selectedHelpSection != null);
-    return false;
+    const selectedId = getSectionSelectionId(this.selectedHelpSection as HelpTextSection | HelpTextStep);
+    const sectionId = getSectionSelectionId(section as HelpTextSection | HelpTextStep);
+    return !!selectedId && selectedId === sectionId;
   }
 
   public isTableCellSelected(
