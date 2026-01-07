@@ -9,6 +9,15 @@ export enum HelpContentType {
   TABLE = 'TABLE',
 }
 
+const VALUELESS_CONTENT_TYPES = new Set<HelpContentType>([
+  HelpContentType.ENUMERATION,
+  HelpContentType.BULLET_ENUMERATION,
+  HelpContentType.TABLE,
+]);
+
+const INTERNAL_ID_KEY = '__internalId';
+let internalIdCounter = 0;
+
 export const NON_NESTABLE_CONTENT_TYPES = new Set<HelpContentType>([
   HelpContentType.INSTRUCTION,
   HelpContentType.INSTRUCTION_BOLD,
@@ -27,6 +36,54 @@ export function isNonNestableType(type?: string): boolean {
   }
 
   return NON_NESTABLE_CONTENT_TYPES.has(type as HelpContentType);
+}
+
+export function isValuelessContentType(type?: string): boolean {
+  if (!type) {
+    return false;
+  }
+
+  return VALUELESS_CONTENT_TYPES.has(type as HelpContentType);
+}
+
+export function getSectionSelectionId(section?: HelpTextSection | HelpTextStep | null): string | null {
+  if (!section) {
+    return null;
+  }
+
+  if ((section as HelpTextStep).type === 'STEP') {
+    return (section as HelpTextStep).value || null;
+  }
+
+  if ((section as HelpTextSection).value) {
+    return (section as HelpTextSection).value;
+  }
+
+  return ensureInternalId(section as HelpTextSection);
+}
+
+export function matchesSectionId(section: HelpTextSection, contentId: string): boolean {
+  if (!contentId) {
+    return false;
+  }
+
+  return section.value === contentId || (section as any)[INTERNAL_ID_KEY] === contentId;
+}
+
+function ensureInternalId(section: HelpTextSection): string {
+  const existing = (section as any)[INTERNAL_ID_KEY];
+  if (existing) {
+    return existing;
+  }
+
+  internalIdCounter += 1;
+  const id = `section-${internalIdCounter}`;
+  Object.defineProperty(section, INTERNAL_ID_KEY, {
+    value: id,
+    enumerable: false,
+    writable: false
+  });
+  return id;
 }
 
 export const HELP_TEXT_ROOT_KEYS = [
@@ -99,7 +156,7 @@ export class HelpTextSection {
   }
 
   public getTranslationKey(): string | null {
-    if (this.type === HelpContentType.BULLET_ENUMERATION) {
+    if (isValuelessContentType(this.type)) {
       return null;
     }
 
@@ -176,7 +233,7 @@ export class HelpTextSection {
       return this.addSubsection(contentId);
     }
 
-    const currentIndex = this.subsections.findIndex(section => section.value === afterSectionId);
+    const currentIndex = this.subsections.findIndex(section => matchesSectionId(section, afterSectionId));
     const insertIndex = currentIndex === -1 ? this.subsections.length : currentIndex + 1;
     return this.addSubsection(contentId, insertIndex);
   }
@@ -367,7 +424,7 @@ function findSectionInCollections(collections: SectionCollection[], contentId: s
 
     for (const section of collection) {
       if (!section) { continue; }
-      if (section.value === contentId) {
+      if (matchesSectionId(section, contentId)) {
         return section;
       }
       if (section.type === 'TABLE') {
@@ -400,7 +457,7 @@ function findParentInCollections(
 
     for (const section of collection) {
       if (!section) { continue; }
-      if (section.value === contentId) {
+      if (matchesSectionId(section, contentId)) {
         return directParent;
       }
       if (section.type === 'TABLE') {
@@ -468,7 +525,7 @@ function removeFromCollections(collections: SectionCollection[], contentId: stri
   for (const collection of collections) {
     if (!collection) { continue; }
 
-    const index = collection.findIndex(item => item && item.value === contentId);
+    const index = collection.findIndex(item => item && matchesSectionId(item, contentId));
     if (index !== -1) {
       collection.splice(index, 1);
       return true;
@@ -597,6 +654,11 @@ export function parseHelpTextSection(obj: any): HelpTextSection {
   sec.width = obj.width;
   sec.border = !!obj.border;
 
+  if (isValuelessContentType(sec.type)) {
+    sec.value = undefined;
+    ensureInternalId(sec);
+  }
+
   if (((!sec.type) || (sec.type === '')) && (!sec.linkId || sec.linkId === '')) {
     console.error('JSON error. Section link ID is undefined or empty. Section value: ', sec.value);
   }
@@ -639,9 +701,11 @@ export function parseHelpTextTable(obj: any): HelpTextTable {
   newTable.header = obj.header;
   newTable.rows = obj.rows;
   newTable.linkId = undefined;
+  newTable.value = undefined;
   newTable.content = undefined;
   newTable.steps = undefined;
   newTable.subsections = undefined;
+  ensureInternalId(newTable);
 
   return newTable;
 }

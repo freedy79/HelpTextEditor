@@ -54,11 +54,11 @@
             <span
                 *ngIf="hasChildren(section)"
                 class="tree-toggle material-icons"
-                (click)="onOpenCloseSection(section.value)"
+                (click)="onOpenCloseSection(getItemSelectionId(section))"
                 (contextmenu)="openContextMenu($event, section, parent, container, index)">
                 {{ getTreeIcon(section) }}
             </span>
-            <span (click)="onSelectTreeItem(section.value)" (dblclick)="onOpenCloseSection(section.value)"
+            <span (click)="onSelectTreeItem(getItemSelectionId(section))" (dblclick)="onOpenCloseSection(getItemSelectionId(section))"
                 class="tree_item"
                 [ngClass]="{'selected': isSelectedSection(section)}"
                 (contextmenu)="openContextMenu($event, section, parent, container, index)">

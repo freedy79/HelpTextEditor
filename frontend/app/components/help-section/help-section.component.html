@@ -1,26 +1,26 @@
 <div [ngClass]="{'selected': isSelected(section)}">
-    <p [attr.id]="section.linkId" id="{{section.value}}" [class]="'sectionHeader' + sectionLevel"
-        (click)="contentClick(section.value)">
+    <p [attr.id]="section.linkId" id="{{getSectionId(section)}}" [class]="'sectionHeader' + sectionLevel"
+        (click)="contentClick(getSectionId(section))">
         {{sectionNumber}} {{section.value | qtfTranslate}}</p>
 </div>
 
 <div *ngFor="let content of section.content">
     <ng-container [ngSwitch]="content.type">
         <ng-template [ngSwitchCase]="'INSTRUCTION'">
-            <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
-                (click)="contentClick(content.value)">
+            <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
+                (click)="contentClick(getSectionId(content))">
                 <p [innerHTML]="content.value | qtfTranslate" class="help-instruction"></p>
             </div>
         </ng-template>
         <ng-template [ngSwitchCase]="'INSTRUCTION_BOLD'">
-            <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
-                (click)="contentClick(content.value)">
+            <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
+                (click)="contentClick(getSectionId(content))">
                 <p [innerHTML]="content.value | qtfTranslate" class="help-instruction-bold"></p>
             </div>
         </ng-template>
         <ng-template [ngSwitchCase]="'IMAGE'">
-            <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
-                (click)="contentClick(content.value)">
+            <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
+                (click)="contentClick(getSectionId(content))">
                 <figure>
                     <img [src]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.svg'"
                         [appDefault]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.png'"
@@ -31,8 +31,8 @@
             </div>
         </ng-template>
         <ng-template [ngSwitchCase]="'SPLITIMAGE'">
-            <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
-                (click)="contentClick(content.value)">
+            <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
+                (click)="contentClick(getSectionId(content))">
                 <figure>
                     <img [src]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.svg'"
                         [appDefault]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.png'"
@@ -44,14 +44,14 @@
         <ng-template [ngSwitchCase]="'ENUMERATION'">
             <div class="OrderedList">
                 <div *ngFor="let step of content.steps; let k = index">
-                    <div id="{{step.value}}" (click)="contentClick(step.value)" class="Enum_list_item"
+                    <div id="{{getSectionId(step)}}" (click)="contentClick(getSectionId(step))" class="Enum_list_item"
                         [ngClass]="{'selected': isSelected(step)}">
                         <div [innerHTML]="(k + 1 ) + '.'" class="Enum_list_numberfield"></div>
                         <div [innerHTML]="(step.value  | qtfTranslate)"></div>
                     </div>
                     <ol class="subSecList">
                         <li *ngFor="let substep of step.substeps">
-                            <div (click)="contentClick(substep.value)" id="{{substep.value}}"
+                            <div (click)="contentClick(getSectionId(substep))" id="{{getSectionId(substep)}}"
                                 [ngClass]="{'selected': isSelected(substep)}"
                                 [innerHTML]="substep.value | qtfTranslate">
                             </div>
@@ -63,7 +63,7 @@
         <ng-template [ngSwitchCase]="'BULLET_ENUMERATION'">
             <div *ngFor="let bulletPoint of content.steps">
                 <li class="subSecBulletList">
-                    <div (click)="contentClick(bulletPoint.value)" id="{{bulletPoint.value}}"
+                    <div (click)="contentClick(getSectionId(bulletPoint))" id="{{getSectionId(bulletPoint)}}"
                         [ngClass]="{'selected': isSelected(bulletPoint), 'list_inline_edge': isIeOrEdge()}"
                         [innerHTML]="bulletPoint.value | qtfTranslate"></div>
                 </li>
@@ -75,15 +75,15 @@
                 <table class="help-table">
                     <tr>
                         <th *ngFor="let header of content.header; let colIndex = index"
-                            (click)="tableCellClick(header, content.value, colIndex, undefined, true)"
-                            [ngClass]="{'selected': isTableCellSelected(header, content.value, undefined, colIndex, true)}"
+                            (click)="tableCellClick(header, getSectionId(content), colIndex, undefined, true)"
+                            [ngClass]="{'selected': isTableCellSelected(header, getSectionId(content), undefined, colIndex, true)}"
                             [innerHTML]="header | qtfTranslate"></th>
                     </tr>
                     <tr *ngFor="let row of content.rows; let i = index" class="help-table"
                         [ngClass]="{'table-even-row': (i % 2 == 0), 'table-odd-row': (i % 2 == 1)}">
                         <td *ngFor="let rowValue of row.rowValues; let colIndex = index"
-                            (click)="tableCellClick(rowValue, content.value, colIndex, i)"
-                            [ngClass]="{'selected': isTableCellSelected(rowValue, content.value, i, colIndex)}"
+                            (click)="tableCellClick(rowValue, getSectionId(content), colIndex, i)"
+                            [ngClass]="{'selected': isTableCellSelected(rowValue, getSectionId(content), i, colIndex)}"
                             [innerHTML]="rowValue | qtfTranslate"></td>
                     </tr>
                 </table>
