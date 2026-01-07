@@ -6,6 +6,7 @@
                 [cdkDropListConnectedTo]="getConnectedDropListIds(getDropListId({ parent: item, container: 'coversheet', mode: 'list' }))"
                 [cdkDropListEnterPredicate]="listEnterPredicate"
                 cdkDropListOrientation="vertical"
+                [cdkDropListDisabled]="true"
                 [cdkDropListData]="{ parent: item, container: 'coversheet', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
                 (cdkDropListEntered)="onDropListEntered($event)" (cdkDropListExited)="onDropListExited($event)">
                 <ng-container *ngFor="let sec of getViewCollection(item, 'coversheet'); let i = index; trackBy: trackByItem">
@@ -46,7 +47,7 @@
 
     <!-- Rekursives Template für die Baumansicht -->
     <ng-template #recursiveTree let-section="$implicit" let-parent="parent" let-container="container" let-index="index" let-level="level">
-        <div class="tree-row" [ngStyle]="getMarginLeft(level)" cdkDrag [cdkDragData]="{ item: section, parent: parent, container: container, index: index }" cdkDragLockAxis="y" [cdkDragConstrainPosition]="constrainY" (cdkDragStarted)="onDragStarted($event)"
+        <div class="tree-row" [ngStyle]="getMarginLeft(level)" cdkDrag [cdkDragDisabled]="container === 'coversheet'" [cdkDragData]="{ item: section, parent: parent, container: container, index: index }" cdkDragLockAxis="y" [cdkDragConstrainPosition]="constrainY" (cdkDragStarted)="onDragStarted($event)"
             (cdkDragEnded)="onDragEnded($event)" (cdkDragMoved)="onDragMoved($event)" #treeRowEl
             [attr.data-parent-key]="getParentKey(parent)" [attr.data-container]="container" [attr.data-index]="index" [attr.data-item-key]="getItemKey(section)"
             [class.drop-above]="isDropAbove(section, parent, container, index)" [class.drop-below]="isDropBelow(section, parent, container, index)">
@@ -64,7 +65,7 @@
                 <div *ngIf="section.value">{{ section.value }}</div>
                 <div *ngIf="!section.value">{{ section.type }}</div>
             </span>
-            <span class="tree-actions">
+            <span class="tree-actions" *ngIf="container !== 'coversheet'">
                 <span class="material-icons action-icon"
                     [class.disabled]="!canMoveUp(parent, container, index)"
                     title="Move up"
@@ -107,6 +108,7 @@
                 [cdkDropListConnectedTo]="getConnectedDropListIds(getDropListId({ parent: section, container: 'coversheet', mode: 'list' }))"
                 [cdkDropListEnterPredicate]="listEnterPredicate"
                 cdkDropListOrientation="vertical"
+                [cdkDropListDisabled]="true"
                 [cdkDropListData]="{ parent: section, container: 'coversheet', mode: 'list' }" (cdkDropListDropped)="onDrop($event)"
                 (cdkDropListEntered)="onDropListEntered($event)" (cdkDropListExited)="onDropListExited($event)">
                 <ng-container *ngFor="let sub of getViewCollection(section, 'coversheet'); let j = index; trackBy: trackByItem">
