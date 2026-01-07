@@ -428,9 +428,12 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     }
 
     if (this.isHelpTextSection(section)) {
-      const canAddChildren = !isNonNestableType(section.type);
-      if (canAddChildren) {
+      const canAddSubsection = this.canAddSubsection(section);
+      const canAddContent = this.canAddContent(section);
+      if (canAddSubsection) {
         items.push({ label: 'Add subsection', action: 'addSubsection' });
+      }
+      if (canAddContent) {
         items.push({ label: 'Add content', action: 'addContent' });
       }
       if (this.showStepControls(section)) {
@@ -554,6 +557,30 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
 
   showStepControls(section: HelpTextSection): boolean {
     return section && (section.type === HelpContentType.ENUMERATION || section.type === HelpContentType.BULLET_ENUMERATION);
+  }
+
+  private canAddSubsection(section: HelpTextSection): boolean {
+    if (!section) {
+      return false;
+    }
+    if (isNonNestableType(section.type)) {
+      return false;
+    }
+    return !this.showStepControls(section);
+  }
+
+  private canAddContent(section: HelpTextSection): boolean {
+    if (!section) {
+      return false;
+    }
+    if (!isNonNestableType(section.type)) {
+      return true;
+    }
+    return this.isInstructionType(section.type);
+  }
+
+  private isInstructionType(type?: string): boolean {
+    return type === HelpContentType.INSTRUCTION || type === HelpContentType.INSTRUCTION_BOLD;
   }
 
   isHelpTextSection(item: ParentType | TreeItem): item is HelpTextSection {

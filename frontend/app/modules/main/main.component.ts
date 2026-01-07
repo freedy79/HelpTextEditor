@@ -237,7 +237,11 @@ export class MainComponent implements OnInit {
     } else if (item.clickId === 'addMainSection') {
       this.createNewMainsection();
     } else if (item.clickId === 'addSubsection' && this.selectedSection) {
-      this.createNewSubsection();
+      if (this.canAddSubsectionForSection(this.selectedSection)) {
+        this.createNewSubsection();
+      } else {
+        console.warn('Cannot add subsections for content type: ', this.selectedSection.type);
+      }
     } else if (item.clickId === 'addContent' && this.selectedSection) {
       this.openOverlayAddContent();
     } else if (item.clickId === 'addStep' && this.selectedSection) {
@@ -322,8 +326,13 @@ export class MainComponent implements OnInit {
   }
 
   onAddSubsection(section: HelpTextSection) {
+    this.selectedSection = section;
     this.syncSelectionForContextAction(section);
-    this.createNewSubsection();
+    if (this.canAddSubsectionForSection(section)) {
+      this.createNewSubsection();
+    } else {
+      console.warn('Cannot add subsections for content type: ', section?.type);
+    }
   }
 
   private scrollToSectionIfHidden(elementId: string | null) {
@@ -355,6 +364,34 @@ export class MainComponent implements OnInit {
     if (!section) { return; }
     this.syncSelectionForContextAction(section);
     this.openOverlayAddContent();
+  }
+
+  private canAddSubsectionForSection(section?: HelpTextSection | null): boolean {
+    if (!section) {
+      return false;
+    }
+    if (isNonNestableType(section.type)) {
+      return false;
+    }
+    return !this.isEnumerationType(section.type);
+  }
+
+  private canAddContentToSection(section?: HelpTextSection | null): boolean {
+    if (!section) {
+      return false;
+    }
+    if (!isNonNestableType(section.type)) {
+      return true;
+    }
+    return this.isInstructionType(section.type);
+  }
+
+  private isEnumerationType(type?: string): boolean {
+    return type === HelpContentType.ENUMERATION || type === HelpContentType.BULLET_ENUMERATION;
+  }
+
+  private isInstructionType(type?: string): boolean {
+    return type === HelpContentType.INSTRUCTION || type === HelpContentType.INSTRUCTION_BOLD;
   }
 
   onAddStep(section: HelpTextSection) {
@@ -721,8 +758,8 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    if (isNonNestableType(this.selectedSection.type)) {
-      console.warn('Cannot add subsections to non-nestable content type: ', this.selectedSection.type);
+    if (!this.canAddSubsectionForSection(this.selectedSection)) {
+      console.warn('Cannot add subsections for content type: ', this.selectedSection.type);
       return;
     }
     this.saveCurrentSectionText();
@@ -1139,8 +1176,8 @@ export class MainComponent implements OnInit {
   }
 
   openOverlayAddContent() {
-    if (this.selectedSection && isNonNestableType(this.selectedSection.type)) {
-      console.warn('Cannot add content to non-nestable content type: ', this.selectedSection.type);
+    if (this.selectedSection && !this.canAddContentToSection(this.selectedSection)) {
+      console.warn('Cannot add content for content type: ', this.selectedSection.type);
       return;
     }
     this.showOverlayAddContent = true;
