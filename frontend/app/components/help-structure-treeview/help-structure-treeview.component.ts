@@ -28,7 +28,7 @@ import { MainHelpSection, HelpTextSection, HelpContentType, HelpTextStep, Abbrev
 import { ContextMenuComponent, ContextMenuItem } from '../context-menu/app-context-menu.component';
 
 type ParentType = HelpTextSection | MainHelpSection | HelpTextStep;
-type TreeItem = HelpTextSection | HelpTextStep | AbbreviationItem | null;
+type TreeItem = HelpTextSection | HelpTextStep | MainHelpSection | AbbreviationItem | null;
 type DragContext = { item?: TreeItem; parent: ParentType; container: string; index: number };
 interface MoveEvent {
   parent: ParentType;
