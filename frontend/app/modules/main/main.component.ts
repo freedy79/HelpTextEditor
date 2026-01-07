@@ -1544,6 +1544,14 @@ export class MainComponent implements OnInit {
     return getSectionSelectionId(this.selectedSection as HelpTextSection | HelpTextStep);
   }
 
+  public get translationIdCount(): number {
+    if (!this.qtfFile?.TEXTS) {
+      return 0;
+    }
+
+    return Object.values(this.qtfFile.TEXTS).filter(entry => this.hasExistingTranslation(entry)).length;
+  }
+
   canEditTranslationForSelection(): boolean {
     const key = this.getSelectedTranslationKey();
     return key !== null && key !== undefined;
