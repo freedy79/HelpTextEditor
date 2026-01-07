@@ -48,6 +48,8 @@ import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from 
 export class MainComponent implements OnInit {
   @ViewChild('previewContainer') previewContainer: ElementRef<HTMLDivElement>;
 
+  private readonly splitterStorageKey = 'help-text-editor:left-column-width';
+
   helpTextRoot: HelpTextRoot | null = null;
   qtfFile: QtfFile | null = null;
 
@@ -143,6 +145,7 @@ export class MainComponent implements OnInit {
     if (storedKey) {
       this.deeplAuthKey = storedKey;
     }
+    this.loadStoredSplitterWidth();
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -176,7 +179,11 @@ export class MainComponent implements OnInit {
 
   @HostListener('window:mouseup')
   onWindowMouseUp() {
+    if (!this.isDraggingSplitter) {
+      return;
+    }
     this.isDraggingSplitter = false;
+    this.persistSplitterWidth();
   }
 
   onSplitterMouseDown(event: MouseEvent) {
@@ -184,6 +191,32 @@ export class MainComponent implements OnInit {
     this.dragStartX = event.clientX;
     this.dragStartWidth = this.leftColumnWidth;
     event.preventDefault();
+  }
+
+  private loadStoredSplitterWidth() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const storedWidth = window.localStorage.getItem(this.splitterStorageKey);
+    if (!storedWidth) {
+      return;
+    }
+
+    const parsedWidth = Number(storedWidth);
+    if (Number.isNaN(parsedWidth)) {
+      return;
+    }
+
+    this.leftColumnWidth = Math.min(this.leftMaxWidth, Math.max(this.leftMinWidth, parsedWidth));
+  }
+
+  private persistSplitterWidth() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.localStorage.setItem(this.splitterStorageKey, String(this.leftColumnWidth));
   }
 
   public onMenuItemClicked(item) {
