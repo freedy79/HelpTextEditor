@@ -530,7 +530,7 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     return section && (section.type === HelpContentType.ENUMERATION || section.type === HelpContentType.BULLET_ENUMERATION);
   }
 
-  isHelpTextSection(item: TreeItem): item is HelpTextSection {
+  isHelpTextSection(item: ParentType | TreeItem): item is HelpTextSection {
     return !!item && (item instanceof HelpTextSection || (item as any).type && (item as any).type !== 'STEP');
   }
 
