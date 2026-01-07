@@ -1176,6 +1176,7 @@ export class MainComponent implements OnInit {
     if (data.type === 'IMAGE' || data.type === 'SPLITIMAGE') {
       newItem.value = 'empty';
       newItem.imageDescription = newKey;
+      newItem.border = false;
     }
 
     console.log('parent ', parentSection.constructor.name, ' value: ', parentSection.value);
@@ -1680,6 +1681,18 @@ export class MainComponent implements OnInit {
     const imageValue = this.selectedSection.value;
     if ((this.selectedSection.type === 'IMAGE') && (newWidth !== 'undefined')) {
       this.selectedSection.pdfWidth = newWidth;
+      this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+      this.saveCurrentSectionText();
+      this.onTopLevelChange(this.selectedTopLevelKey);
+      this.onSelectSection(imageValue);
+    }
+  }
+
+  onImageBorderChanged(event) {
+    const newBorder = !!event.target.checked;
+    const imageValue = this.selectedSection.value;
+    if (this.selectedSection.type === 'IMAGE' || this.selectedSection.type === 'SPLITIMAGE') {
+      this.selectedSection.border = newBorder;
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
       this.saveCurrentSectionText();
       this.onTopLevelChange(this.selectedTopLevelKey);

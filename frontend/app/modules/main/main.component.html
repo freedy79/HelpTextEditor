@@ -137,6 +137,12 @@
           </div>
             <p><strong>Width:</strong> <input [value]="selectedSection.width" (focusout)="onImageWidthChanged($event)"></p>  
             <p><strong>Width (PDF):</strong> <input [value]="selectedSection.pdfWidth" (focusout)="onPdfWidthChanged($event)"></p>  
+            <p>
+              <label>
+                <strong>Border:</strong>
+                <input type="checkbox" [checked]="!!selectedSection.border" (change)="onImageBorderChanged($event)">
+              </label>
+            </p>
         </div>
         <div>
           <button (click)="deleteItem(selectedSection)" style="margin-left: 4px;">delete</button>

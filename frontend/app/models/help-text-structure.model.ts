@@ -87,6 +87,7 @@ export class HelpTextSection {
   imageDescription?: string;
   pdfWidth?: Number;
   width?: string;
+  border?: boolean;
 
   coversheet?: HelpTextSection[];
   content?: HelpTextSection[];
@@ -594,6 +595,7 @@ export function parseHelpTextSection(obj: any): HelpTextSection {
   sec.imageDescription = obj.imageDescription;
   sec.pdfWidth = obj.pdfWidth;
   sec.width = obj.width;
+  sec.border = !!obj.border;
 
   if (((!sec.type) || (sec.type === '')) && (!sec.linkId || sec.linkId === '')) {
     console.error('JSON error. Section link ID is undefined or empty. Section value: ', sec.value);
