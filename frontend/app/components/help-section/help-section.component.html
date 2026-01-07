@@ -73,14 +73,16 @@
             <div class="help-table-container">
                 <table class="help-table">
                     <tr>
-                        <th *ngFor="let header of content.header" (click)="contentClick(header)"
-                            [ngClass]="{'selected': isTableCellSelected(header)}"
+                        <th *ngFor="let header of content.header; let colIndex = index"
+                            (click)="tableCellClick(header, content.value, colIndex, undefined, true)"
+                            [ngClass]="{'selected': isTableCellSelected(header, content.value, undefined, colIndex, true)}"
                             [innerHTML]="header | qtfTranslate"></th>
                     </tr>
                     <tr *ngFor="let row of content.rows; let i = index" class="help-table"
                         [ngClass]="{'table-even-row': (i % 2 == 0), 'table-odd-row': (i % 2 == 1)}">
-                        <td *ngFor="let rowValue of row.rowValues" (click)="contentClick(rowValue)"
-                            [ngClass]="{'selected': isTableCellSelected(rowValue)}"
+                        <td *ngFor="let rowValue of row.rowValues; let colIndex = index"
+                            (click)="tableCellClick(rowValue, content.value, colIndex, i)"
+                            [ngClass]="{'selected': isTableCellSelected(rowValue, content.value, i, colIndex)}"
                             [innerHTML]="rowValue | qtfTranslate"></td>
                     </tr>
                 </table>
@@ -96,5 +98,6 @@
 <div *ngFor="let subSection of section.subsections; let i = index">
     <app-help-section [section]="subSection" [sectionNumber]="(sectionNumber + '.') + (i + 1)"
         [sectionLevel]="(sectionLevel + 1)" (selectContent)="forwardSectionClick($event)"
-        [selectedHelpSection]="selectedHelpSection"></app-help-section>
+        [selectedHelpSection]="selectedHelpSection" [selectedContentKey]="selectedContentKey"
+        [selectedTableCell]="selectedTableCell" [language]="language"></app-help-section>
 </div>

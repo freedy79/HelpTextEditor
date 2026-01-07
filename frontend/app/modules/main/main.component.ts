@@ -13,7 +13,8 @@ import {
   HelpTextStep,
   AbbreviationItem,
   isNonNestableType,
-  HelpTextTable
+  HelpTextTable,
+  TableCellSelection
 } from '~/app/models/help-text-structure.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { buildInfo } from '~/app/build-info.generated';
@@ -87,12 +88,7 @@ export class MainComponent implements OnInit {
 
   selectedSection: HelpTextSection | null = null;
   selectedContentKey: string | null = null;
-  selectedTableCell: {
-    table: HelpTextTable;
-    rowIndex?: number;
-    colIndex: number;
-    isHeader: boolean;
-  } | null = null;
+  selectedTableCell: TableCellSelection | null = null;
   selectedTextContent = '';
 
   isDirty = false;
@@ -540,7 +536,7 @@ export class MainComponent implements OnInit {
     }
   }
 
-  onSelectSection(contentId: string) {
+  onSelectSection(contentId: string | TableCellSelection) {
     const activeMainSection = this.ensureCurrentMainSection();
     if (!activeMainSection || contentId === '') {
       console.log('currenthelp text item is undefined.');
@@ -554,6 +550,20 @@ export class MainComponent implements OnInit {
     this.autoTranslationMessage = '';
 
     console.log('Selection: ', contentId);
+    if (typeof contentId !== 'string') {
+      const tableSection = activeMainSection.findSectionById(contentId.tableId);
+      if (!tableSection) {
+        console.error('Could not find table ', contentId.tableId, ' in ', this.currentMainHelpSection);
+        return;
+      }
+
+      this.selectedSection = tableSection;
+      this.selectedTableCell = contentId;
+      this.selectedContentKey = contentId.key;
+      this.loadTextFromQtf(this.selectedContentKey);
+      return;
+    }
+
     this.selectedSection = activeMainSection.findSectionById(contentId);
     if (!this.selectedSection) {
       console.error('Could not find ', contentId, ' in ', this.currentMainHelpSection);
@@ -863,7 +873,7 @@ export class MainComponent implements OnInit {
 
     if (newId !== '') {
       const oldId = currentKey;
-      if (!oldId) {
+      if (oldId === null) {
         return;
       }
       const changed = this.updateSelectedTranslationKey(oldId, newId);
@@ -897,19 +907,14 @@ export class MainComponent implements OnInit {
     }
   }
 
-  private findTableCellContext(table: HelpTextTable, key: string): {
-    table: HelpTextTable;
-    rowIndex?: number;
-    colIndex: number;
-    isHeader: boolean;
-  } | null {
-    if (!table || !key) {
+  private findTableCellContext(table: HelpTextTable, key: string): TableCellSelection | null {
+    if (!table) {
       return null;
     }
 
     const headerIndex = table.header?.indexOf(key) ?? -1;
     if (headerIndex >= 0) {
-      return { table, colIndex: headerIndex, isHeader: true };
+      return { tableId: table.value, colIndex: headerIndex, isHeader: true, key };
     }
 
     if (table.rows) {
@@ -917,7 +922,7 @@ export class MainComponent implements OnInit {
         const row = table.rows[rowIndex];
         const colIndex = row?.rowValues?.indexOf(key) ?? -1;
         if (colIndex >= 0) {
-          return { table, rowIndex, colIndex, isHeader: false };
+          return { tableId: table.value, rowIndex, colIndex, isHeader: false, key };
         }
       }
     }
@@ -931,11 +936,12 @@ export class MainComponent implements OnInit {
     }
 
     if (this.selectedSection?.type === 'TABLE' && this.selectedTableCell) {
-      const table = this.selectedTableCell.table;
+      const table = this.selectedSection as HelpTextTable;
       if (this.selectedTableCell.isHeader) {
         if (table.header && this.selectedTableCell.colIndex < table.header.length) {
           table.header[this.selectedTableCell.colIndex] = newId;
           this.selectedContentKey = newId;
+          this.selectedTableCell = { ...this.selectedTableCell, key: newId };
           return true;
         }
         return false;
@@ -947,6 +953,7 @@ export class MainComponent implements OnInit {
         if (row?.rowValues && this.selectedTableCell.colIndex < row.rowValues.length) {
           row.rowValues[this.selectedTableCell.colIndex] = newId;
           this.selectedContentKey = newId;
+          this.selectedTableCell = { ...this.selectedTableCell, key: newId };
           return true;
         }
       }
@@ -1489,7 +1496,7 @@ export class MainComponent implements OnInit {
     if (!this.selectedSection) {
       return null;
     }
-    if (this.selectedContentKey) {
+    if (this.selectedContentKey !== null && this.selectedContentKey !== undefined) {
       return this.selectedContentKey;
     }
     const getter = (this.selectedSection as any).getTranslationKey;
@@ -1501,7 +1508,8 @@ export class MainComponent implements OnInit {
   }
 
   canEditTranslationForSelection(): boolean {
-    return !!this.getSelectedTranslationKey();
+    const key = this.getSelectedTranslationKey();
+    return key !== null && key !== undefined;
   }
 
   private getTranslationEntryForSelection(key: string | null): QtfTextEntry | null {

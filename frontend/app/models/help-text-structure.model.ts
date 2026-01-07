@@ -229,6 +229,14 @@ export interface RowItem {
   rowValues: string[];
 }
 
+export interface TableCellSelection {
+  tableId: string;
+  rowIndex?: number;
+  colIndex: number;
+  isHeader: boolean;
+  key: string;
+}
+
 export class HelpTextTable extends HelpTextSection {
   header: string[] = [];
   rows?: RowItem[];
