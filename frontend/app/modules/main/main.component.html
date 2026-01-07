@@ -58,7 +58,8 @@
         <div *ngFor="let mainSection of getSelectedItem()?.content  let i = index">
           <app-help-section [section]="mainSection" [sectionNumber]="i + 1" [sectionLevel]=1
             (selectContent)="onSelectSection($event)" [selectedHelpSection]="selectedSection"
-            [selectedContentKey]="selectedContentKey" [language]="getImageLanguage()"></app-help-section>
+            [selectedContentKey]="selectedContentKey" [selectedTableCell]="selectedTableCell"
+            [language]="getImageLanguage()"></app-help-section>
         </div>
       </div>
     </div>
