@@ -614,6 +614,97 @@ export function parseHelpTextRoot(json: any): HelpTextRoot {
   return root;
 }
 
+export function serializeHelpTextRoot(root: HelpTextRoot): Record<HelpTextRootKey, unknown> {
+  const serialized: Partial<Record<HelpTextRootKey, unknown>> = {};
+
+  root.forEachSection((section, key) => {
+    serialized[key] = serializeMainHelpSection(section);
+  });
+
+  return serialized as Record<HelpTextRootKey, unknown>;
+}
+
+export function serializeMainHelpSection(section: MainHelpSection): Record<string, unknown> {
+  const serialized: Record<string, unknown> = {};
+
+  if (section.coversheet?.length) {
+    serialized.coversheet = section.coversheet.map(serializeHelpTextSection);
+  }
+  if (section.abbreviations?.length) {
+    serialized.abbreviations = section.abbreviations.map(abbr => ({
+      abbreviation: abbr.abbreviation,
+      shortDescription: abbr.shortDescription,
+      longDescription: abbr.longDescription,
+      referenceAbbreviation: abbr.referenceAbbreviation
+    }));
+  }
+  if (section.content?.length) {
+    serialized.content = section.content.map(serializeHelpTextSection);
+  }
+
+  return serialized;
+}
+
+export function serializeHelpTextSection(section: HelpTextSection): Record<string, unknown> {
+  if (section.type === 'TABLE') {
+    return serializeHelpTextTable(section as HelpTextTable);
+  }
+
+  const serialized: Record<string, unknown> = {
+    linkId: section.linkId,
+    value: section.value,
+    type: section.type
+  };
+
+  if (section.imageDescription !== undefined) {
+    serialized.imageDescription = section.imageDescription;
+  }
+  if (section.pdfWidth !== undefined) {
+    serialized.pdfWidth = section.pdfWidth;
+  }
+  if (section.width !== undefined) {
+    serialized.width = section.width;
+  }
+  if (section.type === HelpContentType.IMAGE || section.type === HelpContentType.SPLITIMAGE) {
+    serialized.border = !!section.border;
+  }
+
+  if (section.coversheet?.length) {
+    serialized.coversheet = section.coversheet.map(serializeHelpTextSection);
+  }
+  if (section.content?.length) {
+    serialized.content = section.content.map(serializeHelpTextSection);
+  }
+  if (section.subsections?.length) {
+    serialized.subsections = section.subsections.map(serializeHelpTextSection);
+  }
+  if (section.steps?.length) {
+    serialized.steps = section.steps.map(serializeHelpTextStep);
+  }
+
+  return serialized;
+}
+
+export function serializeHelpTextStep(step: HelpTextStep): Record<string, unknown> {
+  const serialized: Record<string, unknown> = {
+    value: step.value
+  };
+
+  if (step.substeps?.length) {
+    serialized.substeps = step.substeps.map(serializeHelpTextStep);
+  }
+
+  return serialized;
+}
+
+export function serializeHelpTextTable(section: HelpTextTable): Record<string, unknown> {
+  return {
+    header: section.header,
+    type: section.type,
+    rows: section.rows
+  };
+}
+
 export function parseMainHelpSection(obj: any): MainHelpSection {
   const item = new MainHelpSection();
 

@@ -16,7 +16,8 @@ import {
   HelpTextTable,
   TableCellSelection,
   getSectionSelectionId,
-  isValuelessContentType
+  isValuelessContentType,
+  serializeHelpTextRoot
 } from '~/app/models/help-text-structure.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { buildInfo } from '~/app/build-info.generated';
@@ -288,7 +289,7 @@ export class MainComponent implements OnInit {
     this.saveCurrentSectionText();
 
     if (this.helpTextRoot) {
-      this.fileService.downloadJson(this.helpTextRoot, 'helpTexts.json');
+      this.fileService.downloadJson(serializeHelpTextRoot(this.helpTextRoot), 'helpTexts.json');
     }
     if (this.qtfFile) {
       this.fileService.downloadJson(this.qtfFile, 'HELPTEXT.qtf');
