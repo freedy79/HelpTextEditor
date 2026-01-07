@@ -816,19 +816,19 @@ export class HelpStructureTreeviewComponent implements OnChanges, AfterViewInit 
     if (this.isAbbreviation(item)) {
       return item.abbreviation || null;
     }
-    if ('id' in (item as Record<string, unknown>) && typeof (item as Record<string, unknown>).id === 'string') {
-      return (item as { id: string }).id;
-    }
-    if ('key' in (item as Record<string, unknown>) && typeof (item as Record<string, unknown>).key === 'string') {
-      return (item as { key: string }).key;
-    }
-    if ('titleKey' in (item as Record<string, unknown>) && typeof (item as Record<string, unknown>).titleKey === 'string') {
-      return (item as { titleKey: string }).titleKey;
-    }
-    if ('value' in (item as Record<string, unknown>) && typeof (item as Record<string, unknown>).value === 'string') {
-      return (item as { value: string }).value;
-    }
-    return null;
+    return (
+      this.getStringProperty(item, 'id')
+      ?? this.getStringProperty(item, 'key')
+      ?? this.getStringProperty(item, 'titleKey')
+      ?? this.getStringProperty(item, 'value')
+    );
+  }
+
+  private getStringProperty(item: unknown, property: string): string | null {
+    if (!item || typeof item !== 'object') { return null; }
+    if (!(property in item)) { return null; }
+    const value = (item as Record<string, unknown>)[property];
+    return typeof value === 'string' ? value : null;
   }
 
   getItemKey(item: TreeItem | null | undefined): string {
