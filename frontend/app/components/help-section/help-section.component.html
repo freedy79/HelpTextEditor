@@ -22,8 +22,8 @@
             <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(content.value)">
                 <figure>
-                    <img [src]="'./media/helpImages/' + content.value + '_' + language + '.svg'"
-                        [appDefault]="'./media/helpImages/' + content.value + '_' + language + '.png'"
+                    <img [src]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.svg'"
+                        [appDefault]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.png'"
                         class="image" [class.image-border]="content.border"
                         [fallback]="'assets/image-fallback.svg'" [style.width]="content.width" [style.height]="content.height">
                     <figcaption [innerHTML]="content.imageDescription | qtfTranslate" class="imageDesc"></figcaption>
@@ -34,8 +34,8 @@
             <div id="{{content.value}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(content.value)">
                 <figure>
-                    <img [src]="'./media/helpImages/' + content.value + '_' + language + '.png'"
-                        [appDefault]="'./media/helpImages/' + content.value + '_' + language + '.png'"
+                    <img [src]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.svg'"
+                        [appDefault]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.png'"
                         [fallback]="'assets/image-fallback.svg'" class="image" [class.image-border]="content.border">
                     <figcaption [innerHTML]="content.imageDescription | qtfTranslate" class="imageDesc"></figcaption>
                 </figure>
