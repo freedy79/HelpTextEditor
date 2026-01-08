@@ -808,6 +808,7 @@ export class HelpEditorFacade {
     }
 
     console.log('Website load user language: ' + language);
+    this.translateService.use(language);
     this.ensureTranslationBucket(language);
 
     let key: TextKey;
