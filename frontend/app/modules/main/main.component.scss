@@ -145,6 +145,62 @@ textarea {
     }
 }
 
+.coverage-panel {
+    margin-top: 16px;
+    border-top: 1px solid #ccc;
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    h3 {
+        margin: 0;
+    }
+}
+
+.coverage-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 12px;
+    font-size: 0.9rem;
+}
+
+.coverage-block {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 6px 8px;
+    background: #fafafa;
+
+    summary {
+        cursor: pointer;
+        font-weight: 600;
+    }
+}
+
+.coverage-language {
+    margin-top: 8px;
+
+    h4 {
+        margin: 6px 0;
+        font-size: 0.95rem;
+    }
+}
+
+.coverage-key-list,
+.coverage-ref-list {
+    margin: 6px 0 0 16px;
+    padding: 0;
+
+    li {
+        margin-bottom: 4px;
+    }
+}
+
+.coverage-key {
+    font-weight: 600;
+  
+}
+
 .table-actions {
     margin-top: 12px;
     display: flex;

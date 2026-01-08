@@ -32,6 +32,29 @@ import { HelpTextDataService } from './help-text-data.service';
 import { HelpEditorActionsService } from './help-editor-actions.service';
 import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from '../../models/qtf-file.model';
 
+interface CoverageReference {
+  kind: 'HelpTextSection' | 'HelpTextStep' | 'Table' | 'Image' | 'Abbreviation';
+  label: string;
+}
+
+interface CoverageKeyUsage {
+  key: string;
+  references: CoverageReference[];
+}
+
+interface CoverageLanguageReport {
+  language: string;
+  missing: CoverageKeyUsage[];
+}
+
+interface CoverageReport {
+  usedKeys: CoverageKeyUsage[];
+  missingKeys: CoverageKeyUsage[];
+  missingTranslations: CoverageLanguageReport[];
+  duplicateKeys: CoverageKeyUsage[];
+  unusedQtfKeys: string[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class HelpEditorFacade {
   private readonly splitterStorageKey = 'help-text-editor:left-column-width';
@@ -134,6 +157,14 @@ export class HelpEditorFacade {
     private actionsService: HelpEditorActionsService
   ) {}
 
+  get coverageReport(): CoverageReport | null {
+    if (!this.helpTextRoot || !this.qtfFile) {
+      return null;
+    }
+
+    return this.buildCoverageReport(this.helpTextRoot, this.qtfFile);
+  }
+
   init(): void {
     const storedKey = this.deeplTranslationService.getStoredAuthKey()?.trim();
     if (storedKey) {
@@ -177,6 +208,154 @@ export class HelpEditorFacade {
     }
     this.isDraggingSplitter = false;
     this.persistSplitterWidth();
+  }
+
+  private buildCoverageReport(root: HelpTextRoot, qtfFile: QtfFile): CoverageReport {
+    const references = this.collectCoverageReferences(root);
+    const usedKeys: CoverageKeyUsage[] = Array.from(references.entries())
+      .map(([key, refs]) => ({
+        key,
+        references: [...refs].sort((a, b) => a.label.localeCompare(b.label))
+      }))
+      .sort((a, b) => a.key.localeCompare(b.key));
+
+    const missingKeys = usedKeys.filter(item => !qtfFile.TEXTS?.[item.key]);
+    const missingTranslations: CoverageLanguageReport[] = this.languages.map(language => ({
+      language,
+      missing: usedKeys.filter(item => this.isTranslationMissing(qtfFile.TEXTS?.[item.key], language))
+    }));
+    const duplicateKeys = usedKeys.filter(item => item.references.length > 1);
+    const usedKeySet = new Set(usedKeys.map(item => item.key));
+    const unusedQtfKeys = Object.keys(qtfFile.TEXTS || {})
+      .filter(key => !usedKeySet.has(key))
+      .sort((a, b) => a.localeCompare(b));
+
+    return {
+      usedKeys,
+      missingKeys,
+      missingTranslations,
+      duplicateKeys,
+      unusedQtfKeys
+    };
+  }
+
+  private collectCoverageReferences(root: HelpTextRoot): Map<string, CoverageReference[]> {
+    const references = new Map<string, CoverageReference[]>();
+
+    const addReference = (key: string | null | undefined, reference: CoverageReference) => {
+      if (!key) {
+        return;
+      }
+
+      const existing = references.get(key);
+      if (existing) {
+        existing.push(reference);
+      } else {
+        references.set(key, [reference]);
+      }
+    };
+
+    const formatSectionLabel = (section: HelpTextSection, parentPath?: string): string => {
+      const displayKey = section.getTranslationKey()
+        || section.value
+        || section.imageDescription
+        || section.linkId
+        || getSectionSelectionId(section)
+        || 'unknown';
+      const typeLabel = section.type || 'SECTION';
+      const current = `${typeLabel}:${displayKey}`;
+      return parentPath ? `${parentPath} > ${current}` : current;
+    };
+
+    const processStep = (step: HelpTextStep, parentPath: string) => {
+      addReference(step.value, {
+        kind: 'HelpTextStep',
+        label: `${parentPath} > STEP:${step.value}`
+      });
+      step.substeps?.forEach(substep => processStep(substep, `${parentPath} > STEP:${step.value}`));
+    };
+
+    const processTableCell = (cell: TableCellValue, locationLabel: string) => {
+      const key = getTableCellKey(cell);
+      if (!key) {
+        return;
+      }
+      const cellType = isTableCellImage(cell) ? 'image' : 'text';
+      addReference(key, {
+        kind: 'Table',
+        label: `${locationLabel} (${cellType})`
+      });
+    };
+
+    const processSection = (section?: HelpTextSection, parentPath?: string) => {
+      if (!section) {
+        return;
+      }
+
+      const sectionPath = formatSectionLabel(section, parentPath);
+      const translationKey = section.getTranslationKey();
+      if (translationKey) {
+        addReference(translationKey, {
+          kind: section.type === 'IMAGE' || section.type === 'SPLITIMAGE' ? 'Image' : 'HelpTextSection',
+          label: section.type === 'IMAGE' || section.type === 'SPLITIMAGE'
+            ? `${sectionPath}${section.value ? ` (file: ${section.value})` : ''}`
+            : sectionPath
+        });
+      }
+
+      if (section.type === 'TABLE') {
+        const tableSection = section as HelpTextTable;
+        tableSection.header?.forEach((cell, index) =>
+          processTableCell(cell, `${sectionPath} header[${index + 1}]`)
+        );
+        tableSection.rows?.forEach((row, rowIndex) => {
+          row.rowValues?.forEach((cell, colIndex) =>
+            processTableCell(cell, `${sectionPath} row ${rowIndex + 1} col ${colIndex + 1}`)
+          );
+        });
+      }
+
+      section.steps?.forEach(step => processStep(step, sectionPath));
+      section.coversheet?.forEach(item => processSection(item, sectionPath));
+      section.content?.forEach(item => processSection(item, sectionPath));
+      section.subsections?.forEach(item => processSection(item, sectionPath));
+    };
+
+    root.forEachSection((section, key) => {
+      const rootPath = `ROOT:${key}`;
+      section.coversheet?.forEach(item => processSection(item, rootPath));
+      section.content?.forEach(item => processSection(item, rootPath));
+      section.abbreviations?.forEach(item => {
+        addReference(item.abbreviation, {
+          kind: 'Abbreviation',
+          label: `${rootPath} > abbreviation`
+        });
+        addReference(item.shortDescription, {
+          kind: 'Abbreviation',
+          label: `${rootPath} > shortDescription`
+        });
+        addReference(item.longDescription, {
+          kind: 'Abbreviation',
+          label: `${rootPath} > longDescription`
+        });
+      });
+    });
+
+    return references;
+  }
+
+  private isTranslationMissing(entry: QtfTextEntry | undefined, language: string): boolean {
+    if (!entry) {
+      return true;
+    }
+
+    const translation = entry.TRANSLATIONS?.[language];
+    const autoTranslation = entry.AUTOTRANSLATIONS?.[language];
+    return !this.isNonEmptyTranslation(translation) && !this.isNonEmptyTranslation(autoTranslation);
+  }
+
+  private isNonEmptyTranslation(value?: string | null): boolean {
+    return !!value && value.toString().trim() !== '';
   }
 
   onSplitterMouseDown(event: MouseEvent) {
