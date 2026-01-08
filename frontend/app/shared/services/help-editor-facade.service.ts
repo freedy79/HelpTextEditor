@@ -1495,7 +1495,9 @@ export class HelpEditorFacade {
     const newKey = this.generateIdFromPrevious(previousKey)
       || `${parentKey}_${data.type}_${Math.random().toString(36).substring(2)}`;
     const newLinkId = 'LINK_' + Math.random().toString(36).substring(2);
-    const newItem: HelpTextSection = new HelpTextSection();
+    const newItem: HelpTextSection = data.type === HelpContentType.TABLE
+      ? this.createTableSection()
+      : new HelpTextSection();
     newItem.linkId = newLinkId;
     newItem.value = newKey;
     newItem.linkId = '';
@@ -1867,6 +1869,34 @@ export class HelpEditorFacade {
     return !(this.selectedSection.type === 'TABLE' && this.selectedTableCell);
   }
 
+  private createTableSection(): HelpTextTable {
+    const table = new HelpTextTable();
+    table.type = HelpContentType.TABLE;
+    table.header = [];
+    table.rows = [];
+
+    const columnCount = 2;
+    const rowCount = 2;
+
+    for (let colIndex = 0; colIndex < columnCount; colIndex += 1) {
+      const headerKey = this.createUniqueTableCellKey('TABLE_HEADER');
+      table.header.push(headerKey);
+      this.ensureQtfEntry(headerKey);
+    }
+
+    for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+      const rowValues: TableCellValue[] = [];
+      for (let colIndex = 0; colIndex < columnCount; colIndex += 1) {
+        const cellKey = this.createUniqueTableCellKey('TABLE_CELL');
+        rowValues.push(cellKey);
+        this.ensureQtfEntry(cellKey);
+      }
+      table.rows.push({ rowValues });
+    }
+
+    return table;
+  }
+
   public addTableRow(): void {
     if (this.selectedSection?.type !== 'TABLE') {
       return;
@@ -1891,6 +1921,15 @@ export class HelpEditorFacade {
     table.rows.splice(insertIndex, 0, { rowValues });
     this.isDirty = true;
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+
+    const tableId = getSectionSelectionId(table) || '';
+    this.onSelectSection({
+      tableId,
+      rowIndex: insertIndex,
+      colIndex: 0,
+      isHeader: false,
+      key: getTableCellKey(rowValues[0])
+    });
   }
 
   public addTableColumn(): void {
@@ -1922,6 +1961,14 @@ export class HelpEditorFacade {
 
     this.isDirty = true;
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+
+    const tableId = getSectionSelectionId(table) || '';
+    this.onSelectSection({
+      tableId,
+      colIndex: insertIndex,
+      isHeader: true,
+      key: getTableCellKey(headerKey)
+    });
   }
 
   private getTableColumnCount(table: HelpTextTable): number {
