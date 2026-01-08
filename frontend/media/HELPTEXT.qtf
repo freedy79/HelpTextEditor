@@ -48,8 +48,8 @@
         "SPANISH": "Device_Concept_MCA_ES",
         "ITALIAN": "Device_Concept_MCA_IT",
         "CHINESE": "Device_Concept_MCA_CN",
-        "JAPANESE": "デバイス_コンセプト_MCA",
-        "KOREAN": "Device_Concept_MCA"
+        "JAPANESE": "Device_Concept_MCA_JP",
+        "KOREAN": "Device_Concept_MCA_KR"
       },
       "AUTOTRANSLATIONS": {
         "FRENCH": "Device_Concept_MCA_FR",
@@ -57,8 +57,8 @@
         "SPANISH": "Device_Concept_MCA_ES",
         "ITALIAN": "Device_Concept_MCA_IT",
         "CHINESE": "Device_Concept_MCA_CN",
-        "JAPANESE": "デバイス_コンセプト_MCA",
-        "KOREAN": "Device_Concept_MCA"
+        "JAPANESE": "Device_Concept_MCA_JP",
+        "KOREAN": "Device_Concept_MCA_KR"
       },
       "VERIFIED": {
         "ENGLISH": true,
@@ -3576,8 +3576,8 @@
         "RUSSIAN": "Printing_Concept_RU",
         "ITALIAN": "Printing_Concept_IT",
         "CHINESE": "Printing_Concept_CN",
-        "JAPANESE": "印刷コンセプト",
-        "KOREAN": "인쇄_개념"
+        "JAPANESE": "Printing_Concept_JP",
+        "KOREAN": "Printing_Concept_KR"
       },
       "AUTOTRANSLATIONS": {
         "FRENCH": "Printing_Concept_FR",
@@ -3585,8 +3585,8 @@
         "RUSSIAN": "Printing_Concept_RU",
         "ITALIAN": "Printing_Concept_IT",
         "CHINESE": "Printing_Concept_CN",
-        "JAPANESE": "印刷コンセプト",
-        "KOREAN": "인쇄_개념"
+        "JAPANESE": "Printing_Concept_JP",
+        "KOREAN": "Printing_Concept_KR"
       },
       "VERIFIED": {
         "ENGLISH": true,
@@ -22945,18 +22945,18 @@
         "FRENCH": "Access_Management_FR",
         "SPANISH": "Access_Management_ES",
         "ITALIAN": "Access_Management_IT",
-        "CHINESE": "访问管理",
-        "JAPANESE": "アクセス管理",
-        "KOREAN": "Access_Management"
+        "CHINESE": "Access_Management_CN",
+        "JAPANESE": "Access_Management_JP",
+        "KOREAN": "Access_Management_KR"
       },
       "AUTOTRANSLATIONS": {
         "RUSSIAN": "Access_Management_RU",
         "FRENCH": "Access_Management_FR",
         "SPANISH": "Access_Management_ES",
         "ITALIAN": "Access_Management_IT",
-        "CHINESE": "访问管理",
-        "JAPANESE": "アクセス管理",
-        "KOREAN": "Access_Management"
+        "CHINESE": "Access_Management_CN",
+        "JAPANESE": "Access_Management_JP",
+        "KOREAN": "Access_Management_KR"
       },
       "VERIFIED": {
         "ENGLISH": false,
@@ -25380,20 +25380,20 @@
       "int_ref_id": "",
       "used_in": [],
       "TRANSLATIONS": {
-        "ENGLISH": "Example: DN=Surname /, First name, OU=Resources, OU=User, OU=GO-Goettingen, OU=Region Europe, DC=Company name, DC=com",
-        "GERMAN": "Beispiel: DN=Nachname /, Vorname, OU=Ressourcen, OU=Benutzer, OU=GO-Goettingen, OU=Region-Europe, DC=Firmenname, DC=com",
-        "FRENCH": "Exemple : DN=Nom /, Prénom, OU=Ressources, OU=Utilisateur, OU=GO-Goettingen, OU=Région Europe, DC=Nom de la société, DC=com",
-        "RUSSIAN": "Пример: DN=Фамилия /, Имя, OU=Ресурсы, OU=Пользователь, OU=GO-Goettingen, OU=Регион Европа, DC=Название компании, DC=com",
-        "SPANISH": "Ejemplo: DN=Apellido /, Nombre, OU=Recursos, OU=Usuario, OU=GO-Goettingen, OU=Región Europa, DC=Nombre de la empresa, DC=com",
-        "ITALIAN": "Esempio: DN=Cognome /, Nome, OU=Risorse, OU=Utente, OU=GO-Goettingen, OU=Regione Europa, DC=Nome azienda, DC=com",
-        "CHINESE": "例如DN=Surname /, First name, OU=Resources, OU=User, OU=GO-Goettingen, OU=Region Europe, DC=Company name, DC=com"
+        "ENGLISH": "Example: CN=Surname /, First name, OU=Resources, OU=User, OU=GO-Goettingen, OU=Region Europe, DC=Company name, DC=com",
+        "GERMAN": "Beispiel: CN=Nachname /, Vorname, OU=Ressourcen, OU=Benutzer, OU=GO-Goettingen, OU=Region-Europe, DC=Firmenname, DC=com",
+        "FRENCH": "Exemple : CN=Nom /, Prénom, OU=Ressources, OU=Utilisateur, OU=GO-Goettingen, OU=Région Europe, DC=Nom de la société, DC=com",
+        "RUSSIAN": "Пример: CN=Фамилия /, Имя, OU=Ресурсы, OU=Пользователь, OU=GO-Goettingen, OU=Регион Европа, DC=Название компании, DC=com",
+        "SPANISH": "Ejemplo: CN=Apellido /, Nombre, OU=Recursos, OU=Usuario, OU=GO-Goettingen, OU=Región Europa, DC=Nombre de la empresa, DC=com",
+        "ITALIAN": "Esempio: CN=Cognome /, Nome, OU=Risorse, OU=Utente, OU=GO-Goettingen, OU=Regione Europa, DC=Nome azienda, DC=com",
+        "CHINESE": "CN=Surname /, First name, OU=Resources, OU=User, OU=GO-Goettingen, OU=Region Europe, DC=Company name, DC=com"
       },
       "AUTOTRANSLATIONS": {
-        "FRENCH": "Exemple : DN=Nom /, Prénom, OU=Ressources, OU=Utilisateur, OU=GO-Goettingen, OU=Région Europe, DC=Nom de la société, DC=com",
-        "RUSSIAN": "Пример: DN=Фамилия /, Имя, OU=Ресурсы, OU=Пользователь, OU=GO-Goettingen, OU=Регион Европа, DC=Название компании, DC=com",
-        "SPANISH": "Ejemplo: DN=Apellido /, Nombre, OU=Recursos, OU=Usuario, OU=GO-Goettingen, OU=Región Europa, DC=Nombre de la empresa, DC=com",
-        "ITALIAN": "Esempio: DN=Cognome /, Nome, OU=Risorse, OU=Utente, OU=GO-Goettingen, OU=Regione Europa, DC=Nome azienda, DC=com",
-        "CHINESE": "例如DN=Surname /, First name, OU=Resources, OU=User, OU=GO-Goettingen, OU=Region Europe, DC=Company name, DC=com"
+        "FRENCH": "Exemple : CN=Nom /, Prénom, OU=Ressources, OU=Utilisateur, OU=GO-Goettingen, OU=Région Europe, DC=Nom de la société, DC=com",
+        "RUSSIAN": "Пример: CN=Фамилия /, Имя, OU=Ресурсы, OU=Пользователь, OU=GO-Goettingen, OU=Регион Европа, DC=Название компании, DC=com",
+        "SPANISH": "Ejemplo: CN=Apellido /, Nombre, OU=Recursos, OU=Usuario, OU=GO-Goettingen, OU=Región Europa, DC=Nombre de la empresa, DC=com",
+        "ITALIAN": "Esempio: CN=Cognome /, Nome, OU=Risorse, OU=Utente, OU=GO-Goettingen, OU=Regione Europa, DC=Nome azienda, DC=com",
+        "CHINESE": "CN=Surname /, First name, OU=Resources, OU=User, OU=GO-Goettingen, OU=Region Europe, DC=Company name, DC=com"
       },
       "VERIFIED": {
         "ENGLISH": false,
@@ -33522,14 +33522,14 @@
         "FRENCH": "Connexion_au_reseau",
         "SPANISH": "Conexion_a_la_red",
         "ITALIAN": "Connessione_di_rete",
-        "CHINESE": "网络连接"
+        "CHINESE": "Network_connection_CN"
       },
       "AUTOTRANSLATIONS": {
         "RUSSIAN": "Сетевое подключение",
         "FRENCH": "Connexion au réseau",
         "SPANISH": "Conexión a la red",
         "ITALIAN": "Connessione di rete",
-        "CHINESE": "网络连接"
+        "CHINESE": "Network_connection_CN"
       },
       "VERIFIED": {
         "ENGLISH": false,
@@ -44031,14 +44031,14 @@
         "FRENCH": "Fonction_de_pesage",
         "SPANISH": "Funcion_de_pesaje",
         "ITALIAN": "Funzione_di_pesatura",
-        "CHINESE": "称重功能"
+        "CHINESE": "Weighing_functions_CN"
       },
       "AUTOTRANSLATIONS": {
         "RUSSIAN": "Функция взвешивания",
         "FRENCH": "Fonction de pesage",
         "SPANISH": "Función de pesaje",
         "ITALIAN": "Funzione di pesatura",
-        "CHINESE": "称重功能"
+        "CHINESE": "Weighing_functions_CN"
       },
       "VERIFIED": {
         "ENGLISH": false,
@@ -50074,6 +50074,36 @@
         "CHINESE": false
       }
     },
+    "WEIGHING_MIN_USP_INSTRUCTION_2": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "Do not translate minUSP. Do not translate QAPP Center.",
+      "locked": false,
+      "obsolete": false,
+      "ref_id": "",
+      "ref_changed": false,
+      "int_ref_id": "",
+      "used_in": [],
+      "TRANSLATIONS": {
+        "ENGLISH": "Generally, according to pharmacopoeia requirements the smallest net weight m(snw) and an optional safety factor (SF) should be defined by the user whereby m(snw) = SF x m(min). The values set by the user for m(snw) and SF are considered as permissible limits and must not be exceeded (m(snw)) or fallen below (SF). The QAPP \"Minimum Weight\" allows to decide in the menu item \"Value to monitor\", whether the currently determined safety factor SF or the product (SF x mmin) of the defined safety factor SF and the currently determined minimum weight mmin shall be monitored and compared against the user-defined limits for m snw, or SF. The safety factor (SF) is an optional – if no safety factor is defined, the value should be set to 1. ",
+        "GERMAN": "Generell sollten gemäß den Anforderungen der Pharmacopoeias das kleinste Nettogewicht m(snw) und ein optionaler Sicherheitsfaktor SF definiert werden, wobei m(snw) = SF x m(min). Die vom Anwender festgelegten Werte für m(snw) und SF sind als zulässige Grenzwerte zu verstehen und dürfen nicht über- (m snw) bzw. unterschritten (SF) werden. Die QAPP \"Minimum Weight\" ermöglicht es, im Menüpunkt \"Zu überwachender Wert\" zu entscheiden, ob der aktuell ermittelte Sicherheitsfaktor SF oder das Produkt (SF x mmin) des definierten Sicherheitsfaktors SF mit der aktuell ermittelten Mindesteinwaage mmin überwacht und mit den vom Anwender festgelegten Grenzwerten für m snw bzw. SF verglichen werden soll. Der Sicherheitsfaktor (SF) ist optional. Wenn der kein Sicherheitsfaktor definiet ist, kann der Wert auf 1 gesetzt werden.",
+        "RUSSIAN": "В целом, согласно требованиям фармакопеи, пользователь должен задать минимальную чистую массу m(snw) и при необходимости коэффициент безопасности (SF), при этом m(snw) = SF x m(min). Заданные пользователем значения m(snw) и SF рассматриваются как допустимые пределы и не должны превышаться (для m(snw)) или быть ниже установленного уровня (для SF). QAPP \"Minimum Weight\" позволяет в пункте меню \"Контролируемое значение\" выбрать, следует ли контролировать текущий вычисленный коэффициент безопасности SF или произведение (SF x mmin) заданного коэффициента безопасности SF и текущей определённой минимальной массы mmin, и сравнивать его с заданными пользователем пределами для m(snw) или SF. Коэффициент безопасности (SF) является необязательным параметром; если он не задан, значение следует установить равным 1.",
+        "FRENCH": "Généralement, conformément aux exigences des pharmacopées, la masse nette minimale m(snw) et, le cas échéant, un facteur de sécurité (SF) doivent être définis par l’utilisateur, de sorte que m(snw) = SF x m(min). Les valeurs définies par l’utilisateur pour m(snw) et SF sont considérées comme des limites admissibles et ne doivent pas être dépassées (m(snw)) ni être inférieures (SF). La QAPP \"Minimum Weight\" permet, dans le menu \"Valeur à surveiller\", de choisir s’il faut surveiller le facteur de sécurité SF actuellement déterminé ou le produit (SF x mmin) du facteur de sécurité défini SF et de la masse minimale actuellement déterminée mmin, puis le comparer aux limites définies par l’utilisateur pour m(snw) ou SF. Le facteur de sécurité (SF) est optionnel ; si aucun facteur de sécurité n’est défini, la valeur doit être réglée sur 1.",
+        "SPANISH": "En general, de acuerdo con los requisitos de las farmacopeas, el peso neto mínimo m(snw) y, de forma opcional, un factor de seguridad (SF) deben ser definidos por el usuario, de modo que m(snw) = SF x m(min). Los valores establecidos por el usuario para m(snw) y SF se consideran límites permisibles y no deben superarse (m(snw)) ni quedar por debajo (SF). La QAPP \"Minimum Weight\" permite decidir, en el elemento de menú \"Valor a supervisar\", si se debe supervisar el factor de seguridad SF determinado actualmente o el producto (SF x mmin) del factor de seguridad definido SF y el peso mínimo actualmente determinado mmin, y compararlo con los límites definidos por el usuario para m(snw) o SF. El factor de seguridad (SF) es opcional; si no se define ningún factor de seguridad, el valor debe establecerse en 1.",
+        "ITALIAN": "In generale, secondo i requisiti della farmacopea, la massa netta minima m(snw) e un eventuale fattore di sicurezza (SF) devono essere definiti dall’utente, per cui m(snw) = SF x m(min). I valori impostati dall’utente per m(snw) e SF sono considerati limiti ammissibili e non devono essere superati (m(snw)) né scendere al di sotto (SF). La QAPP \"Minimum Weight\" consente di decidere, nella voce di menu \"Valore da monitorare\", se monitorare il fattore di sicurezza SF attualmente determinato oppure il prodotto (SF x mmin) del fattore di sicurezza definito SF e della massa minima attualmente determinata mmin, confrontandolo con i limiti definiti dall’utente per m(snw) o SF. Il fattore di sicurezza (SF) è opzionale; se non è definito alcun fattore di sicurezza, il valore deve essere impostato su 1.",
+        "CHINESE": "通常情况下，根据药典要求，用户应定义最小净重 m(snw) 以及可选的安全系数（SF），并满足 m(snw) = SF x m(min)。用户为 m(snw) 和 SF 设定的数值被视为允许的限值，其中 m(snw) 不得被超出，SF 不得低于设定值。QAPP \"Minimum Weight\" 在菜单项 \"监控值\" 中允许选择：监控当前确定的安全系数 SF，或监控已定义的安全系数 SF 与当前确定的最小称量 mmin 的乘积（SF x mmin），并与用户为 m(snw) 或 SF 设定的限值进行比较。安全系数（SF）为可选项；如果未定义安全系数，该值应设置为 1."
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {
+        "ENGLISH": false,
+        "GERMAN": false,
+        "RUSSIAN": false,
+        "FRENCH": false,
+        "SPANISH": false,
+        "ITALIAN": false,
+        "CHINESE": false
+      }
+    },
     "WEIGHING_EXT_MIN_USP_TITLE": {
       "group": "HELP_TITLE",
       "topic": "HELPTEXT",
@@ -50085,21 +50115,15 @@
       "int_ref_id": "",
       "used_in": [],
       "TRANSLATIONS": {
-        "ENGLISH": "minUSP function extension",
-        "GERMAN": "Funktionserweiterung minUSP",
-        "RUSSIAN": "Расширение функции minUSP",
-        "FRENCH": "extension de la fonction minUSP",
-        "SPANISH": "Ampliación de la función minUSP",
-        "ITALIAN": "estensione della funzione minUSP",
-        "CHINESE": "minUSP 功能扩展"
+        "ENGLISH": "Minimum Weight Function Extension",
+        "GERMAN": "Funktionserweiterung Minimalgewicht",
+        "RUSSIAN": "Расширение функции минимального веса",
+        "FRENCH": "Extension de la fonction poids minimal",
+        "SPANISH": "Extensión de la función peso mínimo",
+        "ITALIAN": "Estensione della funzione peso minimo",
+        "CHINESE": "最小重量功能扩展"
       },
-      "AUTOTRANSLATIONS": {
-        "RUSSIAN": "расширение функции minUSP",
-        "FRENCH": "extension de la fonction minUSP",
-        "SPANISH": "Ampliación de la función minUSP",
-        "ITALIAN": "estensione della funzione minUSP",
-        "CHINESE": "minUSP 功能扩展"
-      },
+      "AUTOTRANSLATIONS": {},
       "VERIFIED": {
         "ENGLISH": false,
         "GERMAN": false,
@@ -50121,21 +50145,15 @@
       "int_ref_id": "",
       "used_in": [],
       "TRANSLATIONS": {
-        "ENGLISH": "This minUSP function extension monitors compliance of the permitted working range as per US Pharmacopeia (USP) Section 41 and alerts the user when weighing values fall below the working range. <BR>The minUSP function can be activated/deactivated in the Settings menu under Device Settings. <BR>The starting point of the working range must be entered as the parameter in line with US Pharmacopeia (USP) Section 41. To calculate the valid starting point, you can either use QAPP USP Advanced or contact Sartorius Service. <BR>The minUSP function is also able to mark measuring values outside the working range as invalid, thus preventing impermissible values from being transferred. <BR>The minUSP function can also be used to monitor working ranges in line with other regulations by calculating and entering the starting point accordingly.",
-        "GERMAN": "Die Funktionserweiterung [minUSP] überwacht die Einhaltung des zulässigen Arbeitsbereiches gemäß US Pharmacopeia (USP) Kapitel 41 und warnt den Benutzer wenn Wägewerte unterhalb des Arbeitsbereiches liegen. <BR>Die Funktion minUSP kann im Einstellungsmenü unter Geräteeinstellungen aktiviert / deaktiviert werden. <BR>Als Parameter muss der Startpunkt des Arbeitsbereiches gemäß US Pharmacopeia (USP) Kapitel 41 eingetragen werden. Die Bestimmung des gültigen Startpunktes kann mittels der QAPP USP Advanced oder durch den Sartorius Service erfolgen. <BR>Wahlweise kann die Funktion minUSP Messwerte außerhalb des Arbeitsbereiches als ungültig markieren und somit eine Übernahme unzulässiger Wägewerte verhindern. <BR>Die Funktion minUSP kann für die Überwachung von Arbeitsbereichen auch nach anderen Regularien verwendet werden, indem man den Startpunkt entsprechend bestimmt und einträgt.",
-        "RUSSIAN": "Расширение функции minUSP контролирует соблюдение допустимого рабочего диапазона в соответствии с разделом 41 Фармакопеи США (USP) и предупреждает пользователя, когда значения взвешивания опускаются ниже рабочего диапазона. <BR>Функция minUSP может быть активирована/деактивирована в меню Настройки в разделе Настройки устройства. <BR>Начальная точка рабочего диапазона должна быть введена как параметр в соответствии с US Pharmacopeia (USP) Section 41. Для расчета действительной начальной точки можно использовать QAPP USP Advanced или обратиться в сервисную службу Sartorius. <BR>Функция minUSP также способна пометить значения измерений за пределами рабочего диапазона как недопустимые, тем самым предотвращая передачу недопустимых значений. <BR>Функция minUSP также может использоваться для контроля рабочих диапазонов в соответствии с другими нормативными документами путем расчета и ввода начальной точки соответствующим образом.",
-        "FRENCH": "Cette extension de fonction minUSP surveille la conformité de la plage de travail autorisée conformément à la section 41 de la pharmacopée américaine (USP) et alerte l'utilisateur lorsque les valeurs de pesée tombent en dessous de la plage de travail. <BR>La fonction minUSP peut être activée/désactivée dans le menu Paramètres sous Paramètres de l'appareil. <BR>Le point de départ de la plage de travail doit être saisi comme paramètre conformément à la section 41 de l'US Pharmacopeia (USP). Pour calculer le point de départ valide, vous pouvez soit utiliser QAPP USP Advanced, soit contacter le service après-vente Sartorius. <BR>La fonction minUSP est également capable de marquer comme non valides les valeurs de mesure situées en dehors de la plage de travail, empêchant ainsi le transfert de valeurs non autorisées. <BR>La fonction minUSP peut également être utilisée pour contrôler les plages de travail conformément à d'autres réglementations en calculant et en saisissant le point de départ en conséquence.",
-        "SPANISH": "Esta extensión de la función minUSP controla el cumplimiento del rango de trabajo permitido según la Sección 41 de la Farmacopea de los Estados Unidos (USP) y alerta al usuario cuando los valores de pesaje caen por debajo del rango de trabajo. <BR>La función minUSP puede activarse/desactivarse en el menú de configuración, en Ajustes del aparato. <BR>El punto inicial del rango de trabajo debe introducirse como parámetro de acuerdo con la Sección 41 de la Farmacopea de los Estados Unidos (USP). Para calcular el punto inicial válido, puede utilizarse QAPP USP Advanced o ponerse en contacto con el servicio técnico de Sartorius. <BR>La función minUSP también es capaz de marcar como no válidos los valores de medición que se encuentran fuera del rango de trabajo, evitando así que se transfieran valores no permitidos. <BR>La función minUSP también puede utilizarse para controlar los rangos de trabajo de acuerdo con otras normativas, calculando e introduciendo el punto de partida correspondiente.",
-        "ITALIAN": "Questa estensione della funzione minUSP monitora la conformità dell'intervallo di lavoro consentito secondo la sezione 41 della US Pharmacopeia (USP) e avvisa l'utente quando i valori di pesatura scendono al di sotto dell'intervallo di lavoro. <BR>La funzione minUSP può essere attivata/disattivata nel menu Impostazioni sotto Impostazioni dispositivo. <BR>Il punto di partenza del campo di lavoro deve essere inserito come parametro in linea con la sezione 41 della US Pharmacopeia (USP). Per calcolare il punto di partenza valido, è possibile utilizzare QAPP USP Advanced o contattare il servizio assistenza Sartorius. <BR>La funzione minUSP è anche in grado di contrassegnare come non validi i valori di misurazione al di fuori del campo di lavoro, impedendo così il trasferimento di valori non consentiti. <BR>La funzione minUSP può essere utilizzata anche per monitorare i campi di lavoro in linea con altre normative, calcolando e inserendo il punto di partenza di conseguenza.",
-        "CHINESE": "此 minUSP 功能扩展可监控是否符合美国药典 (USP) 第 41 节规定的允许工作范围，并在称重值低于工作范围时向用户发出警报。<BR>minUSP 功能可在设备设置下的设置菜单中激活/禁用。<BR>工作范围的起点必须作为符合美国药典 (USP) 第 41 节规定的参数输入。要计算有效的起点，可以使用 QAPP USP Advanced 或联系赛多利斯服务部。<BR>minUSP 功能还能将超出工作范围的测量值标记为无效，从而防止不允许的值被传送。<BR>minUSP 功能还可用于监测符合其他规定的工作范围，方法是计算并输入相应的起点。"
+        "ENGLISH": "This Minimum Weight function extension monitors compliance with the permitted working range as per US Pharmacopoeia (USP) Section 41, European Pharmacopoeia 2.1.7, EURAMET cg 18, Japanese Pharmacopoeia 9.61, and Chinese Pharmacopoeia Guideline 9032. It alerts the user when weighing values fall below the working range, calculated by Desired smallest net weight * safety factor. <BR>The Minimum Weight function can be activated or deactivated in the Settings menu under Weighing Settings. <BR>The desired smallest net weight must be entered as the parameter in line with the chosen procedure. To calculate the valid smallest net weight and the safety factor, you can either use QAPP USP Advanced or contact Sartorius Service. <BR>The function can also mark measuring values outside the minimum range as invalid, thus preventing impermissible values from being transferred. <BR>The function can also be used to monitor working ranges in line with other regulations by calculating and entering the starting point accordingly.",
+        "GERMAN": "Diese Funktionserweiterung Minimalgewicht überwacht die Einhaltung des zulässigen Arbeitsbereichs gemäß US-Pharmakopöe (USP) Abschnitt 41, Europäischer Pharmakopöe 2.1.7, EURAMET cg 18, Japanischer Pharmakopöe 9.61 und Chinesischer Pharmakopöe Richtlinie 9032. Sie warnt den Benutzer, wenn Wägewerte unter den Arbeitsbereich fallen, der berechnet wird aus gewünschtem kleinstem Nettogewicht * Sicherheitsfaktor. <BR>Die Funktion Minimalgewicht kann im Einstellungsmenü unter Wägeeinstellungen aktiviert oder deaktiviert werden. <BR>Das gewünschte kleinste Nettogewicht muss entsprechend dem gewählten Verfahren als Parameter eingegeben werden. Zur Berechnung des gültigen kleinsten Nettogewichts und des Sicherheitsfaktors können Sie entweder QAPP USP Advanced verwenden oder den Sartorius Service kontaktieren. <BR>Die Funktion kann Messwerte außerhalb des minimalen Bereichs auch als ungültig kennzeichnen und damit verhindern, dass unzulässige Werte übertragen werden. <BR>Die Funktion kann außerdem genutzt werden, um Arbeitsbereiche gemäß anderen Regularien zu überwachen, indem der Startpunkt entsprechend berechnet und eingegeben wird.",
+        "RUSSIAN": "Это расширение функции минимального веса контролирует соблюдение допустимого рабочего диапазона в соответствии с Фармакопеей США (USP) раздел 41, Европейской Фармакопеей 2.1.7, EURAMET cg 18, Японской Фармакопеей 9.61 и Руководством Китайской Фармакопеи 9032. Оно предупреждает пользователя, когда значения взвешивания выходят ниже рабочего диапазона, рассчитанного как желаемый минимальный чистый вес * коэффициент безопасности. <BR>Функцию «Минимальный вес» можно включить или отключить в меню Настройки под пунктом Настройки взвешивания. <BR>Желаемый минимальный чистый вес необходимо ввести как параметр в соответствии с выбранной процедурой. Для расчета действительного минимального веса и коэффициента безопасности можно использовать QAPP USP Advanced или обратиться в сервис Sartorius. <BR>Функция также может помечать значения измерений за пределами минимального диапазона как недопустимые, предотвращая их передачу. <BR>Функцию также можно использовать для контроля рабочих диапазонов в соответствии с другими нормами, рассчитав и введя соответствующую начальную точку.",
+        "FRENCH": "Cette extension de la fonction Poids minimal surveille le respect de la plage de travail autorisée conformément à la Pharmacopée américaine (USP) section 41, à la Pharmacopée européenne 2.1.7, à l’EURAMET cg 18, à la Pharmacopée japonaise 9.61 et à la Directive de la Pharmacopée chinoise 9032. Elle alerte l’utilisateur lorsque les valeurs de pesée tombent en dessous de la plage de travail, calculée par Poids net minimal souhaité * facteur de sécurité. <BR>La fonction Poids minimal peut être activée ou désactivée dans le menu Paramètres, sous Paramètres de pesée. <BR>Le poids net minimal souhaité doit être saisi comme paramètre conformément à la procédure choisie. Pour calculer le poids net minimal valide et le facteur de sécurité, vous pouvez utiliser QAPP USP Advanced ou contacter le service Sartorius. <BR>La fonction peut également marquer les valeurs de mesure en dehors de la plage minimale comme invalides, empêchant ainsi le transfert de valeurs non autorisées. <BR>La fonction peut également être utilisée pour surveiller des plages de travail selon d’autres réglementations en calculant et en entrant le point de départ approprié.",
+        "SPANISH": "Esta extensión de la función Peso mínimo supervisa el cumplimiento del rango de trabajo permitido según la Farmacopea de los Estados Unidos (USP) Sección 41, la Farmacopea Europea 2.1.7, EURAMET cg 18, la Farmacopea Japonesa 9.61 y la Directriz de la Farmacopea China 9032. Advierte al usuario cuando los valores de pesaje caen por debajo del rango de trabajo, calculado como Peso neto mínimo deseado * factor de seguridad. <BR>La función Peso mínimo se puede activar o desactivar en el menú Configuración, en Configuración de pesaje. <BR>El peso neto mínimo deseado debe introducirse como parámetro de acuerdo con el procedimiento elegido. Para calcular el peso neto mínimo válido y el factor de seguridad, puede usar QAPP USP Advanced o contactar con el servicio de Sartorius. <BR>La función también puede marcar los valores de medición fuera del rango mínimo como inválidos, evitando así la transferencia de valores no permitidos. <BR>La función también se puede utilizar para supervisar rangos de trabajo de acuerdo con otras normativas calculando e introduciendo el punto de inicio correspondiente.",
+        "ITALIAN": "Questa estensione della funzione Peso minimo controlla la conformità all’intervallo di lavoro consentito secondo la Farmacopea degli Stati Uniti (USP) sezione 41, la Farmacopea Europea 2.1.7, EURAMET cg 18, la Farmacopea Giapponese 9.61 e la Linea guida della Farmacopea Cinese 9032. Avvisa l’utente quando i valori di pesata scendono al di sotto dell’intervallo di lavoro, calcolato come Peso netto minimo desiderato * fattore di sicurezza. <BR>La funzione Peso minimo può essere attivata o disattivata nel menu Impostazioni, alla voce Impostazioni di pesata. <BR>Il peso netto minimo desiderato deve essere inserito come parametro in conformità con la procedura scelta. Per calcolare il peso netto minimo valido e il fattore di sicurezza, è possibile utilizzare QAPP USP Advanced o contattare il servizio Sartorius. <BR>La funzione può anche contrassegnare i valori di misurazione al di fuori dell’intervallo minimo come non validi, impedendo così il trasferimento di valori non consentiti. <BR>La funzione può inoltre essere utilizzata per monitorare intervalli di lavoro conformi ad altri regolamenti calcolando e inserendo di conseguenza il punto di partenza.",
+        "CHINESE": "此最小重量功能扩展可监控符合美国药典 (USP) 第41节、欧洲药典 2.1.7、EURAMET cg 18、日本药典 9.61 和中国药典指南 9032 的允许工作范围。 当称量值低于工作范围时（计算方式为期望的最小净重 * 安全系数），系统会提醒用户。 <BR>最小重量功能可在设置菜单的称量设置中启用或停用。 <BR>必须根据所选方法输入期望的最小净重作为参数。 要计算有效的最小净重和安全系数，可以使用 QAPP USP Advanced 或联系赛多利斯服务。 <BR>该功能还可以将超出最小范围的测量值标记为无效，从而防止传输不允许的值。 <BR>此外，该功能还可用于根据其他法规监控工作范围，只需相应计算并输入起始点。"
       },
-      "AUTOTRANSLATIONS": {
-        "RUSSIAN": "Расширение функции minUSP контролирует соблюдение допустимого рабочего диапазона в соответствии с разделом 41 Фармакопеи США (USP) и предупреждает пользователя, когда значения взвешивания опускаются ниже рабочего диапазона. <BR>Функция minUSP может быть активирована/деактивирована в меню Настройки в разделе Настройки устройства. <BR>Начальная точка рабочего диапазона должна быть введена как параметр в соответствии с US Pharmacopeia (USP) Section 41. Для расчета действительной начальной точки можно использовать QAPP USP Advanced или обратиться в сервисную службу Sartorius. <BR>Функция minUSP также способна пометить значения измерений за пределами рабочего диапазона как недопустимые, тем самым предотвращая передачу недопустимых значений. <BR>Функция minUSP также может использоваться для контроля рабочих диапазонов в соответствии с другими нормативными документами путем расчета и ввода начальной точки соответствующим образом.",
-        "FRENCH": "Cette extension de fonction minUSP surveille la conformité de la plage de travail autorisée conformément à la section 41 de la pharmacopée américaine (USP) et alerte l'utilisateur lorsque les valeurs de pesée tombent en dessous de la plage de travail. <BR>La fonction minUSP peut être activée/désactivée dans le menu Paramètres sous Paramètres de l'appareil. <BR>Le point de départ de la plage de travail doit être saisi comme paramètre conformément à la section 41 de l'US Pharmacopeia (USP). Pour calculer le point de départ valide, vous pouvez soit utiliser QAPP USP Advanced, soit contacter le service après-vente Sartorius. <BR>La fonction minUSP est également capable de marquer comme non valides les valeurs de mesure situées en dehors de la plage de travail, empêchant ainsi le transfert de valeurs non autorisées. <BR>La fonction minUSP peut également être utilisée pour contrôler les plages de travail conformément à d'autres réglementations en calculant et en saisissant le point de départ en conséquence.",
-        "SPANISH": "Esta extensión de la función minUSP controla el cumplimiento del rango de trabajo permitido según la Sección 41 de la Farmacopea de los Estados Unidos (USP) y alerta al usuario cuando los valores de pesaje caen por debajo del rango de trabajo. <BR>La función minUSP puede activarse/desactivarse en el menú de configuración, en Ajustes del aparato. <BR>El punto inicial del rango de trabajo debe introducirse como parámetro de acuerdo con la Sección 41 de la Farmacopea de los Estados Unidos (USP). Para calcular el punto inicial válido, puede utilizarse QAPP USP Advanced o ponerse en contacto con el servicio técnico de Sartorius. <BR>La función minUSP también es capaz de marcar como no válidos los valores de medición que se encuentran fuera del rango de trabajo, evitando así que se transfieran valores no permitidos. <BR>La función minUSP también puede utilizarse para controlar los rangos de trabajo de acuerdo con otras normativas, calculando e introduciendo el punto de partida correspondiente.",
-        "ITALIAN": "Questa estensione della funzione minUSP monitora la conformità dell'intervallo di lavoro consentito secondo la sezione 41 della US Pharmacopeia (USP) e avvisa l'utente quando i valori di pesatura scendono al di sotto dell'intervallo di lavoro. <BR>La funzione minUSP può essere attivata/disattivata nel menu Impostazioni sotto Impostazioni dispositivo. <BR>Il punto di partenza del campo di lavoro deve essere inserito come parametro in linea con la sezione 41 della US Pharmacopeia (USP). Per calcolare il punto di partenza valido, è possibile utilizzare QAPP USP Advanced o contattare il servizio assistenza Sartorius. <BR>La funzione minUSP è anche in grado di contrassegnare come non validi i valori di misurazione al di fuori del campo di lavoro, impedendo così il trasferimento di valori non consentiti. <BR>La funzione minUSP può essere utilizzata anche per monitorare i campi di lavoro in linea con altre normative, calcolando e inserendo il punto di partenza di conseguenza.",
-        "CHINESE": "此 minUSP 功能扩展可监控是否符合美国药典 (USP) 第 41 节规定的允许工作范围，并在称重值低于工作范围时向用户发出警报。<BR>minUSP 功能可在设备设置下的设置菜单中激活/禁用。<BR>工作范围的起点必须作为符合美国药典 (USP) 第 41 节规定的参数输入。要计算有效的起点，可以使用 QAPP USP Advanced 或联系赛多利斯服务部。<BR>minUSP 功能还能将超出工作范围的测量值标记为无效，从而防止不允许的值被传送。<BR>minUSP 功能还可用于监测符合其他规定的工作范围，方法是计算并输入相应的起点。"
-      },
+      "AUTOTRANSLATIONS": {},
       "VERIFIED": {
         "ENGLISH": false,
         "GERMAN": false,
@@ -52140,14 +52158,14 @@
         "FRENCH": "Actions_commandees_par_minuterie",
         "SPANISH": "Acciones_controladas_por_un_temporizador",
         "ITALIAN": "Azioni_controllate_da_un_timer",
-        "CHINESE": "定时控制行动"
+        "CHINESE": "Timer-controlled_actions_CN"
       },
       "AUTOTRANSLATIONS": {
         "RUSSIAN": "Действия, контролируемые по таймеру",
         "FRENCH": "Actions commandées par minuterie",
         "SPANISH": "Acciones controladas por un temporizador",
         "ITALIAN": "Azioni controllate da un timer",
-        "CHINESE": "定时控制行动"
+        "CHINESE": "Timer-controlled_actions_CN"
       },
       "VERIFIED": {
         "ENGLISH": false,
@@ -61640,14 +61658,14 @@
         "FRENCH": "Maintenance_d_appareil",
         "SPANISH": "Mantenimiento_de_los_dispositivos",
         "ITALIAN": "Manutenzione_del_dispositivo",
-        "CHINESE": "设备维护"
+        "CHINESE": "Device_maintenance_CN"
       },
       "AUTOTRANSLATIONS": {
         "RUSSIAN": "Обслуживание устройства",
         "FRENCH": "Maintenance des appareils",
         "SPANISH": "Mantenimiento de los dispositivos",
         "ITALIAN": "Manutenzione del dispositivo",
-        "CHINESE": "设备维护"
+        "CHINESE": "Device_maintenance_CN"
       },
       "VERIFIED": {
         "ENGLISH": false,
@@ -71372,10 +71390,10 @@
       "TRANSLATIONS": {
         "ENGLISH": "Device cleaning",
         "GERMAN": "Reinigung des Geräts",
-        "FRENCH": "Device cleaning (EN)",
-        "RUSSIAN": "Device cleaning (EN)",
-        "SPANISH": "Device cleaning (EN)",
-        "ITALIAN": "Device cleaning (EN)",
+        "FRENCH": "Nettoyage de l'appareil",
+        "RUSSIAN": "Очистка прибора",
+        "SPANISH": "Limpieza del aparato",
+        "ITALIAN": "Pulizia dell'apparecchio",
         "CHINESE": "清洁设备"
       },
       "AUTOTRANSLATIONS": {
@@ -71448,7 +71466,7 @@
       },
       "AUTOTRANSLATIONS": {
         "FRENCH": "Nettoyage des appareils",
-        "CHINESE": "家电清洁"
+        "CHINESE": "Device_cleaning_CN"
       },
       "VERIFIED": {
         "ENGLISH": false,
@@ -74425,18 +74443,18 @@
       "TRANSLATIONS": {
         "ENGLISH": "Job Management",
         "GERMAN": "Job-Verwaltung",
-        "FRENCH": "Gestion des emplois",
-        "RUSSIAN": "Управление работой",
-        "SPANISH": "Gestión del empleo",
-        "ITALIAN": "Gestione del lavoro",
-        "CHINESE": "工作管理"
+        "FRENCH": "Gestion des ordres",
+        "RUSSIAN": "Управление заказами",
+        "SPANISH": "Gestión de pedidos",
+        "ITALIAN": "Gestione degli ordini",
+        "CHINESE": "訂單管理"
       },
       "AUTOTRANSLATIONS": {
-        "FRENCH": "Gestion des emplois",
-        "RUSSIAN": "Управление работой",
-        "SPANISH": "Gestión del empleo",
-        "ITALIAN": "Gestione del lavoro",
-        "CHINESE": "工作管理"
+        "FRENCH": "Gestion des ordres",
+        "RUSSIAN": "Управление заказами",
+        "SPANISH": "Gestión de pedidos",
+        "ITALIAN": "Gestione degli ordini",
+        "CHINESE": "訂單管理"
       },
       "VERIFIED": {
         "ENGLISH": true,
@@ -81699,6 +81717,1062 @@
         "SPANISH": false,
         "ITALIAN": false
       }
+    },
+    "TASKS_CONCEPT_COVER_TITLE": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Task-Konzept",
+        "ENGLISH": "Task Concept",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASKS_CONCEPT_FILE_NAME": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "TASKS_CONCEPT_FILE_NAME",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_TITLE": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Anwendungen",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_INSTRUCTION1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Werkseitig sind für das Gerät einige Anwendungen aktiviert. Weitere Anwendungen können im QAPP-Center aktiviert werden. Diese Anwendungen können für 30 Tage kostenlos getestet werden und benötigen danach eine Lizenz.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_TITLE1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Anwendungen (QAPPs) aktivieren",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_TITLE1_ENUMERATION_ttv9b5l5g7f": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "TASK_CONCEPT_ACTIVATE_TITLE1_ENUMERATION_ttv9b5l5g7f",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_INSTRUCTION2": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Vorgehen:",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Die Task-Verwaltung öffnen",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP2": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Auf die Schaltfläche [QAPP-Center] tippen.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_INSTRUCTION_2": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Da eine Anwendung in der Praxis häufig in unterschiedlichen Varianten genutzt wird, ermöglicht das Task-Konzept eine flexible Anpassung:\nJede Task basiert auf derselben zugrunde liegenden Anwendung, kann jedoch mit individuellen Parametern konfiguriert werden. Dadurch lassen sich mehrere unterschiedliche Ausprägungen derselben QAPP erstellen, ohne das Grundprogramm zu verändern.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_INSTRUCTION_1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Auf der Cubis II-Waage bildet eine Task eine vollständig konfigurierte Anwendung (QAPP), die einen bestimmten Arbeitsablauf auf der Waage abbildet. Eine Anwendung (QAPP) ist ein fest definiertes Programm, das auf der Waage ausgeführt wird und einen spezifischen Workflow umfasst – einschließlich aller hierfür notwendigen Funktionen, Prozessschritte und Parameter.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_PARAMETER_TITLE1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Anwendungsparameter\n",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_PARAMETER_INSTRUCTION1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Jede Task enthält eine Reihe obligatorischer Parameter, die ihre Identität und ihr grundlegendes Verhalten definieren:",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP3": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Eine Übersicht der verfügbaren QAPP-Pakete wird angezeigt.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP4": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Das gewünschte QAPP-Paket auswählen.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "NEW_SECTION_3j": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "NEW_SECTION_3j",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_PARAMETER_WEIGHING_TITLE1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Wägeprofil",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "NEW_SECTION_d1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Druckprofil",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP5": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Eine Liste der im QAPP-Paket enthaltenen Anwendungen wird angezeigt.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP6": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Wenn das ausgewählte QAPP-Paket mit allen enthaltenen Anwendungen freigeschaltet werden soll:",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_PARAMETER_TITLE1_BULLET_ENUMERATION_vsaqghws01": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "TASK_CONCEPT_PARAMETER_TITLE1_BULLET_ENUMERATION_vsaqghws01",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_PARAMETER_ENUM_1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "<b>Name</b><br>Eindeutiger Bezeichner der Task, unter dem sie im System angezeigt und aufgerufen wird.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_PARAMETER_ENUM_2": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "<b>Beschreibung</b><br>Kurze textliche Erläuterung des Zwecks oder der spezifischen Konfiguration der Task. Dies erleichtert die Zuordnung, insbesondere wenn mehrere Tasks derselben Anwendung existieren.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_PARAMETER_ENUM_3": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "<b>Zugeordnetes Wägeprofil</b><br>Das Wägeprofil legt die grundlegenden Einstellungen und Eigenschaften der Waage für diesen Workflow fest (z. B. Stabilitätskriterien, Filtereinstellungen oder Startbedingungen). Die Task verwendet stets das ihr zugeordnete Profil.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_PARAMETER_ENUM_4": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "<b>Zugeordnete Druckprofile</b><br>In der Regel können einer Task bis zu zwei Druckprofile zugeordnet werden, um unterschiedliche Ausgabebedarfe abzudecken – beispielsweise ein GLP-konformer Report als PDF sowie eine schnelle Etikettenausgabe auf einen Drucker.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_PARAMETER_ENUM_5": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "<b>Rollen</b><br>Festlegung, welche Benutzerrollen eine Task anzeigen und ausführen dürfen. Eine Task ist nur für Benutzer sichtbar und startbar, die einer der zugeordneten Rollen angehören.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_TITLE1_ENUMERATION_ttv9b5l5g7f_ENUMERATION_e6jvoxq0km7": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Test\n",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP6_A": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Auf die Schaltfläche [Lizenz] tippen.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP6_B": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Das Eingabefeld für den Lizenzschlüssel erscheint.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP6_C": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Den Lizenzschlüssel in das Eingabefeld eintippen und auf die Schaltfläche [OK] tippen.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP6_D": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "TASK_CONCEPT_ACTIVATE_STEP6_D",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP7": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Wenn eine einzelne Anwendung aus dem angezeigten QAPP-Paket\naktiviert werden soll:",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP7_A": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Auf die gewünschte Anwendung tippen.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP7_B": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Eine Anzeige mit Details zu der ausgewählten Anwendung öffnet\nsich.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP7_C": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Auf die Schaltfläche [Lizenz] tippen.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP7_D": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Das Eingabefeld für den Lizenzschlüssel erscheint.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEP7_E": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Den Lizenzschlüssel in das Eingabefeld eintippen und auf die Schaltfläche [OK] tippen.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_ACTIVATE_STEPS": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "TASK_CONCEPT_ACTIVATE_STEPS",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "NEW_SECTION_74": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "NEW_SECTION_74",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "NEW_SECTION_d4": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "new text"
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "NEW_SECTION_a6": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "NEW_SECTION_a6",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_TITLE": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "QAPP-Center",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_TITLE_INSTRUCTION_pagmwc722ss": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "new text"
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_TITLE_INSTRUCTION_5kc2s6gs6tp": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "new text"
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_INSTRUCTION_1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Die Anwendungen der Waage (QAPPs) sind im QAPP-Center in verschiedenen Paketen zusammengefasst. Innerhalb der einzelnen Bereiche werden die verfügbaren Anwendungen übersichtlich aufgeführt, beschrieben und anhand von Bildschirmfotos (Screenshots) erläutert.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_INSTRUCTION_2": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Ist eine für den Anwendungsfall geeignete und bereits lizenzierte Anwendung vorhanden, kann direkt aus dem QAPP-Center heraus eine Task auf Basis dieser Anwendung erstellt werden. Dadurch entfällt eine separate Auswahl der Anwendung in der Task-Verwaltung und der Konfigurationsprozess wird vereinfacht.",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "NEW_SECTION_64": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "NEW_SECTION_64",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_UPDATE_TITLE": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "QAPP-Center aktualisieren",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_UPDATE_TITLE_INSTRUCTION_6vmxhowpw8c": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Das QAPP-Center mit seinen Anwendungen kann unabhängig von der Geräte-Firmware aktualisiert werden. Dazu muss die QAPP-Center-Datei mit der dazugehörigen MD5-Datei über einen Konnektor z. B. USB-Stick erreichbar sein. ",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_TITLE_IMAGE_zo3xvqvpa4p": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "QAPP-Center",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_UPDATE_TITLE_INSTRUCTION_z7cs5tvwvuf": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "<b>Vorgehen:</b>",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_UPDATE_TITLE_ENUMERATION_3n9cx2xela7": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "TASK_CONCEPT_QAPP_CENTER_UPDATE_TITLE_ENUMERATION_3n9cx2xela7",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+    "TASK_CONCEPT_QAPP_CENTER_UPDATE_STEP_1": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Update-Dateien über einen Konnektor zugänglich machen (z. B. USB-Stick)",
+        "ENGLISH": "",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
+    },
+	"TASK_CONCEPT_TITLE": {
+      "group": "HELP_INSTRUCTION",
+      "topic": "HELPTEXT",
+      "comment": "",
+      "locked": false,
+      "obsolete": false,
+      "TRANSLATIONS": {
+        "GERMAN": "Task-Konzept",
+        "ENGLISH": "Task Concept",
+        "FRENCH": "",
+        "CHINESE": "",
+        "RUSSIAN": "",
+        "SPANISH": "",
+        "ITALIAN": "",
+        "JAPANESE": "",
+        "KOREAN": ""
+      },
+      "AUTOTRANSLATIONS": {},
+      "VERIFIED": {}
     }
   }
 }

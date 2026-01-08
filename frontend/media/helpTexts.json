@@ -670,6 +670,250 @@
       }
     ]
   },
+  "HELP_TEXT_TASKS_CONCEPT": {
+    "coversheet": [
+      {
+        "linkId": "TASKS_CONCEPT_COVER",
+        "value": "TASKS_CONCEPT_COVER_TITLE",
+        "coversheet": [
+          {
+            "value": "TASKS_CONCEPT_INTRODUCTION_1",
+            "type": "INTRODUCTION"
+          }
+        ]
+      },
+      {
+        "linkId": "TASKS_CONCEPT_SUMMARY",
+        "value": "SUMMARY_TITLE",
+        "coversheet": [
+          {
+            "value": "TASKS_CONCEPT_INTRODUCTION_2",
+            "type": "INTRODUCTION"
+          }
+        ]
+      },
+      {
+        "value": "TASKS_CONCEPT_FILE_NAME",
+        "type": "FILE_NAME"
+      }
+    ],
+    "abbreviations": [],
+    "content": [
+      {
+        "linkId": "TASK_CONCEPT_SECTION",
+        "value": "TASK_CONCEPT_TITLE",
+        "content": [
+          {
+            "value": "TASK_CONCEPT_INSTRUCTION_1",
+            "type": "INSTRUCTION",
+            "subsections": [
+              {
+                "value": "NEW_SECTION_a6"
+              }
+            ]
+          },
+          {
+            "linkId": "",
+            "value": "TASK_CONCEPT_INSTRUCTION_2",
+            "type": "INSTRUCTION",
+            "subsections": [
+              {
+                "value": "NEW_SECTION_74"
+              }
+            ]
+          }
+        ],
+        "subsections": [
+          {
+            "linkId": "TASK_CONCEPT_ACTIVATE",
+            "value": "TASK_CONCEPT_ACTIVATE_TITLE1",
+            "content": [
+              {
+                "linkId": "",
+                "value": "TASK_CONCEPT_ACTIVATE_INSTRUCTION1",
+                "type": "INSTRUCTION"
+              },
+              {
+                "linkId": "",
+                "value": "TASK_CONCEPT_ACTIVATE_INSTRUCTION2",
+                "type": "INSTRUCTION_BOLD"
+              },
+              {
+                "linkId": "",
+                "value": "TASK_CONCEPT_ACTIVATE_STEPS",
+                "type": "ENUMERATION",
+                "steps": [
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_ACTIVATE_STEP1"
+                  },
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_ACTIVATE_STEP2"
+                  },
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_ACTIVATE_STEP3"
+                  },
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_ACTIVATE_STEP4"
+                  },
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_ACTIVATE_STEP5"
+                  },
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_ACTIVATE_STEP6",
+                    "substeps": [
+                      {
+                        "type": "STEP",
+                        "value": "TASK_CONCEPT_ACTIVATE_STEP6_A"
+                      },
+                      {
+                        "type": "STEP",
+                        "value": "TASK_CONCEPT_ACTIVATE_STEP6_B"
+                      },
+                      {
+                        "type": "STEP",
+                        "value": "TASK_CONCEPT_ACTIVATE_STEP6_C"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_ACTIVATE_STEP7",
+                    "substeps": [
+                      {
+                        "type": "STEP",
+                        "value": "TASK_CONCEPT_ACTIVATE_STEP7_A"
+                      },
+                      {
+                        "type": "STEP",
+                        "value": "TASK_CONCEPT_ACTIVATE_STEP7_B"
+                      },
+                      {
+                        "type": "STEP",
+                        "value": "TASK_CONCEPT_ACTIVATE_STEP7_C"
+                      },
+                      {
+                        "type": "STEP",
+                        "value": "TASK_CONCEPT_ACTIVATE_STEP7_D"
+                      },
+                      {
+                        "type": "STEP",
+                        "value": "TASK_CONCEPT_ACTIVATE_STEP7_E"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "linkId": "TASK_CONCEPT_PARAMETER",
+            "value": "TASK_CONCEPT_PARAMETER_TITLE1",
+            "content": [
+              {
+                "linkId": "",
+                "value": "TASK_CONCEPT_PARAMETER_INSTRUCTION1",
+                "type": "INSTRUCTION",
+                "subsections": [
+                  {
+                    "value": "NEW_SECTION_d1"
+                  }
+                ]
+              },
+              {
+                "linkId": "",
+                "value": "TASK_CONCEPT_PARAMETER_TITLE1_BULLET_ENUMERATION_vsaqghws01",
+                "type": "BULLET_ENUMERATION",
+                "steps": [
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_PARAMETER_ENUM_1"
+                  },
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_PARAMETER_ENUM_2"
+                  },
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_PARAMETER_ENUM_3"
+                  },
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_PARAMETER_ENUM_4"
+                  },
+                  {
+                    "type": "STEP",
+                    "value": "TASK_CONCEPT_PARAMETER_ENUM_5"
+                  }
+                ]
+              }
+            ],
+            "subsections": []
+          },
+          {
+            "value": "TASK_CONCEPT_QAPP_CENTER_TITLE",
+            "content": [
+              {
+                "linkId": "",
+                "value": "TASK_CONCEPT_QAPP_CENTER_INSTRUCTION_1",
+                "type": "INSTRUCTION"
+              },
+              {
+                "linkId": "",
+                "value": "TASK_CONCEPT_QAPP_CENTER_INSTRUCTION_2",
+                "type": "INSTRUCTION",
+                "subsections": [
+                  {
+                    "value": "NEW_SECTION_64"
+                  }
+                ]
+              },
+              {
+                "linkId": "",
+                "value": "QAPP-Center",
+                "type": "IMAGE",
+                "imageDescription": "TASK_CONCEPT_QAPP_CENTER_TITLE_IMAGE_zo3xvqvpa4p"
+              }
+            ],
+            "subsections": [
+              {
+                "value": "TASK_CONCEPT_QAPP_CENTER_UPDATE_TITLE",
+                "content": [
+                  {
+                    "linkId": "",
+                    "value": "TASK_CONCEPT_QAPP_CENTER_UPDATE_TITLE_INSTRUCTION_6vmxhowpw8c",
+                    "type": "INSTRUCTION"
+                  },
+                  {
+                    "linkId": "",
+                    "value": "TASK_CONCEPT_QAPP_CENTER_UPDATE_TITLE_INSTRUCTION_z7cs5tvwvuf",
+                    "type": "INSTRUCTION"
+                  },
+                  {
+                    "linkId": "",
+                    "value": "TASK_CONCEPT_QAPP_CENTER_UPDATE_TITLE_ENUMERATION_3n9cx2xela7",
+                    "type": "ENUMERATION",
+                    "steps": [
+                      {
+                        "type": "STEP",
+                        "value": "TASK_CONCEPT_QAPP_CENTER_UPDATE_STEP_1",
+                        "linkId": "Update-Dateien bereitstellen und über Konnektor zugänglich machen."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "HELP_TEXT_PRINT_CONCEPT": {
     "coversheet": [
       {
@@ -7273,11 +7517,15 @@
             ]
           },
           {
-            "linkId": "WEIGHING_MIN_USP",
+            "linkId": "WEIGHING_MINIMUM_WEIGHT",
             "value": "WEIGHING_MIN_USP_TITLE",
             "content": [
               {
                 "value": "WEIGHING_MIN_USP_INSTRUCTION_1",
+                "type": "INSTRUCTION"
+              },
+              {
+                "value": "WEIGHING_MIN_USP_INSTRUCTION_2",
                 "type": "INSTRUCTION"
               }
             ],
