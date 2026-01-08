@@ -68,7 +68,10 @@
     <div class="column right">
       <h3>Properties</h3>     
       <div *ngIf="selectedSection != undefined; else noSelection">
-        <div *ngIf="selectedSection.type != 'IMAGE'">
+        <div *ngIf="selectedSection.type === 'TABLE' && selectedTableCell">
+          <ng-container *ngTemplateOutlet="tableCellType"></ng-container>
+        </div>
+        <div *ngIf="selectedSection.type != 'IMAGE' && selectedSection.type != 'SPLITIMAGE' && !(selectedSection.type === 'TABLE' && selectedTableCell)">
           <ng-container *ngTemplateOutlet="defaultType; context:{ $selectedSection: selectedSection }"></ng-container>
         </div>
         <div *ngIf="selectedSection.type == 'IMAGE' || selectedSection.type == 'SPLITIMAGE'">
@@ -107,6 +110,62 @@
         <div *ngIf="canEditTranslationForSelection()">
           <div class="PropertyAction" (click)="copyGermanText()" style="margin-left: 4px">Copy German</div>
           <div class="PropertyAction" (click)="copyEnglishText()" style="margin-left: 4px">Copy English</div>
+        </div>
+      </ng-template>
+      <ng-template #tableCellType>
+        <div>
+          <p>
+            <strong>Cell type:</strong>
+            <select [ngModel]="getSelectedTableCellType()" (ngModelChange)="onTableCellTypeChanged($event)">
+              <option value="TEXT">Text</option>
+              <option value="IMAGE">Image</option>
+            </select>
+          </p>
+
+          <ng-container *ngIf="getSelectedTableCellType() === 'TEXT'">
+            <p><strong>Unique key:</strong> <input [value]="getSelectedTranslationKey()" (focusout)="onIdChanged($event)"></p>
+            <label><strong>Translation ({{ selectedLanguage }}):</strong></label>
+            <textarea #tableCellTextArea [(ngModel)]="selectedTextContent" (ngModelChange)="onTranslationChanged($event)"
+              style="width: 100%; height: 200px;"></textarea>
+            <button (click)="wrapSelectionInBold(tableCellTextArea)">B</button>
+            <button (click)="copyText(tableCellTextArea)">Copy all</button>
+            <div *ngIf="hasMissingTranslationForSelection()">
+              <button (click)="autoTranslateCurrentSelection()" [disabled]="!canAutoTranslateCurrentSelection() || isAutoTranslating">
+                {{ isAutoTranslating ? 'Übersetze...' : 'Automatisch übersetzen' }}
+              </button>
+            </div>
+            <div *ngIf="autoTranslationMessage">
+              <small>{{ autoTranslationMessage }}</small>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="getSelectedTableCellType() === 'IMAGE'">
+            <p><strong>Image file:</strong> <input [value]="getSelectedTableCellImageValue()" (focusout)="onTableCellImageFileChanged($event)"></p>
+            <p><strong>Description key:</strong> <input [value]="getSelectedTableCellImageDescription()" (focusout)="onTableCellImageDescriptionChanged($event)"></p>
+            <p><strong>Width:</strong> <input [value]="getSelectedTableCellImageWidth()" (focusout)="onTableCellImageWidthChanged($event)"></p>
+            <p><strong>Height:</strong> <input [value]="getSelectedTableCellImageHeight()" (focusout)="onTableCellImageHeightChanged($event)"></p>
+            <p>
+              <label>
+                <strong>Border:</strong>
+                <input type="checkbox" [checked]="getSelectedTableCellImageBorder()" (change)="onTableCellImageBorderChanged($event)">
+              </label>
+            </p>
+            <ng-container *ngIf="canEditTranslationForSelection()">
+              <label><strong>Translation ({{ selectedLanguage }}):</strong></label>
+              <textarea #tableCellImageTextArea [(ngModel)]="selectedTextContent" (ngModelChange)="onTranslationChanged($event)"
+                style="width: 100%; height: 200px;"></textarea>
+              <button (click)="wrapSelectionInBold(tableCellImageTextArea)">B</button>
+              <button (click)="copyText(tableCellImageTextArea)">Copy all</button>
+            </ng-container>
+            <div *ngIf="hasMissingTranslationForSelection() && canEditTranslationForSelection()">
+              <button (click)="autoTranslateCurrentSelection()" [disabled]="!canAutoTranslateCurrentSelection() || isAutoTranslating">
+                {{ isAutoTranslating ? 'Übersetze...' : 'Automatisch übersetzen' }}
+              </button>
+            </div>
+            <div *ngIf="autoTranslationMessage && canEditTranslationForSelection()">
+              <small>{{ autoTranslationMessage }}</small>
+            </div>
+          </ng-container>
         </div>
       </ng-template>
       <ng-template #imageType>

@@ -15,8 +15,12 @@ import {
   isNonNestableType,
   HelpTextTable,
   TableCellSelection,
+  TableCellValue,
+  TableCellImage,
   getSectionSelectionId,
+  getTableCellKey,
   isValuelessContentType,
+  isTableCellImage,
   serializeHelpTextRoot
 } from '~/app/models/help-text-structure.model';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
@@ -614,7 +618,8 @@ export class MainComponent implements OnInit {
 
       this.selectedSection = tableSection;
       this.selectedTableCell = contentId;
-      this.selectedContentKey = contentId.key;
+      const cellValue = this.getTableCellValue(tableSection as HelpTextTable, contentId);
+      this.syncSelectedTableCellKey(cellValue);
       this.loadTextFromQtf(this.selectedContentKey);
       return;
     }
@@ -628,7 +633,8 @@ export class MainComponent implements OnInit {
     if (this.selectedSection.type === 'TABLE') {
       const table = this.selectedSection as HelpTextTable;
       this.selectedTableCell = this.findTableCellContext(table, contentId);
-      this.selectedContentKey = this.selectedTableCell ? contentId : null;
+      const cellValue = this.selectedTableCell ? this.getTableCellValue(table, this.selectedTableCell) : null;
+      this.syncSelectedTableCellKey(cellValue);
       this.loadTextFromQtf(this.selectedContentKey);
       return;
     }
@@ -985,22 +991,104 @@ export class MainComponent implements OnInit {
     }
 
     const tableId = getSectionSelectionId(table) || '';
-    const headerIndex = table.header?.indexOf(key) ?? -1;
-    if (headerIndex >= 0) {
-      return { tableId, colIndex: headerIndex, isHeader: true, key };
+    if (table.header) {
+      for (let colIndex = 0; colIndex < table.header.length; colIndex += 1) {
+        const cellKey = getTableCellKey(table.header[colIndex]);
+        if (cellKey === key) {
+          return { tableId, colIndex, isHeader: true, key };
+        }
+      }
     }
 
     if (table.rows) {
       for (let rowIndex = 0; rowIndex < table.rows.length; rowIndex += 1) {
         const row = table.rows[rowIndex];
-        const colIndex = row?.rowValues?.indexOf(key) ?? -1;
-        if (colIndex >= 0) {
-          return { tableId, rowIndex, colIndex, isHeader: false, key };
+        if (!row?.rowValues) {
+          continue;
+        }
+        for (let colIndex = 0; colIndex < row.rowValues.length; colIndex += 1) {
+          const cellKey = getTableCellKey(row.rowValues[colIndex]);
+          if (cellKey === key) {
+            return { tableId, rowIndex, colIndex, isHeader: false, key };
+          }
         }
       }
     }
 
     return null;
+  }
+
+  private getTableCellValue(table: HelpTextTable, selection: TableCellSelection): TableCellValue | null {
+    if (!table || !selection) {
+      return null;
+    }
+
+    if (selection.isHeader) {
+      return table.header?.[selection.colIndex] ?? null;
+    }
+
+    const rowIndex = selection.rowIndex ?? -1;
+    if (!table.rows || rowIndex < 0 || rowIndex >= table.rows.length) {
+      return null;
+    }
+
+    return table.rows[rowIndex]?.rowValues?.[selection.colIndex] ?? null;
+  }
+
+  private setTableCellValue(table: HelpTextTable, selection: TableCellSelection, value: TableCellValue): boolean {
+    if (!table || !selection) {
+      return false;
+    }
+
+    if (selection.isHeader) {
+      if (table.header && selection.colIndex >= 0 && selection.colIndex < table.header.length) {
+        table.header[selection.colIndex] = value;
+        return true;
+      }
+      return false;
+    }
+
+    const rowIndex = selection.rowIndex ?? -1;
+    if (table.rows && rowIndex >= 0 && rowIndex < table.rows.length) {
+      const row = table.rows[rowIndex];
+      if (row?.rowValues && selection.colIndex >= 0 && selection.colIndex < row.rowValues.length) {
+        row.rowValues[selection.colIndex] = value;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private syncSelectedTableCellKey(cellValue: TableCellValue | null): void {
+    const key = getTableCellKey(cellValue);
+    this.selectedContentKey = key;
+    if (this.selectedTableCell) {
+      this.selectedTableCell = { ...this.selectedTableCell, key };
+    }
+  }
+
+  private getSelectedTableCellValue(): TableCellValue | null {
+    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+      return null;
+    }
+    return this.getTableCellValue(this.selectedSection as HelpTextTable, this.selectedTableCell);
+  }
+
+  private updateSelectedTableCellValue(value: TableCellValue): void {
+    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+      return;
+    }
+
+    const table = this.selectedSection as HelpTextTable;
+    const changed = this.setTableCellValue(table, this.selectedTableCell, value);
+    if (!changed) {
+      return;
+    }
+
+    this.syncSelectedTableCellKey(value);
+    this.isDirty = true;
+    this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+    this.loadTextFromQtf(this.selectedContentKey);
   }
 
   private updateSelectedTranslationKey(oldId: string, newId: string): boolean {
@@ -1012,7 +1100,15 @@ export class MainComponent implements OnInit {
       const table = this.selectedSection as HelpTextTable;
       if (this.selectedTableCell.isHeader) {
         if (table.header && this.selectedTableCell.colIndex < table.header.length) {
-          table.header[this.selectedTableCell.colIndex] = newId;
+          const existingCell = table.header[this.selectedTableCell.colIndex];
+          if (isTableCellImage(existingCell)) {
+            table.header[this.selectedTableCell.colIndex] = {
+              ...existingCell,
+              imageDescription: newId
+            };
+          } else {
+            table.header[this.selectedTableCell.colIndex] = newId;
+          }
           this.selectedContentKey = newId;
           this.selectedTableCell = { ...this.selectedTableCell, key: newId };
           return true;
@@ -1024,7 +1120,15 @@ export class MainComponent implements OnInit {
       if (table.rows && rowIndex >= 0 && rowIndex < table.rows.length) {
         const row = table.rows[rowIndex];
         if (row?.rowValues && this.selectedTableCell.colIndex < row.rowValues.length) {
-          row.rowValues[this.selectedTableCell.colIndex] = newId;
+          const existingCell = row.rowValues[this.selectedTableCell.colIndex];
+          if (isTableCellImage(existingCell)) {
+            row.rowValues[this.selectedTableCell.colIndex] = {
+              ...existingCell,
+              imageDescription: newId
+            };
+          } else {
+            row.rowValues[this.selectedTableCell.colIndex] = newId;
+          }
           this.selectedContentKey = newId;
           this.selectedTableCell = { ...this.selectedTableCell, key: newId };
           return true;
@@ -1560,6 +1664,28 @@ export class MainComponent implements OnInit {
     });
   }
 
+  private ensureQtfEntry(key: string, previousKey?: string): void {
+    if (!this.qtfFile) {
+      return;
+    }
+    if (!this.qtfFile.TEXTS) {
+      this.qtfFile.TEXTS = {};
+    }
+    if (!this.qtfFile.TEXTS[key]) {
+      if (previousKey && this.qtfFile.TEXTS[previousKey]) {
+        const previousEntry = this.qtfFile.TEXTS[previousKey];
+        this.qtfFile.TEXTS[key] = {
+          ...previousEntry,
+          TRANSLATIONS: { ...previousEntry.TRANSLATIONS },
+          AUTOTRANSLATIONS: { ...previousEntry.AUTOTRANSLATIONS },
+          VERIFIED: { ...previousEntry.VERIFIED }
+        };
+      } else {
+        this.qtfFile.TEXTS[key] = createNewQtfItem(this.selectedLanguage, '');
+      }
+    }
+  }
+
   private persistAbbreviationChange(mainSection: MainHelpSection): void {
     const selectedId = this.getSelectedSectionId();
     this.currentMainHelpSection = mainSection;
@@ -1614,6 +1740,154 @@ export class MainComponent implements OnInit {
     }
 
     return !(this.selectedSection.type === 'TABLE' && this.selectedTableCell);
+  }
+
+  public getSelectedTableCellType(): 'TEXT' | 'IMAGE' {
+    const cellValue = this.getSelectedTableCellValue();
+    return isTableCellImage(cellValue) ? 'IMAGE' : 'TEXT';
+  }
+
+  public onTableCellTypeChanged(type: 'TEXT' | 'IMAGE'): void {
+    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+      return;
+    }
+
+    const currentValue = this.getSelectedTableCellValue();
+    if (type === 'IMAGE') {
+      const description = typeof currentValue === 'string'
+        ? currentValue
+        : isTableCellImage(currentValue)
+          ? currentValue.imageDescription
+          : undefined;
+      const nextValue: TableCellImage = {
+        type: 'IMAGE',
+        value: isTableCellImage(currentValue) ? currentValue.value : '',
+        imageDescription: description,
+        width: isTableCellImage(currentValue) ? currentValue.width : undefined,
+        height: isTableCellImage(currentValue) ? currentValue.height : undefined,
+        border: isTableCellImage(currentValue) ? currentValue.border : undefined
+      };
+      this.updateSelectedTableCellValue(nextValue);
+      return;
+    }
+
+    const nextKey = isTableCellImage(currentValue)
+      ? (currentValue.imageDescription || '')
+      : (typeof currentValue === 'string' ? currentValue : '');
+    this.updateSelectedTableCellValue(nextKey);
+  }
+
+  public getSelectedTableCellImageValue(): string {
+    const cellValue = this.getSelectedTableCellValue();
+    return isTableCellImage(cellValue) ? cellValue.value : '';
+  }
+
+  public getSelectedTableCellImageDescription(): string {
+    const cellValue = this.getSelectedTableCellValue();
+    return isTableCellImage(cellValue) ? (cellValue.imageDescription || '') : '';
+  }
+
+  public getSelectedTableCellImageWidth(): string {
+    const cellValue = this.getSelectedTableCellValue();
+    return isTableCellImage(cellValue) ? (cellValue.width || '') : '';
+  }
+
+  public getSelectedTableCellImageHeight(): string {
+    const cellValue = this.getSelectedTableCellValue();
+    return isTableCellImage(cellValue) ? (cellValue.height || '') : '';
+  }
+
+  public getSelectedTableCellImageBorder(): boolean {
+    const cellValue = this.getSelectedTableCellValue();
+    return isTableCellImage(cellValue) ? !!cellValue.border : false;
+  }
+
+  public onTableCellImageFileChanged(event): void {
+    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+      return;
+    }
+    const newValue = event.target.value;
+    const currentValue = this.getSelectedTableCellValue();
+    const nextValue: TableCellImage = isTableCellImage(currentValue)
+      ? { ...currentValue, value: newValue }
+      : {
+        type: 'IMAGE',
+        value: newValue,
+        imageDescription: typeof currentValue === 'string' ? currentValue : undefined
+      };
+    this.updateSelectedTableCellValue(nextValue);
+  }
+
+  public onTableCellImageDescriptionChanged(event): void {
+    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+      return;
+    }
+    const newDescription = event.target.value;
+    const currentValue = this.getSelectedTableCellValue();
+    const currentKey = this.getSelectedTranslationKey();
+
+    if (currentKey && newDescription && currentKey !== newDescription) {
+      this.onIdChanged(event);
+      return;
+    }
+
+    if (!isTableCellImage(currentValue)) {
+      return;
+    }
+
+    if (!currentKey && newDescription && this.currentMainHelpSection.idExists(newDescription)) {
+      alert('Id already exists.');
+      return;
+    }
+
+    const nextValue: TableCellImage = {
+      ...currentValue,
+      imageDescription: newDescription || undefined
+    };
+    this.updateSelectedTableCellValue(nextValue);
+
+    if (newDescription) {
+      this.ensureQtfEntry(newDescription);
+      this.loadTextFromQtf(newDescription);
+    } else {
+      this.selectedTextContent = '';
+    }
+  }
+
+  public onTableCellImageWidthChanged(event): void {
+    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+      return;
+    }
+    const newWidth = event.target.value;
+    const currentValue = this.getSelectedTableCellValue();
+    if (!isTableCellImage(currentValue)) {
+      return;
+    }
+    this.updateSelectedTableCellValue({ ...currentValue, width: newWidth || undefined });
+  }
+
+  public onTableCellImageHeightChanged(event): void {
+    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+      return;
+    }
+    const newHeight = event.target.value;
+    const currentValue = this.getSelectedTableCellValue();
+    if (!isTableCellImage(currentValue)) {
+      return;
+    }
+    this.updateSelectedTableCellValue({ ...currentValue, height: newHeight || undefined });
+  }
+
+  public onTableCellImageBorderChanged(event): void {
+    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+      return;
+    }
+    const checked = !!event.target.checked;
+    const currentValue = this.getSelectedTableCellValue();
+    if (!isTableCellImage(currentValue)) {
+      return;
+    }
+    this.updateSelectedTableCellValue({ ...currentValue, border: checked });
   }
 
   private getTranslationEntryForSelection(key: string | null): QtfTextEntry | null {

@@ -7,6 +7,7 @@ import {
   HelpTextSection,
   HelpTextStep,
   HelpTextTable,
+  getTableCellKey,
   StructureIssue,
   collectStructureIssues
 } from '~/app/models/help-text-structure.model';
@@ -262,8 +263,8 @@ export class TranslationIssuesDialogComponent implements OnInit {
 
       if (section.type === 'TABLE') {
         const tableSection = section as HelpTextTable;
-        tableSection.header?.forEach(addIfPresent);
-        tableSection.rows?.forEach(row => row?.rowValues?.forEach(addIfPresent));
+        tableSection.header?.forEach(cell => addIfPresent(getTableCellKey(cell)));
+        tableSection.rows?.forEach(row => row?.rowValues?.forEach(cell => addIfPresent(getTableCellKey(cell))));
       }
 
       section.coversheet?.forEach(processSection);
