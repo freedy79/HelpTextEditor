@@ -1,6 +1,6 @@
 export interface MenuItemModel {
     text?: string;
-    iconCss?: string;
+    icon?: string;
     items?: MenuItemModel[];
     separator?: boolean;
     clickId?: string;
