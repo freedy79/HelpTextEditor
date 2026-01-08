@@ -20,7 +20,7 @@ describe('TreeDragDropService', () => {
     const dragContext: DragContext = { item: dragged, parent, container: 'content', index: 0 };
     const dropData: DropContainerContext = { parent, container: 'coversheet', mode: 'list' };
 
-    expect(service.canEnterDropListContext(dragContext, dropData, 'list')).toBeFalse();
+    expect(service.canEnterDropListContext(dragContext, dropData, 'list')).toBeFalsy();
   });
 
   it('rejects child drops for non-nestable sections', () => {
@@ -37,7 +37,7 @@ describe('TreeDragDropService', () => {
     const dragContext: DragContext = { item: dragged, parent: dragParent, container: 'content', index: 0 };
     const dropData: DropContainerContext = { parent: targetParent, container: 'subsections', mode: 'child' };
 
-    expect(service.canEnterDropListContext(dragContext, dropData, 'child')).toBeFalse();
+    expect(service.canEnterDropListContext(dragContext, dropData, 'child')).toBeFalsy();
   });
 
   it('moves items within a list based on the drop indicator', () => {
