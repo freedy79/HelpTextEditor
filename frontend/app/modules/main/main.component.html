@@ -204,6 +204,87 @@
       <ng-template #noSelection>
         <p>No item selected.</p>
       </ng-template>
+
+      <div class="coverage-panel">
+        <h3>Coverage</h3>
+        <div *ngIf="facade.coverageReport as coverage; else noCoverage">
+          <div class="coverage-summary">
+            <div><strong>Used keys:</strong> {{ coverage.usedKeys.length }}</div>
+            <div><strong>Missing QTF keys:</strong> {{ coverage.missingKeys.length }}</div>
+            <div><strong>Duplicate keys:</strong> {{ coverage.duplicateKeys.length }}</div>
+            <div><strong>Unused QTF keys:</strong> {{ coverage.unusedQtfKeys.length }}</div>
+          </div>
+
+          <details class="coverage-block" [open]="coverage.missingKeys.length > 0">
+            <summary>Missing keys in HELPTEXT.qtf</summary>
+            <div *ngIf="coverage.missingKeys.length; else noMissingQtf">
+              <ul class="coverage-key-list">
+                <li *ngFor="let item of coverage.missingKeys">
+                  <div class="coverage-key">{{ item.key }}</div>
+                  <ul class="coverage-ref-list">
+                    <li *ngFor="let ref of item.references">{{ ref.kind }}: {{ ref.label }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <ng-template #noMissingQtf>
+              <p>Keine fehlenden Keys gefunden.</p>
+            </ng-template>
+          </details>
+
+          <details class="coverage-block" [open]="coverage.missingTranslations.some(report => report.missing.length)">
+            <summary>Missing translations per language</summary>
+            <ng-template #noMissingTranslations>
+              <p>Keine fehlenden Übersetzungen.</p>
+            </ng-template>
+            <div *ngFor="let report of coverage.missingTranslations" class="coverage-language">
+              <h4>{{ report.language }} ({{ report.missing.length }})</h4>
+              <div *ngIf="report.missing.length; else noMissingTranslations">
+                <ul class="coverage-key-list">
+                  <li *ngFor="let item of report.missing">
+                    <div class="coverage-key">{{ item.key }}</div>
+                    <ul class="coverage-ref-list">
+                      <li *ngFor="let ref of item.references">{{ ref.kind }}: {{ ref.label }}</li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </details>
+
+          <details class="coverage-block" [open]="coverage.duplicateKeys.length > 0">
+            <summary>Duplicate keys in helpTexts.json</summary>
+            <div *ngIf="coverage.duplicateKeys.length; else noDuplicateKeys">
+              <ul class="coverage-key-list">
+                <li *ngFor="let item of coverage.duplicateKeys">
+                  <div class="coverage-key">{{ item.key }} ({{ item.references.length }})</div>
+                  <ul class="coverage-ref-list">
+                    <li *ngFor="let ref of item.references">{{ ref.kind }}: {{ ref.label }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <ng-template #noDuplicateKeys>
+              <p>Keine doppelten Keys gefunden.</p>
+            </ng-template>
+          </details>
+
+          <details class="coverage-block" [open]="coverage.unusedQtfKeys.length > 0">
+            <summary>Unused QTF keys</summary>
+            <div *ngIf="coverage.unusedQtfKeys.length; else noUnusedKeys">
+              <ul class="coverage-key-list">
+                <li *ngFor="let key of coverage.unusedQtfKeys">{{ key }}</li>
+              </ul>
+            </div>
+            <ng-template #noUnusedKeys>
+              <p>Keine ungenutzten Keys gefunden.</p>
+            </ng-template>
+          </details>
+        </div>
+        <ng-template #noCoverage>
+          <p>Lade helpTexts.json und HELPTEXT.qtf, um die Coverage zu sehen.</p>
+        </ng-template>
+      </div>
     </div>
   </div>
 
