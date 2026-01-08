@@ -73,8 +73,12 @@ export function createHelpNodeId(seed?: string): string {
     return seed;
   }
 
-  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
-    return crypto.randomUUID();
+  const cryptoRef =
+    typeof globalThis !== 'undefined'
+      ? (globalThis as typeof globalThis & { crypto?: { randomUUID?: () => string } }).crypto
+      : undefined;
+  if (cryptoRef?.randomUUID) {
+    return cryptoRef.randomUUID();
   }
 
   const entropy = Math.random().toString(36).slice(2);
