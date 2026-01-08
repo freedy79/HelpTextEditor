@@ -1937,6 +1937,57 @@ export class HelpEditorFacade {
     });
   }
 
+  public canMoveTableRow(direction: 'up' | 'down'): boolean {
+    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell || this.selectedTableCell.isHeader) {
+      return false;
+    }
+
+    const table = this.selectedSection as HelpTextTable;
+    const rowIndex = this.selectedTableCell.rowIndex ?? -1;
+    if (!table.rows || rowIndex < 0 || rowIndex >= table.rows.length) {
+      return false;
+    }
+
+    return direction === 'up' ? rowIndex > 0 : rowIndex < table.rows.length - 1;
+  }
+
+  public moveTableRow(direction: 'up' | 'down'): void {
+    if (!this.canMoveTableRow(direction)) {
+      return;
+    }
+
+    this.saveCurrentSectionText();
+    const table = this.selectedSection as HelpTextTable;
+    const rowIndex = this.selectedTableCell?.rowIndex ?? -1;
+    if (!table.rows || rowIndex < 0 || rowIndex >= table.rows.length) {
+      return;
+    }
+
+    const targetIndex = direction === 'up' ? rowIndex - 1 : rowIndex + 1;
+    const [row] = table.rows.splice(rowIndex, 1);
+    table.rows.splice(targetIndex, 0, row);
+
+    this.isDirty = true;
+    this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+
+    const tableId = getSectionSelectionId(table) || '';
+    if (!tableId) {
+      return;
+    }
+
+    const selectedColIndex = this.selectedTableCell?.colIndex ?? 0;
+    const maxColIndex = (row.rowValues?.length ?? 1) - 1;
+    const nextColIndex = Math.min(Math.max(selectedColIndex, 0), Math.max(maxColIndex, 0));
+    const nextCellValue = row.rowValues?.[nextColIndex] ?? null;
+    this.onSelectSection({
+      tableId,
+      rowIndex: targetIndex,
+      colIndex: nextColIndex,
+      isHeader: false,
+      key: getTableCellKey(nextCellValue)
+    });
+  }
+
   public addTableColumn(): void {
     if (this.selectedSection?.type !== 'TABLE') {
       return;
