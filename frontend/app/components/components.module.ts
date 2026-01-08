@@ -4,6 +4,7 @@ import { ContextMenuComponent } from './context-menu/app-context-menu.component'
 import { HeaderMenuComponent } from './header-menu/header-menu.component';
 import { HelpSectionComponent } from './help-section/help-section.component';
 import { HelpStructureTreeviewComponent } from './help-structure-treeview/help-structure-treeview.component';
+import { TreeDropIndicatorDirective } from './help-structure-treeview/tree-drop-indicator.directive';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,6 +18,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     HeaderMenuComponent,
     HelpSectionComponent,
     HelpStructureTreeviewComponent,
+    TreeDropIndicatorDirective,
     StatusbarComponent
   ],
   imports: [
@@ -31,6 +33,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     HeaderMenuComponent,
     HelpSectionComponent,
     HelpStructureTreeviewComponent,
+    TreeDropIndicatorDirective,
     StatusbarComponent
   ],
   providers: [
