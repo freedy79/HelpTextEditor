@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import { Request, Response, NextFunction } from 'express';
 import type { Express } from 'express';
 import { fileFilter, handleUpload } from './uploadRoutes';
+import { ApiError } from '../middlewares/errorHandler';
 
 test('fileFilter allows whitelisted mime types and rejects others', () => {
   const allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
@@ -20,14 +21,19 @@ test('fileFilter allows whitelisted mime types and rejects others', () => {
   }
 
   let rejected: boolean | null = null;
+  let rejectionError: unknown;
   fileFilter(
     {} as Request,
     { mimetype: 'text/plain' } as Express.Multer.File,
-    (_err: Error | null, accept?: boolean) => {
+    (err: Error | null, accept?: boolean) => {
+      rejectionError = err;
       rejected = accept ?? null;
     }
   );
-  assert.equal(rejected, false);
+  assert.equal(rejected, null);
+  assert.ok(rejectionError instanceof ApiError);
+  const apiError = rejectionError as ApiError;
+  assert.equal(apiError.errorCode, 'INVALID_MIME_TYPE');
 });
 
 test('handleUpload responds with 400 when no file is provided', () => {
@@ -44,11 +50,21 @@ test('handleUpload responds with 400 when no file is provided', () => {
       return this;
     },
   } as unknown as Response;
+  const next = (err?: Error) => {
+    if (err && err instanceof ApiError) {
+      statusCode = err.statusCode;
+      payload = { errorCode: err.errorCode, message: err.message, details: err.details };
+    }
+  };
 
-  handleUpload({} as Request, res, (() => undefined) as NextFunction);
+  handleUpload({} as Request, res, next as NextFunction);
 
   assert.equal(statusCode, 400);
-  assert.deepEqual(payload, { error: 'No file received' });
+  assert.deepEqual(payload, {
+    errorCode: 'MISSING_FILE',
+    message: 'No file received.',
+    details: { field: 'file' },
+  });
 });
 
 test('handleUpload returns upload metadata when a file is present', () => {

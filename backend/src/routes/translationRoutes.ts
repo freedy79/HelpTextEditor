@@ -1,10 +1,61 @@
 import https from 'node:https';
 import express, { Request, Response } from 'express';
+import { ApiError } from '../middlewares/errorHandler';
 
 const router = express.Router();
 
+type DeeplRequestBody = {
+  text: string;
+  sourceLang?: string;
+  targetLang: string;
+  authKey: string;
+};
+
+const validateDeeplRequestBody = (body: unknown): DeeplRequestBody => {
+  const payload = (body ?? {}) as Record<string, unknown>;
+  const missingFields: string[] = [];
+  const invalidFields: string[] = [];
+
+  const textValue = typeof payload.text === 'string' ? payload.text.trim() : '';
+  const targetLangValue =
+    typeof payload.targetLang === 'string' ? payload.targetLang.trim() : '';
+  const authKeyValue = typeof payload.authKey === 'string' ? payload.authKey.trim() : '';
+  const sourceLangValue =
+    typeof payload.sourceLang === 'string' ? payload.sourceLang.trim() : undefined;
+
+  if (textValue.length === 0) {
+    missingFields.push('text');
+  }
+
+  if (targetLangValue.length === 0) {
+    missingFields.push('targetLang');
+  }
+
+  if (authKeyValue.length === 0) {
+    missingFields.push('authKey');
+  }
+
+  if (payload.sourceLang !== undefined && !sourceLangValue) {
+    invalidFields.push('sourceLang');
+  }
+
+  if (missingFields.length > 0 || invalidFields.length > 0) {
+    throw new ApiError(400, 'VALIDATION_ERROR', 'Invalid request body.', {
+      missingFields,
+      invalidFields,
+    });
+  }
+
+  return {
+    text: textValue,
+    sourceLang: sourceLangValue,
+    targetLang: targetLangValue,
+    authKey: authKeyValue,
+  };
+};
+
 router.post('/translate/deepl', async (req: Request, res: Response): Promise<void> => {
-  const { text, sourceLang, targetLang, authKey } = req.body || {};
+  const { text, sourceLang, targetLang, authKey } = validateDeeplRequestBody(req.body);
 
   console.log('[DeepL] Incoming request', {
     hasText: !!text,
@@ -12,12 +63,6 @@ router.post('/translate/deepl', async (req: Request, res: Response): Promise<voi
     targetLang,
     authKeyPreview: authKey ? `${authKey.slice(0, 4)}...${authKey.slice(-3)}` : 'none'
   });
-
-  if (!text || !targetLang || !authKey) {
-    console.warn('[DeepL] Missing required fields', { hasText: !!text, targetLang, hasAuthKey: !!authKey });
-    res.status(400).json({ message: 'Missing required fields for DeepL translation.' });
-    return;
-  }
 
   try {
     const params = new URLSearchParams();
@@ -37,6 +82,7 @@ router.post('/translate/deepl', async (req: Request, res: Response): Promise<voi
       const errorText = deeplResponse.body;
       console.error('[DeepL] Request failed', { status: deeplResponse.status, body: errorText });
       res.status(deeplResponse.status || 502).json({
+        errorCode: 'DEEPL_REQUEST_FAILED',
         message: 'DeepL request failed.',
         details: deeplResponse.body
       });
@@ -51,14 +97,20 @@ router.post('/translate/deepl', async (req: Request, res: Response): Promise<voi
       });
     } catch (parseError) {
       console.error('DeepL response parse error', parseError);
-      res.status(502).json({ message: 'Invalid response from DeepL.' });
+      res.status(502).json({
+        errorCode: 'DEEPL_RESPONSE_INVALID',
+        message: 'Invalid response from DeepL.'
+      });
       return;
     }
 
     res.json(data);
   } catch (error) {
     console.error('DeepL proxy error', error);
-    res.status(500).json({ message: 'DeepL proxy failed. Please try again later.' });
+    res.status(500).json({
+      errorCode: 'DEEPL_PROXY_FAILED',
+      message: 'DeepL proxy failed. Please try again later.'
+    });
   }
 });
 

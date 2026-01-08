@@ -4,11 +4,12 @@ import userRoutes from './routes/userRoutes';
 import errorHandler from './middlewares/errorHandler';
 import uploadRoutes from './routes/uploadRoutes';
 import translationRoutes from './routes/translationRoutes';
+import { config } from './config';
 
 const cors=require('cors');
 
 const app: Application = express();
-const port: number = 3000;
+const port: number = config.port;
 
 // Basic request/response logging to trace the path from the frontend
 app.use((req, res, next) => {
@@ -25,7 +26,7 @@ app.use((req, res, next) => {
 
 // Configure CORS
 app.use(cors({
-  origin: 'http://localhost:4200', // Allow requests from this origin
+  origin: config.corsOrigin, // Allow requests from this origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
   credentials: true // Allow cookies and credentials
 }));
