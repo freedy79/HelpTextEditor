@@ -21,7 +21,9 @@ describe('errorHandler middleware', () => {
     const url = `http://127.0.0.1:${address.port}/boom`;
     const response = await fetch(url);
     assert.equal(response.status, 500);
-    assert.equal(await response.text(), 'Something broke!');
+    const payload = await response.json();
+    assert.equal(payload.errorCode, 'INTERNAL_SERVER_ERROR');
+    assert.equal(payload.message, 'Something went wrong.');
 
     await new Promise<void>((resolve) => server.close(() => resolve()));
   });
