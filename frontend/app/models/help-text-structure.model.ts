@@ -9,14 +9,52 @@ export enum HelpContentType {
   TABLE = 'TABLE',
 }
 
+export interface HelpNodeBase {
+  id: string;
+  type: HelpContentType | 'STEP';
+  linkId?: string;
+}
+
+export interface TextSection extends HelpNodeBase {
+  type:
+    | HelpContentType.INSTRUCTION
+    | HelpContentType.INSTRUCTION_BOLD
+    | HelpContentType.INTRODUCTION
+    | HelpContentType.ENUMERATION
+    | HelpContentType.BULLET_ENUMERATION;
+  value?: string;
+  steps?: HelpTextStep[];
+}
+
+export interface ImageSection extends HelpNodeBase {
+  type: HelpContentType.IMAGE | HelpContentType.SPLITIMAGE;
+  value?: string;
+  imageDescription?: string;
+  pdfWidth?: Number;
+  width?: string;
+  height?: string;
+  border?: boolean;
+}
+
+export interface TableSection extends HelpNodeBase {
+  type: HelpContentType.TABLE;
+  header: TableCellValue[];
+  rows?: RowItem[];
+}
+
+export interface StepNode extends HelpNodeBase {
+  type: 'STEP';
+  value: string;
+  substeps?: StepNode[];
+}
+
 const VALUELESS_CONTENT_TYPES = new Set<HelpContentType>([
   HelpContentType.ENUMERATION,
   HelpContentType.BULLET_ENUMERATION,
   HelpContentType.TABLE,
 ]);
 
-const INTERNAL_ID_KEY = '__internalId';
-let internalIdCounter = 0;
+const DEFAULT_ID_PREFIX = 'help-node';
 
 export const NON_NESTABLE_CONTENT_TYPES = new Set<HelpContentType>([
   HelpContentType.INSTRUCTION,
@@ -30,7 +68,54 @@ export interface StructureIssue {
   message: string;
 }
 
-export function isNonNestableType(type?: string): boolean {
+export function createHelpNodeId(seed?: string): string {
+  if (seed) {
+    return seed;
+  }
+
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID();
+  }
+
+  const entropy = Math.random().toString(36).slice(2);
+  return `${DEFAULT_ID_PREFIX}-${Date.now().toString(36)}-${entropy}`;
+}
+
+export function isTableContentType(type?: HelpContentType | string): type is HelpContentType.TABLE {
+  return type === HelpContentType.TABLE;
+}
+
+export function isImageContentType(
+  type?: HelpContentType | string
+): type is HelpContentType.IMAGE | HelpContentType.SPLITIMAGE {
+  return type === HelpContentType.IMAGE || type === HelpContentType.SPLITIMAGE;
+}
+
+export function isInstructionContentType(
+  type?: HelpContentType | string
+): type is HelpContentType.INSTRUCTION | HelpContentType.INSTRUCTION_BOLD {
+  return type === HelpContentType.INSTRUCTION || type === HelpContentType.INSTRUCTION_BOLD;
+}
+
+export function isEnumerationContentType(
+  type?: HelpContentType | string
+): type is HelpContentType.ENUMERATION | HelpContentType.BULLET_ENUMERATION {
+  return type === HelpContentType.ENUMERATION || type === HelpContentType.BULLET_ENUMERATION;
+}
+
+export function isTableSection(section?: HelpTextSection | null): section is HelpTextTable {
+  return !!section && isTableContentType(section.type);
+}
+
+export function isImageSection(section?: HelpTextSection | null): section is HelpTextSection {
+  return !!section && isImageContentType(section.type);
+}
+
+export function isStepNode(node?: HelpTextStep | null): node is HelpTextStep {
+  return !!node && node.type === 'STEP';
+}
+
+export function isNonNestableType(type?: HelpContentType | string): boolean {
   if (!type) {
     return false;
   }
@@ -38,7 +123,7 @@ export function isNonNestableType(type?: string): boolean {
   return NON_NESTABLE_CONTENT_TYPES.has(type as HelpContentType);
 }
 
-export function isValuelessContentType(type?: string): boolean {
+export function isValuelessContentType(type?: HelpContentType | string): boolean {
   if (!type) {
     return false;
   }
@@ -51,15 +136,11 @@ export function getSectionSelectionId(section?: HelpTextSection | HelpTextStep |
     return null;
   }
 
-  if ((section as HelpTextStep).type === 'STEP') {
-    return (section as HelpTextStep).value || null;
+  if (isStepNode(section as HelpTextStep)) {
+    return (section as HelpTextStep).id || (section as HelpTextStep).value || null;
   }
 
-  if ((section as HelpTextSection).value) {
-    return (section as HelpTextSection).value;
-  }
-
-  return ensureInternalId(section as HelpTextSection);
+  return (section as HelpTextSection).id || (section as HelpTextSection).value || null;
 }
 
 export function matchesSectionId(section: HelpTextSection, contentId: string): boolean {
@@ -67,23 +148,7 @@ export function matchesSectionId(section: HelpTextSection, contentId: string): b
     return false;
   }
 
-  return section.value === contentId || (section as any)[INTERNAL_ID_KEY] === contentId;
-}
-
-function ensureInternalId(section: HelpTextSection): string {
-  const existing = (section as any)[INTERNAL_ID_KEY];
-  if (existing) {
-    return existing;
-  }
-
-  internalIdCounter += 1;
-  const id = `section-${internalIdCounter}`;
-  Object.defineProperty(section, INTERNAL_ID_KEY, {
-    value: id,
-    enumerable: false,
-    writable: false
-  });
-  return id;
+  return section.id === contentId || section.value === contentId;
 }
 
 export const HELP_TEXT_ROOT_KEYS = [
@@ -128,9 +193,14 @@ class SectionCollections {
 }
 
 export class HelpTextStep {
+  id: string;
   value: string;
   type = 'STEP';
   substeps?: HelpTextStep[];
+
+  constructor() {
+    this.id = createHelpNodeId();
+  }
 
   public getTranslationKey(): string {
     return this.value;
@@ -138,18 +208,24 @@ export class HelpTextStep {
 }
 
 export class HelpTextSection {
+  id: string;
   linkId: string;
   value: string; // Key, der in der QTF-Übersetzung steht
-  type: string;
+  type: HelpContentType;
   imageDescription?: string;
   pdfWidth?: Number;
   width?: string;
+  height?: string;
   border?: boolean;
 
   coversheet?: HelpTextSection[];
   content?: HelpTextSection[];
   subsections?: HelpTextSection[];
   steps?: HelpTextStep[];
+
+  constructor() {
+    this.id = createHelpNodeId();
+  }
 
   private get collections(): SectionCollections {
     return new SectionCollections(() => [this.content, this.subsections, this.coversheet]);
@@ -160,7 +236,7 @@ export class HelpTextSection {
       return null;
     }
 
-    if (this.type === 'IMAGE' || this.type === 'SPLITIMAGE') {
+    if (isImageContentType(this.type)) {
       return this.imageDescription;
     }
 
@@ -218,6 +294,7 @@ export class HelpTextSection {
 
     const newItem = new HelpTextSection;
     newItem.value = contentId;
+    newItem.id = contentId;
 
     if (index === -1 || index > this.subsections.length) {
       this.subsections.push(newItem);
@@ -239,9 +316,10 @@ export class HelpTextSection {
   }
 
   public addStep(contentId: string) {
-    if (this.type === HelpContentType.ENUMERATION || this.type === HelpContentType.BULLET_ENUMERATION) {
+    if (isEnumerationContentType(this.type)) {
       const newStep = new HelpTextStep;
       newStep.value = contentId;
+      newStep.id = contentId;
       if (!this.steps) {
         this.steps = [];
       }
@@ -276,7 +354,7 @@ export class HelpTextSection {
     const existsInCollections = this.collections.idExists(key);
     const existsInSteps = stepIdExists(this.steps, key);
     const existsInImageDescription = this.imageDescription === key;
-    const existsInTable = this.type === 'TABLE' && (this as unknown as HelpTextTable).idExists(key);
+    const existsInTable = isTableSection(this) && (this as unknown as HelpTextTable).idExists(key);
 
     return !!(existsInCollections || existsInSteps || existsInImageDescription || existsInTable);
   }
@@ -284,7 +362,7 @@ export class HelpTextSection {
 
 
 export interface TableCellImage {
-  type: 'IMAGE';
+  type: HelpContentType.IMAGE;
   value: string;
   imageDescription?: string;
   width?: string;
@@ -307,7 +385,7 @@ export interface TableCellSelection {
 }
 
 export function isTableCellImage(cell?: TableCellValue | null): cell is TableCellImage {
-  return !!cell && typeof cell === 'object' && (cell as TableCellImage).type === 'IMAGE';
+  return !!cell && typeof cell === 'object' && (cell as TableCellImage).type === HelpContentType.IMAGE;
 }
 
 export function getTableCellKey(cell?: TableCellValue | null): string | null {
@@ -369,6 +447,7 @@ export class MainHelpSection {
     const newSection = new HelpTextSection();
     newSection.linkId = '';
     newSection.value = contentId;
+    newSection.id = contentId;
 
     if (index === -1) {
       this.content.push(newSection);
@@ -454,7 +533,7 @@ function findSectionInCollections(collections: SectionCollection[], contentId: s
       if (matchesSectionId(section, contentId)) {
         return section;
       }
-      if (section.type === 'TABLE') {
+      if (isTableSection(section)) {
         const tableSection = section as HelpTextTable;
         if (tableSection.header?.some(cell => getTableCellKey(cell) === contentId)) {
           return tableSection;
@@ -487,7 +566,7 @@ function findParentInCollections(
       if (matchesSectionId(section, contentId)) {
         return directParent;
       }
-      if (section.type === 'TABLE') {
+      if (isTableSection(section)) {
         const tableSection = section as HelpTextTable;
         if (tableSection.header?.some(cell => getTableCellKey(cell) === contentId)
           || tableSection.rows?.some(row => row.rowValues?.some(cell => getTableCellKey(cell) === contentId))) {
@@ -517,6 +596,9 @@ function changeValueIdInCollections(collections: SectionCollection[], oldId: str
     for (const section of collection) {
       if (section.value === oldId) {
         section.value = newId;
+        if (section.id === oldId) {
+          section.id = newId;
+        }
         return true;
       }
 
@@ -570,13 +652,17 @@ function removeFromCollections(collections: SectionCollection[], contentId: stri
   return false;
 }
 
+function matchesStepId(step: HelpTextStep, contentId: string): boolean {
+  return step.id === contentId || step.value === contentId;
+}
+
 function findStepById(steps: HelpTextStep[] | undefined, contentId: string): HelpTextStep | null {
   if (!steps) {
     return null;
   }
 
   for (const step of steps) {
-    if (step.value === contentId) {
+    if (matchesStepId(step, contentId)) {
       return step;
     }
 
@@ -594,7 +680,7 @@ function removeStepById(steps: HelpTextStep[] | undefined, contentId: string): b
     return false;
   }
 
-  const index = steps.findIndex(step => step.value === contentId);
+  const index = steps.findIndex(step => matchesStepId(step, contentId));
   if (index !== -1) {
     steps.splice(index, 1);
     return true;
@@ -611,6 +697,9 @@ function changeStepValueId(steps: HelpTextStep[] | undefined, oldId: string, new
   for (const step of steps) {
     if (step.value === oldId) {
       step.value = newId;
+      if (step.id === oldId) {
+        step.id = newId;
+      }
       return true;
     }
     if (changeStepValueId(step.substeps, oldId, newId)) {
@@ -626,279 +715,5 @@ function stepIdExists(steps: HelpTextStep[] | undefined, key: string): boolean {
     return false;
   }
 
-  return steps.some(step => step.value === key || stepIdExists(step.substeps, key));
-}
-
-
-export function parseHelpTextRoot(json: any): HelpTextRoot {
-  const root = new HelpTextRoot();
-
-  HELP_TEXT_ROOT_KEYS.forEach(key => {
-    if (json && json[key]) {
-      root.setSection(key, parseMainHelpSection(json[key]));
-    }
-  });
-
-  return root;
-}
-
-export function serializeHelpTextRoot(root: HelpTextRoot): Record<HelpTextRootKey, unknown> {
-  const serialized: Partial<Record<HelpTextRootKey, unknown>> = {};
-
-  root.forEachSection((section, key) => {
-    serialized[key] = serializeMainHelpSection(section);
-  });
-
-  return serialized as Record<HelpTextRootKey, unknown>;
-}
-
-export function serializeMainHelpSection(section: MainHelpSection): Record<string, unknown> {
-  const serialized: Record<string, unknown> = {};
-
-  if (section.coversheet?.length) {
-    serialized.coversheet = section.coversheet.map(serializeHelpTextSection);
-  }
-  if (section.abbreviations?.length) {
-    serialized.abbreviations = section.abbreviations.map(abbr => ({
-      abbreviation: abbr.abbreviation,
-      shortDescription: abbr.shortDescription,
-      longDescription: abbr.longDescription,
-      referenceAbbreviation: abbr.referenceAbbreviation
-    }));
-  }
-  if (section.content?.length) {
-    serialized.content = section.content.map(serializeHelpTextSection);
-  }
-
-  return serialized;
-}
-
-export function serializeHelpTextSection(section: HelpTextSection): Record<string, unknown> {
-  if (section.type === 'TABLE') {
-    return serializeHelpTextTable(section as HelpTextTable);
-  }
-
-  const serialized: Record<string, unknown> = {
-    linkId: section.linkId,
-    value: section.value,
-    type: section.type
-  };
-
-  if (section.imageDescription !== undefined) {
-    serialized.imageDescription = section.imageDescription;
-  }
-  if (section.pdfWidth !== undefined) {
-    serialized.pdfWidth = section.pdfWidth;
-  }
-  if (section.width !== undefined) {
-    serialized.width = section.width;
-  }
-  if (section.type === HelpContentType.IMAGE || section.type === HelpContentType.SPLITIMAGE) {
-    serialized.border = !!section.border;
-  }
-
-  if (section.coversheet?.length) {
-    serialized.coversheet = section.coversheet.map(serializeHelpTextSection);
-  }
-  if (section.content?.length) {
-    serialized.content = section.content.map(serializeHelpTextSection);
-  }
-  if (section.subsections?.length) {
-    serialized.subsections = section.subsections.map(serializeHelpTextSection);
-  }
-  if (section.steps?.length) {
-    serialized.steps = section.steps.map(serializeHelpTextStep);
-  }
-
-  return serialized;
-}
-
-export function serializeHelpTextStep(step: HelpTextStep): Record<string, unknown> {
-  const serialized: Record<string, unknown> = {
-    value: step.value
-  };
-
-  if (step.substeps?.length) {
-    serialized.substeps = step.substeps.map(serializeHelpTextStep);
-  }
-
-  return serialized;
-}
-
-export function serializeHelpTextTable(section: HelpTextTable): Record<string, unknown> {
-  return {
-    header: section.header,
-    type: section.type,
-    rows: section.rows
-  };
-}
-
-export function parseMainHelpSection(obj: any): MainHelpSection {
-  const item = new MainHelpSection();
-
-  // coversheet is an array of sections
-  if (obj.coversheet) {
-    item.coversheet = obj.coversheet.map(parseHelpTextSection);
-  }
-
-  // abbreviations is an array of AbbreviationItem
-  if (obj.abbreviations) {
-    item.abbreviations = obj.abbreviations.map((abbr: any) => ({
-      abbreviation: abbr.abbreviation,
-      shortDescription: abbr.shortDescription,
-      longDescription: abbr.longDescription,
-      referenceAbbreviation: abbr.referenceAbbreviation
-    }));
-  }
-
-  // content is an array of sections
-  if (obj.content) {
-    item.content = obj.content.map(parseHelpTextSection);
-  }
-
-  return item;
-}
-
-export function parseHelpTextSection(obj: any): HelpTextSection {
-  if (obj.type === 'TABLE') {
-    return parseHelpTextTable(obj);
-  }
-
-  const sec = new HelpTextSection();
-  sec.linkId = obj.linkId;
-  sec.value = obj.value;
-  sec.type = obj.type;
-  sec.imageDescription = obj.imageDescription;
-  sec.pdfWidth = obj.pdfWidth;
-  sec.width = obj.width;
-  sec.border = !!obj.border;
-
-  if (isValuelessContentType(sec.type)) {
-    sec.value = undefined;
-    ensureInternalId(sec);
-  }
-
-  if (((!sec.type) || (sec.type === '')) && (!sec.linkId || sec.linkId === '')) {
-    console.error('JSON error. Section link ID is undefined or empty. Section value: ', sec.value);
-  }
-
-  /*if (obj.type == "IMAGE") {
-    console.log("Image found. Value: ", obj.value, " in ", );
-  }*/
-
-  // If there's a "coversheet" array, parse them as nested HelpTextSection
-  if (obj.coversheet) {
-    sec.coversheet = obj.coversheet.map(parseHelpTextSection);
-  }
-  // If there's a "content" array, parse them
-  if (obj.content) {
-    sec.content = obj.content.map(parseHelpTextSection);
-  }
-  // If there's a "subsections" array, parse them
-  if (obj.subsections) {
-    sec.subsections = obj.subsections.map(parseHelpTextSection);
-  }
-  // If there's a "steps" array, parse them
-  if (obj.steps) {
-    sec.steps = obj.steps.map(parseHelpTextStep);
-  }
-
-  return sec;
-}
-
-export function parseHelpTextStep(step: any): HelpTextStep {
-  const newStep = new HelpTextStep();
-  newStep.value = step.value;
-  newStep.substeps = step.substeps ? step.substeps.map(parseHelpTextStep) : undefined;
-  return newStep;
-}
-
-export function parseHelpTextTable(obj: any): HelpTextTable {
-  const newTable = new HelpTextTable();
-
-  newTable.type = obj.type;
-  newTable.header = Array.isArray(obj?.header) ? obj.header : [];
-  newTable.rows = Array.isArray(obj?.rows)
-    ? obj.rows.map((row: any) => ({
-      rowValues: Array.isArray(row?.rowValues) ? row.rowValues : []
-    }))
-    : [];
-  normalizeTableStructure(newTable);
-  newTable.linkId = undefined;
-  newTable.value = undefined;
-  newTable.content = undefined;
-  newTable.steps = undefined;
-  newTable.subsections = undefined;
-  ensureInternalId(newTable);
-
-  return newTable;
-}
-
-function normalizeTableStructure(table: HelpTextTable): void {
-  if (!Array.isArray(table.header)) {
-    table.header = [];
-  }
-
-  if (!Array.isArray(table.rows)) {
-    table.rows = [];
-  }
-
-  for (const row of table.rows) {
-    if (!Array.isArray(row.rowValues)) {
-      row.rowValues = [];
-    }
-  }
-}
-
-export function collectStructureIssues(root: HelpTextRoot | null | undefined): StructureIssue[] {
-  if (!root) {
-    return [];
-  }
-
-  const issues: StructureIssue[] = [];
-
-  const addIssue = (section: HelpTextSection, invalidContainers: string[]) => {
-    const displayKey = section.imageDescription || section.value || section.linkId || 'unknown';
-    const typeLabel = section.type || 'unknown';
-    issues.push({
-      sectionKey: displayKey,
-      message: `Element vom Typ ${typeLabel} darf keine Unterelemente besitzen (gefunden: ${invalidContainers.join(', ')}).`
-    });
-  };
-
-  const collectSectionIssues = (section?: HelpTextSection) => {
-    if (!section) {
-      return;
-    }
-
-    if (isNonNestableType(section.type)) {
-      const invalidContainers = [];
-      if (section.coversheet?.length) {
-        invalidContainers.push('coversheet');
-      }
-      if (section.content?.length) {
-        invalidContainers.push('content');
-      }
-      if (section.subsections?.length) {
-        invalidContainers.push('subsections');
-      }
-      if (section.steps?.length) {
-        invalidContainers.push('steps');
-      }
-      if (invalidContainers.length > 0) {
-        addIssue(section, invalidContainers);
-      }
-    }
-
-    section.coversheet?.forEach(collectSectionIssues);
-    section.content?.forEach(collectSectionIssues);
-    section.subsections?.forEach(collectSectionIssues);
-  };
-
-  root.getSections().forEach(mainSection => {
-    mainSection?.coversheet?.forEach(collectSectionIssues);
-    mainSection?.content?.forEach(collectSectionIssues);
-  });
-
-  return issues;
+  return steps.some(step => matchesStepId(step, key) || stepIdExists(step.substeps, key));
 }

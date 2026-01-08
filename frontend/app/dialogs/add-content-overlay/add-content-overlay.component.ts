@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
+import { HelpContentType } from '~models/help-text-structure.model';
 
 @Component({
   selector: 'app-add-content-overlay',
@@ -8,15 +9,21 @@ import { Component, EventEmitter, Output, ViewChild, ElementRef } from '@angular
 export class AddContentOverlayComponent {
   @Output() closeOverlay = new EventEmitter<{
     cancelled: boolean;
-    type?: string;
+    type?: HelpContentType;
     insertPosition?: string;
   }>();
 
-  public contentType = 'INSTRUCTION';
+  public contentType = HelpContentType.INSTRUCTION;
   public insertPosition = 'after';
 
   public contentTypes = [
-    'INSTRUCTION', 'INSTRUCTION_BOLD', 'BULLET_ENUMERATION', 'ENUMERATION', 'IMAGE', 'SPLITIMAGE', 'TABLE'
+    HelpContentType.INSTRUCTION,
+    HelpContentType.INSTRUCTION_BOLD,
+    HelpContentType.BULLET_ENUMERATION,
+    HelpContentType.ENUMERATION,
+    HelpContentType.IMAGE,
+    HelpContentType.SPLITIMAGE,
+    HelpContentType.TABLE
   ];
 
   onOk() {

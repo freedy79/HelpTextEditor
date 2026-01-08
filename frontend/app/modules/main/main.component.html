@@ -68,16 +68,16 @@
     <div class="column right">
       <h3>Properties</h3>     
       <div *ngIf="facade.selectedSection != undefined; else noSelection">
-        <div *ngIf="facade.selectedSection.type === 'TABLE' && facade.selectedTableCell">
+        <div *ngIf="facade.isTableSection(facade.selectedSection) && facade.selectedTableCell">
           <ng-container *ngTemplateOutlet="tableCellType"></ng-container>
         </div>
-        <div *ngIf="facade.selectedSection.type != 'IMAGE' && facade.selectedSection.type != 'SPLITIMAGE' && !(facade.selectedSection.type === 'TABLE' && facade.selectedTableCell)">
+        <div *ngIf="!facade.isImageSection(facade.selectedSection) && !(facade.isTableSection(facade.selectedSection) && facade.selectedTableCell)">
           <ng-container *ngTemplateOutlet="defaultType; context:{ $selectedSection: facade.selectedSection }"></ng-container>
         </div>
-        <div *ngIf="facade.selectedSection.type == 'IMAGE' || facade.selectedSection.type == 'SPLITIMAGE'">
+        <div *ngIf="facade.isImageSection(facade.selectedSection)">
           <ng-container *ngTemplateOutlet="imageType; context:{ $selectedSection: facade.selectedSection }"></ng-container>
         </div>
-        <div *ngIf="facade.selectedSection.type === 'TABLE'" class="table-actions">
+        <div *ngIf="facade.isTableSection(facade.selectedSection)" class="table-actions">
           <p><strong>Table:</strong></p>
           <button (click)="facade.addTableRow()">Zeile hinzufügen</button>
           <button (click)="facade.moveTableRow('up')" [disabled]="!facade.canMoveTableRow('up')">Zeile nach oben</button>

@@ -15,11 +15,12 @@ import { ElementRef, Injectable, QueryList } from '@angular/core';
 import {
   MainHelpSection,
   HelpTextSection,
-  HelpContentType,
   HelpTextStep,
   AbbreviationItem,
+  isEnumerationContentType,
   isNonNestableType,
-  getSectionSelectionId
+  getSectionSelectionId,
+  isStepNode
 } from '~models/help-text-structure.model';
 
 type ParentType = HelpTextSection | MainHelpSection | HelpTextStep;
@@ -434,15 +435,15 @@ export class TreeDragDropService {
   }
 
   showStepControls(section: HelpTextSection): boolean {
-    return section && (section.type === HelpContentType.ENUMERATION || section.type === HelpContentType.BULLET_ENUMERATION);
+    return !!section && isEnumerationContentType(section.type);
   }
 
   isHelpTextSection(item: ParentType | TreeItem): item is HelpTextSection {
-    return !!item && (item instanceof HelpTextSection || (item as any).type && (item as any).type !== 'STEP');
+    return !!item && (item instanceof HelpTextSection || ((item as any).type && !isStepNode(item as HelpTextStep)));
   }
 
   isHelpTextStep(item: TreeItem): item is HelpTextStep {
-    return !!item && (item as any).type === 'STEP';
+    return isStepNode(item as HelpTextStep);
   }
 
   isAbbreviation(item: TreeItem): item is AbbreviationItem {

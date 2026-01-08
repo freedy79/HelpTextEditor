@@ -9,8 +9,9 @@ import {
   HelpTextTable,
   getTableCellKey,
   StructureIssue,
-  collectStructureIssues
+  isTableSection
 } from '~/app/models/help-text-structure.model';
+import { collectStructureIssues } from '~/app/models/help-text-validator';
 import { QtfFile, QtfTextEntry, createNewQtfItem } from '~/app/models/qtf-file.model';
 
 export interface TranslationIssuesDialogData {
@@ -261,7 +262,7 @@ export class TranslationIssuesDialogComponent implements OnInit {
         : section.value;
       addIfPresent(translationKey);
 
-      if (section.type === 'TABLE') {
+      if (isTableSection(section)) {
         const tableSection = section as HelpTextTable;
         tableSection.header?.forEach(cell => addIfPresent(getTableCellKey(cell)));
         tableSection.rows?.forEach(row => row?.rowValues?.forEach(cell => addIfPresent(getTableCellKey(cell))));

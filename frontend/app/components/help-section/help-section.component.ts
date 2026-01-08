@@ -6,6 +6,7 @@ import {
   HelpTextStep,
   TableCellImage,
   TableCellValue,
+  HelpContentType,
   getSectionSelectionId,
   getTableCellKey,
   isTableCellImage
@@ -28,6 +29,7 @@ export class HelpSectionComponent implements OnChanges {
   @Input() selectedLanguage: String;
 
   @Input() language: String;
+  public readonly HelpContentType = HelpContentType;
 
   constructor() {
     if (this.language === undefined) {
