@@ -793,6 +793,7 @@ export class HelpEditorFacade {
     this.selectedLanguage = nextLanguage;
     this.autoTranslationMessage = '';
     this.translateService.use(nextLanguage);
+    this.ensureTranslationBucket(nextLanguage);
     this.loadTextsFromQtf(nextLanguage);
 
     if (this.selectedSection) {
@@ -807,6 +808,7 @@ export class HelpEditorFacade {
     }
 
     console.log('Website load user language: ' + language);
+    this.ensureTranslationBucket(language);
 
     let key: TextKey;
     for (key in this.qtfFile.TEXTS) {
@@ -832,9 +834,11 @@ export class HelpEditorFacade {
     const entry = this.qtfFile.TEXTS[key];
     if (!entry) {
       this.selectedTextContent = '';
-      this.translateService.set(key, '');
+      this.ensureTranslationBucket(this.selectedLanguage);
+      this.translateService.set(key, '', this.selectedLanguage);
       return;
     }
+    this.ensureTranslationBucket(this.selectedLanguage);
     const translation = entry?.TRANSLATIONS?.[this.selectedLanguage] || entry?.AUTOTRANSLATIONS?.[this.selectedLanguage] || '';
     this.translateService.set(key, translation || '', this.selectedLanguage);
     this.selectedTextContent = translation;
@@ -868,7 +872,8 @@ export class HelpEditorFacade {
     }
     if (this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] !== this.selectedTextContent) {
       this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] = this.selectedTextContent;
-      this.translateService.set(key, this.selectedTextContent);
+      this.ensureTranslationBucket(this.selectedLanguage);
+      this.translateService.set(key, this.selectedTextContent, this.selectedLanguage);
 
       if (this.selectedLanguage === 'GERMAN') {
         this.languages.forEach(language => {
@@ -2411,6 +2416,16 @@ export class HelpEditorFacade {
       this.saveCurrentSectionText();
       this.onTopLevelChange(this.selectedTopLevelKey);
       this.onSelectSection(imageValue);
+    }
+  }
+
+  private ensureTranslationBucket(language: string | null | undefined): void {
+    if (!language) {
+      return;
+    }
+
+    if (!this.translateService.translations?.[language]) {
+      this.translateService.setTranslation(language, {}, true);
     }
   }
 }
