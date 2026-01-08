@@ -6,8 +6,6 @@ import {
   HelpTextRoot,
   MainHelpSection,
   HelpTextSection,
-  parseHelpTextRoot,
-  parseMainHelpSection,
   HelpTextRootKey,
   HelpContentType,
   HelpTextStep,
@@ -19,10 +17,18 @@ import {
   TableCellImage,
   getSectionSelectionId,
   getTableCellKey,
+  isEnumerationContentType,
+  isImageContentType,
+  isInstructionContentType,
+  isTableSection,
   isValuelessContentType,
-  isTableCellImage,
-  serializeHelpTextRoot
+  isTableCellImage
 } from '~/app/models/help-text-structure.model';
+import {
+  parseHelpTextRoot,
+  parseMainHelpSection,
+  serializeHelpTextRoot
+} from '~/app/models/help-text-serializer';
 import { MenuItemModel } from '~/app/components/header-menu/menu-item.model';
 import { buildInfo } from '~/app/build-info.generated';
 import { ConfirmDialogService } from '~/app/dialogs/confirmation-dialog/confirmation-dialog.service';
@@ -279,15 +285,16 @@ export class HelpEditorFacade {
       const sectionPath = formatSectionLabel(section, parentPath);
       const translationKey = section.getTranslationKey();
       if (translationKey) {
+        const isImage = isImageContentType(section.type);
         addReference(translationKey, {
-          kind: section.type === 'IMAGE' || section.type === 'SPLITIMAGE' ? 'Image' : 'HelpTextSection',
-          label: section.type === 'IMAGE' || section.type === 'SPLITIMAGE'
+          kind: isImage ? 'Image' : 'HelpTextSection',
+          label: isImage
             ? `${sectionPath}${section.value ? ` (file: ${section.value})` : ''}`
             : sectionPath
         });
       }
 
-      if (section.type === 'TABLE') {
+      if (isTableSection(section)) {
         const tableSection = section as HelpTextTable;
         tableSection.header?.forEach((cell, index) =>
           processTableCell(cell, `${sectionPath} header[${index + 1}]`)
@@ -540,12 +547,12 @@ export class HelpEditorFacade {
     return this.isInstructionType(section.type);
   }
 
-  private isEnumerationType(type?: string): boolean {
-    return type === HelpContentType.ENUMERATION || type === HelpContentType.BULLET_ENUMERATION;
+  private isEnumerationType(type?: HelpContentType | string): boolean {
+    return isEnumerationContentType(type);
   }
 
-  private isInstructionType(type?: string): boolean {
-    return type === HelpContentType.INSTRUCTION || type === HelpContentType.INSTRUCTION_BOLD;
+  private isInstructionType(type?: HelpContentType | string): boolean {
+    return isInstructionContentType(type);
   }
 
   onAddStep(section: HelpTextSection) {
@@ -770,7 +777,7 @@ export class HelpEditorFacade {
       return;
     }
 
-    if (this.selectedSection.type === 'TABLE') {
+    if (isTableSection(this.selectedSection)) {
       const table = this.selectedSection as HelpTextTable;
       this.selectedTableCell = this.findTableCellContext(table, contentId);
       const cellValue = this.selectedTableCell ? this.getTableCellValue(table, this.selectedTableCell) : null;
@@ -923,10 +930,8 @@ export class HelpEditorFacade {
     }
     this.saveCurrentSectionText();
 
-    const createAsSibling = this.selectedSection.type === HelpContentType.INSTRUCTION
-      || this.selectedSection.type === HelpContentType.INSTRUCTION_BOLD
-      || this.selectedSection.type === HelpContentType.ENUMERATION
-      || this.selectedSection.type === HelpContentType.BULLET_ENUMERATION;
+    const createAsSibling = isInstructionContentType(this.selectedSection.type)
+      || isEnumerationContentType(this.selectedSection.type);
 
     let targetParent: HelpTextSection = this.selectedSection;
     if (createAsSibling) {
@@ -974,7 +979,7 @@ export class HelpEditorFacade {
 
     let parentSection: HelpTextSection = null;
     if (this.currentMainHelpSection && this.currentMainHelpSection !== null) {
-      if (this.selectedSection.type === HelpContentType.ENUMERATION || this.selectedSection.type === HelpContentType.BULLET_ENUMERATION) {
+      if (isEnumerationContentType(this.selectedSection.type)) {
         parentSection = this.selectedSection;
       } else {
         console.log('searching in HelpSection');
@@ -987,7 +992,7 @@ export class HelpEditorFacade {
         return;
       }
 
-      if (parentSection.type === HelpContentType.ENUMERATION || parentSection.type === HelpContentType.BULLET_ENUMERATION) {
+      if (isEnumerationContentType(parentSection.type)) {
         const insertIndex = parentSection.steps ? parentSection.steps.length : 0;
         const previousKey = this.getPreviousSiblingKey(parentSection.steps, insertIndex);
         const parentKey = parentSection.value || parentSection.linkId || parentSection.type || 'ENUMERATION';
@@ -1221,14 +1226,14 @@ export class HelpEditorFacade {
   }
 
   private getSelectedTableCellValue(): TableCellValue | null {
-    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+    if (!isTableSection(this.selectedSection) || !this.selectedTableCell) {
       return null;
     }
     return this.getTableCellValue(this.selectedSection as HelpTextTable, this.selectedTableCell);
   }
 
   private updateSelectedTableCellValue(value: TableCellValue): void {
-    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+    if (!isTableSection(this.selectedSection) || !this.selectedTableCell) {
       return;
     }
 
@@ -1249,7 +1254,7 @@ export class HelpEditorFacade {
       return false;
     }
 
-    if (this.selectedSection?.type === 'TABLE' && this.selectedTableCell) {
+    if (isTableSection(this.selectedSection) && this.selectedTableCell) {
       const table = this.selectedSection as HelpTextTable;
       if (this.selectedTableCell.isHeader) {
         if (table.header && this.selectedTableCell.colIndex < table.header.length) {
@@ -1460,7 +1465,7 @@ export class HelpEditorFacade {
     }
   }
 
-  closeOverlayAddContent(data: { cancelled: boolean; type?: string, insertPosition?: string }) {
+  closeOverlayAddContent(data: { cancelled: boolean; type?: HelpContentType; insertPosition?: string }) {
     this.showOverlayAddContent = false;
     console.log('Cancelled ', data.cancelled, ' type: ', data.type, ' pos: ', data.insertPosition);
 
@@ -1475,14 +1480,6 @@ export class HelpEditorFacade {
     let parentSection: HelpTextSection = null;
 
     if (!this.selectedSection.type || this.selectedSection.type === '') {
-      parentSection = this.selectedSection;
-    } else if (
-      data.type === 'STEP'
-      && (
-        this.selectedSection.type === HelpContentType.ENUMERATION
-        || this.selectedSection.type === HelpContentType.BULLET_ENUMERATION
-      )
-    ) {
       parentSection = this.selectedSection;
     } else if (this.currentMainHelpSection) {
       const selectedId = this.getSelectedSectionId();
@@ -1508,7 +1505,7 @@ export class HelpEditorFacade {
     newItem.linkId = '';
     newItem.type = data.type;
 
-    if (data.type === 'IMAGE' || data.type === 'SPLITIMAGE') {
+    if (isImageContentType(data.type)) {
       newItem.value = 'empty';
       newItem.imageDescription = newKey;
       newItem.border = false;
@@ -1516,6 +1513,12 @@ export class HelpEditorFacade {
 
     if (isValuelessContentType(data.type)) {
       newItem.value = undefined;
+    }
+
+    if (isImageContentType(newItem.type)) {
+      newItem.id = newItem.imageDescription || newItem.value || newItem.id;
+    } else if (newItem.value && !isValuelessContentType(newItem.type)) {
+      newItem.id = newItem.value;
     }
 
     console.log('parent ', parentSection.constructor.name, ' value: ', parentSection.value);
@@ -1533,7 +1536,7 @@ export class HelpEditorFacade {
       }
     }
 
-    if (data.type === HelpContentType.BULLET_ENUMERATION || data.type === HelpContentType.ENUMERATION) {
+    if (isEnumerationContentType(data.type)) {
       newItem.addStep('New step');
     }
 
@@ -1871,7 +1874,15 @@ export class HelpEditorFacade {
       return false;
     }
 
-    return !(this.selectedSection.type === 'TABLE' && this.selectedTableCell);
+    return !(isTableSection(this.selectedSection) && this.selectedTableCell);
+  }
+
+  public isTableSection(section?: HelpTextSection | null): section is HelpTextTable {
+    return isTableSection(section);
+  }
+
+  public isImageSection(section?: HelpTextSection | null): boolean {
+    return !!section && isImageContentType(section.type);
   }
 
   private createTableSection(): HelpTextTable {
@@ -1903,7 +1914,7 @@ export class HelpEditorFacade {
   }
 
   public addTableRow(): void {
-    if (this.selectedSection?.type !== 'TABLE') {
+    if (!isTableSection(this.selectedSection)) {
       return;
     }
 
@@ -1938,7 +1949,7 @@ export class HelpEditorFacade {
   }
 
   public canMoveTableRow(direction: 'up' | 'down'): boolean {
-    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell || this.selectedTableCell.isHeader) {
+    if (!isTableSection(this.selectedSection) || !this.selectedTableCell || this.selectedTableCell.isHeader) {
       return false;
     }
 
@@ -1989,7 +2000,7 @@ export class HelpEditorFacade {
   }
 
   public addTableColumn(): void {
-    if (this.selectedSection?.type !== 'TABLE') {
+    if (!isTableSection(this.selectedSection)) {
       return;
     }
 
@@ -2028,7 +2039,7 @@ export class HelpEditorFacade {
   }
 
   public removeTableColumn(): void {
-    if (this.selectedSection?.type !== 'TABLE') {
+    if (!isTableSection(this.selectedSection)) {
       return;
     }
 
@@ -2150,7 +2161,7 @@ export class HelpEditorFacade {
   }
 
   public onTableCellTypeChanged(type: 'TEXT' | 'IMAGE'): void {
-    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+    if (!isTableSection(this.selectedSection) || !this.selectedTableCell) {
       return;
     }
 
@@ -2162,7 +2173,7 @@ export class HelpEditorFacade {
           ? currentValue.imageDescription
           : undefined;
       const nextValue: TableCellImage = {
-        type: 'IMAGE',
+        type: HelpContentType.IMAGE,
         value: isTableCellImage(currentValue) ? currentValue.value : '',
         imageDescription: description,
         width: isTableCellImage(currentValue) ? currentValue.width : undefined,
@@ -2205,7 +2216,7 @@ export class HelpEditorFacade {
   }
 
   public onTableCellImageFileChanged(event): void {
-    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+    if (!isTableSection(this.selectedSection) || !this.selectedTableCell) {
       return;
     }
     const newValue = event.target.value;
@@ -2213,7 +2224,7 @@ export class HelpEditorFacade {
     const nextValue: TableCellImage = isTableCellImage(currentValue)
       ? { ...currentValue, value: newValue }
       : {
-        type: 'IMAGE',
+        type: HelpContentType.IMAGE,
         value: newValue,
         imageDescription: typeof currentValue === 'string' ? currentValue : undefined
       };
@@ -2221,7 +2232,7 @@ export class HelpEditorFacade {
   }
 
   public onTableCellImageDescriptionChanged(event): void {
-    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+    if (!isTableSection(this.selectedSection) || !this.selectedTableCell) {
       return;
     }
     const newDescription = event.target.value;
@@ -2257,7 +2268,7 @@ export class HelpEditorFacade {
   }
 
   public onTableCellImageWidthChanged(event): void {
-    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+    if (!isTableSection(this.selectedSection) || !this.selectedTableCell) {
       return;
     }
     const newWidth = event.target.value;
@@ -2269,7 +2280,7 @@ export class HelpEditorFacade {
   }
 
   public onTableCellImageHeightChanged(event): void {
-    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+    if (!isTableSection(this.selectedSection) || !this.selectedTableCell) {
       return;
     }
     const newHeight = event.target.value;
@@ -2281,7 +2292,7 @@ export class HelpEditorFacade {
   }
 
   public onTableCellImageBorderChanged(event): void {
-    if (this.selectedSection?.type !== 'TABLE' || !this.selectedTableCell) {
+    if (!isTableSection(this.selectedSection) || !this.selectedTableCell) {
       return;
     }
     const checked = !!event.target.checked;
@@ -2437,7 +2448,7 @@ export class HelpEditorFacade {
     // console.log("width changed: ", this.selectedSection.type, " ", this.selectedSection.value);
     const newWidth = event.target.value;
     const imageValue = this.selectedSection.value;
-    if ((this.selectedSection.type === 'IMAGE') && (newWidth !== 'undefined')) {
+    if (isImageContentType(this.selectedSection.type) && (newWidth !== 'undefined')) {
       this.selectedSection.width = newWidth;
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
       this.saveCurrentSectionText();
@@ -2450,7 +2461,7 @@ export class HelpEditorFacade {
     // console.log("pdf width changed: ", this.selectedSection.type, " ", this.selectedSection.value);
     const newWidth = event.target.value;
     const imageValue = this.selectedSection.value;
-    if ((this.selectedSection.type === 'IMAGE') && (newWidth !== 'undefined')) {
+    if (isImageContentType(this.selectedSection.type) && (newWidth !== 'undefined')) {
       this.selectedSection.pdfWidth = newWidth;
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
       this.saveCurrentSectionText();
@@ -2462,7 +2473,7 @@ export class HelpEditorFacade {
   onImageBorderChanged(event) {
     const newBorder = !!event.target.checked;
     const imageValue = this.selectedSection.value;
-    if (this.selectedSection.type === 'IMAGE' || this.selectedSection.type === 'SPLITIMAGE') {
+    if (isImageContentType(this.selectedSection.type)) {
       this.selectedSection.border = newBorder;
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
       this.saveCurrentSectionText();

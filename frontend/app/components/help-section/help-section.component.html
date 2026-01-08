@@ -6,19 +6,19 @@
 
 <div *ngFor="let content of section.content">
     <ng-container [ngSwitch]="content.type">
-        <ng-template [ngSwitchCase]="'INSTRUCTION'">
+        <ng-template [ngSwitchCase]="HelpContentType.INSTRUCTION">
             <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(getSectionId(content))">
                 <p [innerHTML]="(content.value | qtfTranslate | async)" class="help-instruction"></p>
             </div>
         </ng-template>
-        <ng-template [ngSwitchCase]="'INSTRUCTION_BOLD'">
+        <ng-template [ngSwitchCase]="HelpContentType.INSTRUCTION_BOLD">
             <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(getSectionId(content))">
                 <p [innerHTML]="(content.value | qtfTranslate | async)" class="help-instruction-bold"></p>
             </div>
         </ng-template>
-        <ng-template [ngSwitchCase]="'IMAGE'">
+        <ng-template [ngSwitchCase]="HelpContentType.IMAGE">
             <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(getSectionId(content))">
                 <figure>
@@ -31,7 +31,7 @@
                 </figure>
             </div>
         </ng-template>
-        <ng-template [ngSwitchCase]="'SPLITIMAGE'">
+        <ng-template [ngSwitchCase]="HelpContentType.SPLITIMAGE">
             <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(getSectionId(content))">
                 <figure>
@@ -43,7 +43,7 @@
                 </figure>
             </div>
         </ng-template>
-        <ng-template [ngSwitchCase]="'ENUMERATION'">
+        <ng-template [ngSwitchCase]="HelpContentType.ENUMERATION">
             <div class="OrderedList">
                 <div *ngFor="let step of content.steps; let k = index">
                     <div id="{{getSectionId(step)}}" (click)="contentClick(getSectionId(step))" class="Enum_list_item"
@@ -62,7 +62,7 @@
                 </div>
             </div>
         </ng-template>
-        <ng-template [ngSwitchCase]="'BULLET_ENUMERATION'">
+        <ng-template [ngSwitchCase]="HelpContentType.BULLET_ENUMERATION">
             <div *ngFor="let bulletPoint of content.steps">
                 <li class="subSecBulletList">
                     <div (click)="contentClick(getSectionId(bulletPoint))" id="{{getSectionId(bulletPoint)}}"
@@ -72,7 +72,7 @@
             </div>
         </ng-template>
 
-        <ng-template [ngSwitchCase]="'TABLE'">
+        <ng-template [ngSwitchCase]="HelpContentType.TABLE">
             <div class="help-table-container">
                 <table class="help-table">
                     <tr>

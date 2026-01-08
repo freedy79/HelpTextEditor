@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QtfFile } from '../../models/qtf-file.model';
-import { HelpTextRoot, parseHelpTextRoot } from '../../models/help-text-structure.model';
+import { HelpTextRoot } from '../../models/help-text-structure.model';
+import { parseHelpTextRoot } from '../../models/help-text-serializer';
 
 @Injectable({ providedIn: 'root' })
 export class FileIOService {
