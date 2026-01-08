@@ -283,8 +283,19 @@ export class HelpTextSection {
 }
 
 
+export interface TableCellImage {
+  type: 'IMAGE';
+  value: string;
+  imageDescription?: string;
+  width?: string;
+  height?: string;
+  border?: boolean;
+}
+
+export type TableCellValue = string | TableCellImage;
+
 export interface RowItem {
-  rowValues: string[];
+  rowValues: TableCellValue[];
 }
 
 export interface TableCellSelection {
@@ -292,24 +303,40 @@ export interface TableCellSelection {
   rowIndex?: number;
   colIndex: number;
   isHeader: boolean;
-  key: string;
+  key?: string | null;
+}
+
+export function isTableCellImage(cell?: TableCellValue | null): cell is TableCellImage {
+  return !!cell && typeof cell === 'object' && (cell as TableCellImage).type === 'IMAGE';
+}
+
+export function getTableCellKey(cell?: TableCellValue | null): string | null {
+  if (!cell) {
+    return null;
+  }
+  if (typeof cell === 'string') {
+    return cell;
+  }
+  return cell.imageDescription || null;
 }
 
 export class HelpTextTable extends HelpTextSection {
-  header: string[] = [];
+  header: TableCellValue[] = [];
   rows?: RowItem[];
 
   public idExists(key: string): boolean {
     for (const headerItem of this.header) {
-      if (headerItem === key) {
+      if (getTableCellKey(headerItem) === key) {
         return true;
       }
     }
 
-    for (const row of this.rows) {
-      for (const rowItem of row.rowValues) {
-        if (rowItem === key) {
-          return true;
+    if (this.rows) {
+      for (const row of this.rows) {
+        for (const rowItem of row.rowValues) {
+          if (getTableCellKey(rowItem) === key) {
+            return true;
+          }
         }
       }
     }
@@ -429,10 +456,10 @@ function findSectionInCollections(collections: SectionCollection[], contentId: s
       }
       if (section.type === 'TABLE') {
         const tableSection = section as HelpTextTable;
-        if (tableSection.header?.includes(contentId)) {
+        if (tableSection.header?.some(cell => getTableCellKey(cell) === contentId)) {
           return tableSection;
         }
-        if (tableSection.rows?.some(row => row.rowValues?.includes(contentId))) {
+        if (tableSection.rows?.some(row => row.rowValues?.some(cell => getTableCellKey(cell) === contentId))) {
           return tableSection;
         }
       }
@@ -462,7 +489,8 @@ function findParentInCollections(
       }
       if (section.type === 'TABLE') {
         const tableSection = section as HelpTextTable;
-        if (tableSection.header?.includes(contentId) || tableSection.rows?.some(row => row.rowValues?.includes(contentId))) {
+        if (tableSection.header?.some(cell => getTableCellKey(cell) === contentId)
+          || tableSection.rows?.some(row => row.rowValues?.some(cell => getTableCellKey(cell) === contentId))) {
           return section;
         }
       }

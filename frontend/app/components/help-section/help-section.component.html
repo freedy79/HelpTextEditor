@@ -76,15 +76,37 @@
                     <tr>
                         <th *ngFor="let header of content.header; let colIndex = index"
                             (click)="tableCellClick(header, getSectionId(content), colIndex, undefined, true)"
-                            [ngClass]="{'selected': isTableCellSelected(header, getSectionId(content), undefined, colIndex, true)}"
-                            [innerHTML]="header | qtfTranslate"></th>
+                            [ngClass]="{'selected': isTableCellSelected(getTableCellImageAlt(header), getSectionId(content), undefined, colIndex, true)}">
+                            <ng-container *ngIf="isTableCellImage(header); else headerText">
+                                <img [src]="'./media/helpImages/' + header.value + '_' + (language | uppercase) + '.svg'"
+                                    [appDefault]="'./media/helpImages/' + header.value + '_' + (language | uppercase) + '.png'"
+                                    [fallback]="'assets/image-fallback.svg'" class="table-image"
+                                    [class.image-border]="header.border"
+                                    [style.width]="header.width" [style.height]="header.height"
+                                    [attr.alt]="getTableCellImageAlt(header) | qtfTranslate">
+                            </ng-container>
+                            <ng-template #headerText>
+                                <span [innerHTML]="getTableCellText(header) | qtfTranslate"></span>
+                            </ng-template>
+                        </th>
                     </tr>
                     <tr *ngFor="let row of content.rows; let i = index" class="help-table"
                         [ngClass]="{'table-even-row': (i % 2 == 0), 'table-odd-row': (i % 2 == 1)}">
                         <td *ngFor="let rowValue of row.rowValues; let colIndex = index"
                             (click)="tableCellClick(rowValue, getSectionId(content), colIndex, i)"
-                            [ngClass]="{'selected': isTableCellSelected(rowValue, getSectionId(content), i, colIndex)}"
-                            [innerHTML]="rowValue | qtfTranslate"></td>
+                            [ngClass]="{'selected': isTableCellSelected(getTableCellImageAlt(rowValue), getSectionId(content), i, colIndex)}">
+                            <ng-container *ngIf="isTableCellImage(rowValue); else rowText">
+                                <img [src]="'./media/helpImages/' + rowValue.value + '_' + (language | uppercase) + '.svg'"
+                                    [appDefault]="'./media/helpImages/' + rowValue.value + '_' + (language | uppercase) + '.png'"
+                                    [fallback]="'assets/image-fallback.svg'" class="table-image"
+                                    [class.image-border]="rowValue.border"
+                                    [style.width]="rowValue.width" [style.height]="rowValue.height"
+                                    [attr.alt]="getTableCellImageAlt(rowValue) | qtfTranslate">
+                            </ng-container>
+                            <ng-template #rowText>
+                                <span [innerHTML]="getTableCellText(rowValue) | qtfTranslate"></span>
+                            </ng-template>
+                        </td>
                     </tr>
                 </table>
             </div>

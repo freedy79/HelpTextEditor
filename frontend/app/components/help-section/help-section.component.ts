@@ -1,6 +1,15 @@
 import { Component, EventEmitter, HostBinding, Input, OnChanges, Output } from '@angular/core';
 import { ImageDefaultDirective } from '~shared/directives/img.directive';
-import { HelpTextSection, TableCellSelection, HelpTextStep, getSectionSelectionId } from '~models/help-text-structure.model';
+import {
+  HelpTextSection,
+  TableCellSelection,
+  HelpTextStep,
+  TableCellImage,
+  TableCellValue,
+  getSectionSelectionId,
+  getTableCellKey,
+  isTableCellImage
+} from '~models/help-text-structure.model';
 
 @Component({
   selector: 'app-help-section, json-pipe',
@@ -60,7 +69,7 @@ export class HelpSectionComponent implements OnChanges {
   }
 
   public tableCellClick(
-    cellKey: string,
+    cellValue: TableCellValue,
     tableId: string,
     colIndex: number,
     rowIndex?: number,
@@ -71,7 +80,7 @@ export class HelpSectionComponent implements OnChanges {
       rowIndex,
       colIndex,
       isHeader,
-      key: cellKey
+      key: getTableCellKey(cellValue)
     } as TableCellSelection);
   }
 
@@ -82,7 +91,7 @@ export class HelpSectionComponent implements OnChanges {
   }
 
   public isTableCellSelected(
-    cellKey: string,
+    cellKey: string | null,
     tableId: string,
     rowIndex: number | undefined,
     colIndex: number,
@@ -95,8 +104,22 @@ export class HelpSectionComponent implements OnChanges {
     return this.selectedTableCell.tableId === tableId
       && this.selectedTableCell.isHeader === isHeader
       && this.selectedTableCell.colIndex === colIndex
-      && (this.selectedTableCell.rowIndex ?? null) === (rowIndex ?? null)
-      && this.selectedTableCell.key === cellKey;
+      && (this.selectedTableCell.rowIndex ?? null) === (rowIndex ?? null);
+  }
+
+  public isTableCellImage(cellValue: TableCellValue): cellValue is TableCellImage {
+    return isTableCellImage(cellValue);
+  }
+
+  public getTableCellText(cellValue: TableCellValue): string {
+    if (typeof cellValue === 'string') {
+      return cellValue;
+    }
+    return '';
+  }
+
+  public getTableCellImageAlt(cellValue: TableCellValue): string {
+    return getTableCellKey(cellValue) || '';
   }
 
   public isIeOrEdge() {

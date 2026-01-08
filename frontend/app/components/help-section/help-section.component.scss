@@ -108,6 +108,12 @@ ul, ol {
     font-style: italic;
 }
 
+.table-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
 table, td {
     border: 1px solid black;
     border-collapse: collapse;
