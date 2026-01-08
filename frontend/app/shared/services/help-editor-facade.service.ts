@@ -785,8 +785,15 @@ export class HelpEditorFacade {
   }
 
   onLanguageChange(event) {
+    const nextLanguage = event || this.selectedLanguage;
+    if (!nextLanguage) {
+      return;
+    }
+
+    this.selectedLanguage = nextLanguage;
     this.autoTranslationMessage = '';
-    this.loadTextsFromQtf(this.selectedLanguage);
+    this.translateService.use(nextLanguage);
+    this.loadTextsFromQtf(nextLanguage);
 
     if (this.selectedSection) {
       const translationKey = this.getSelectedTranslationKey();
@@ -811,7 +818,7 @@ export class HelpEditorFacade {
         continue;
       }
       const translation = entry.TRANSLATIONS[language] || entry.AUTOTRANSLATIONS?.[language] || '';
-      this.translateService.set(key, translation);
+      this.translateService.set(key, translation, language);
     }
   }
 
@@ -829,7 +836,7 @@ export class HelpEditorFacade {
       return;
     }
     const translation = entry?.TRANSLATIONS?.[this.selectedLanguage] || entry?.AUTOTRANSLATIONS?.[this.selectedLanguage] || '';
-    this.translateService.set(key, translation || '');
+    this.translateService.set(key, translation || '', this.selectedLanguage);
     this.selectedTextContent = translation;
   }
 
