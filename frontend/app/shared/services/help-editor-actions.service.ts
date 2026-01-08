@@ -21,6 +21,10 @@ import {
   AbbreviationDialogComponent,
   AbbreviationDialogResult
 } from '~/app/dialogs/abbreviation-dialog/abbreviation-dialog.component';
+import {
+  CoverageDialogComponent,
+  CoverageDialogData
+} from '~/app/dialogs/coverage-dialog/coverage-dialog.component';
 import { AbbreviationItem, HelpTextRoot } from '~/app/models/help-text-structure.model';
 import { QtfFile } from '~/app/models/qtf-file.model';
 
@@ -74,6 +78,13 @@ export class HelpEditorActionsService {
   }): Observable<AbbreviationDialogResult | undefined> {
     return this.dialog.open(AbbreviationDialogComponent, {
       width: '520px',
+      data
+    }).afterClosed();
+  }
+
+  openCoverageDialog(data: CoverageDialogData): Observable<void> {
+    return this.dialog.open(CoverageDialogComponent, {
+      width: '760px',
       data
     }).afterClosed();
   }

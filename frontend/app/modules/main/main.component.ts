@@ -38,8 +38,4 @@ export class MainComponent implements OnInit, AfterViewInit {
   onWindowMouseUp() {
     this.facade.onWindowMouseUp();
   }
-
-  hasMissingTranslations(coverage: { missingTranslations: { missing: unknown[] }[] } | null): boolean {
-    return Boolean(coverage?.missingTranslations?.some((report) => report.missing.length));
-  }
 }
