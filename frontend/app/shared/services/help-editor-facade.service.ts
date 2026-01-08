@@ -1867,6 +1867,105 @@ export class HelpEditorFacade {
     return !(this.selectedSection.type === 'TABLE' && this.selectedTableCell);
   }
 
+  public addTableRow(): void {
+    if (this.selectedSection?.type !== 'TABLE') {
+      return;
+    }
+
+    this.saveCurrentSectionText();
+    const table = this.selectedSection as HelpTextTable;
+    if (!table.rows) {
+      table.rows = [];
+    }
+
+    const insertIndex = this.getTableRowInsertIndex(table);
+    const columnCount = Math.max(1, this.getTableColumnCount(table));
+    const rowValues: TableCellValue[] = [];
+
+    for (let colIndex = 0; colIndex < columnCount; colIndex += 1) {
+      const newKey = this.createUniqueTableCellKey('TABLE_CELL');
+      rowValues.push(newKey);
+      this.ensureQtfEntry(newKey);
+    }
+
+    table.rows.splice(insertIndex, 0, { rowValues });
+    this.isDirty = true;
+    this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+  }
+
+  public addTableColumn(): void {
+    if (this.selectedSection?.type !== 'TABLE') {
+      return;
+    }
+
+    this.saveCurrentSectionText();
+    const table = this.selectedSection as HelpTextTable;
+    if (!table.header) {
+      table.header = [];
+    }
+
+    const insertIndex = this.getTableColumnInsertIndex(table);
+    const headerKey = this.createUniqueTableCellKey('TABLE_HEADER');
+    table.header.splice(insertIndex, 0, headerKey);
+    this.ensureQtfEntry(headerKey);
+
+    if (table.rows) {
+      for (const row of table.rows) {
+        if (!row.rowValues) {
+          row.rowValues = [];
+        }
+        const rowKey = this.createUniqueTableCellKey('TABLE_CELL');
+        row.rowValues.splice(insertIndex, 0, rowKey);
+        this.ensureQtfEntry(rowKey);
+      }
+    }
+
+    this.isDirty = true;
+    this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+  }
+
+  private getTableColumnCount(table: HelpTextTable): number {
+    let columnCount = table.header?.length ?? 0;
+    if (table.rows) {
+      for (const row of table.rows) {
+        columnCount = Math.max(columnCount, row.rowValues?.length ?? 0);
+      }
+    }
+    return columnCount;
+  }
+
+  private getTableRowInsertIndex(table: HelpTextTable): number {
+    if (this.selectedTableCell && !this.selectedTableCell.isHeader) {
+      const rowIndex = this.selectedTableCell.rowIndex ?? -1;
+      if (rowIndex >= 0 && table.rows && rowIndex < table.rows.length) {
+        return rowIndex + 1;
+      }
+    }
+    return table.rows?.length ?? 0;
+  }
+
+  private getTableColumnInsertIndex(table: HelpTextTable): number {
+    if (this.selectedTableCell) {
+      const colIndex = this.selectedTableCell.colIndex ?? -1;
+      const columnCount = this.getTableColumnCount(table);
+      if (colIndex >= 0 && colIndex < columnCount) {
+        return colIndex + 1;
+      }
+    }
+    const headerLength = table.header?.length ?? 0;
+    return headerLength > 0 ? headerLength : this.getTableColumnCount(table);
+  }
+
+  private createUniqueTableCellKey(prefix: string): string {
+    let counter = 1;
+    let candidate = `${prefix}_${counter}`;
+    while (this.helpTextRootIdExists(candidate)) {
+      counter += 1;
+      candidate = `${prefix}_${counter}`;
+    }
+    return candidate;
+  }
+
   public getSelectedTableCellType(): 'TEXT' | 'IMAGE' {
     const cellValue = this.getSelectedTableCellValue();
     return isTableCellImage(cellValue) ? 'IMAGE' : 'TEXT';
