@@ -36,6 +36,7 @@
         position: relative;
         display: -ms-inline-flexbox;
         display: inline-flex;
+        align-items: center;
         height: 42px;
         line-height: 42px;
         padding: 0 12px;
@@ -55,6 +56,12 @@
             color:rgba(0,0,0,.87);
             outline:0 solid #eee;
             outline-offset:0 
+        }
+
+        .menu-icon {
+            font-size: 18px;
+            margin-right: 6px;
+            color: inherit;
         }
     }
 

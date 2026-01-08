@@ -113,36 +113,36 @@ export class MainComponent implements OnInit {
   public menuItems: MenuItemModel[] = [
     {
       text: 'File',
-      iconCss: 'em-icons e-file',
+      iconCss: 'folder',
       items: [
-        { text: 'Open', iconCss: 'em-icons e-open', clickId: 'openfile' },
-        { text: 'Open asset', iconCss: 'em-icons e-open', clickId: 'openasset' },
-        { text: 'Save', iconCss: 'em-icons e-save', clickId: 'savefile' },
+        { text: 'Open', clickId: 'openfile' },
+        { text: 'Open asset', clickId: 'openasset' },
+        { text: 'Save', clickId: 'savefile' },
         { separator: true },
-        { text: 'DeepL Einstellungen', iconCss: 'em-icons e-open', clickId: 'deeplSettings' }
+        { text: 'DeepL Einstellungen', clickId: 'deeplSettings' }
       ]
     },
     {
       text: 'Insert',
-      iconCss: 'em-icons e-file',
+      iconCss: 'add_circle',
       items: [
-        { text: 'Help file', iconCss: 'em-icons e-open', clickId: 'addHelpFile' },
-        { text: 'Main section', iconCss: 'em-icons e-open', clickId: 'addMainSection' },
+        { text: 'Help file', clickId: 'addHelpFile' },
+        { text: 'Main section', clickId: 'addMainSection' },
         { separator: true },
-        { text: 'Subsection', iconCss: 'em-icons e-open', clickId: 'addSubsection' },
-        { text: 'Content', iconCss: 'em-icons e-open', clickId: 'addContent' },
-        { text: 'Step', iconCss: 'em-icons e-open', clickId: 'addStep' },
+        { text: 'Subsection', clickId: 'addSubsection' },
+        { text: 'Content', clickId: 'addContent' },
+        { text: 'Step', clickId: 'addStep' },
       ]
     },
     {
       text: 'Edit',
-      iconCss: 'em-icons e-file',
+      iconCss: 'edit',
       items: [
-        { text: 'Translation issues', iconCss: 'em-icons e-open', clickId: 'translationIssues' },
-        { text: 'Clean QTF', iconCss: 'em-icons e-open', clickId: 'cleanQtf' },
+        { text: 'Translation issues', clickId: 'translationIssues' },
+        { text: 'Clean QTF', clickId: 'cleanQtf' },
         { separator: true },
-        { text: 'Copy', iconCss: 'em-icons e-open', clickId: 'copy', enabled: false },
-        { text: 'Delete', iconCss: 'em-icons e-open', clickId: 'delete' }
+        { text: 'Copy', clickId: 'copy', enabled: false },
+        { text: 'Delete', clickId: 'delete' }
       ]
     }
   ];
