@@ -1479,7 +1479,7 @@ export class HelpEditorFacade {
 
     let parentSection: HelpTextSection = null;
 
-    if (!this.selectedSection.type || this.selectedSection.type === '') {
+    if (!this.selectedSection.type) {
       parentSection = this.selectedSection;
     } else if (this.currentMainHelpSection) {
       const selectedId = this.getSelectedSectionId();

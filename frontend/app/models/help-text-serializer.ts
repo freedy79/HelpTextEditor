@@ -172,7 +172,7 @@ export function parseHelpTextSection(obj: any): HelpTextSection {
     sec.id = obj.id ?? sec.id;
   }
 
-  if (((!sec.type) || (sec.type === '')) && (!sec.linkId || sec.linkId === '')) {
+  if (!sec.type && !sec.linkId) {
     console.error('JSON error. Section link ID is undefined or empty. Section value: ', sec.value);
   }
 
