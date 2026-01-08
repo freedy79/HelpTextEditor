@@ -1970,6 +1970,81 @@ export class HelpEditorFacade {
     });
   }
 
+  public removeTableColumn(): void {
+    if (this.selectedSection?.type !== 'TABLE') {
+      return;
+    }
+
+    const table = this.selectedSection as HelpTextTable;
+    const columnCount = this.getTableColumnCount(table);
+    if (columnCount <= 1) {
+      return;
+    }
+
+    const removeIndex = this.selectedTableCell ? (this.selectedTableCell.colIndex ?? -1) : columnCount - 1;
+    if (removeIndex < 0 || removeIndex >= columnCount) {
+      return;
+    }
+
+    this.saveCurrentSectionText();
+
+    if (table.header && removeIndex < table.header.length) {
+      table.header.splice(removeIndex, 1);
+    }
+
+    if (table.rows) {
+      for (const row of table.rows) {
+        if (row.rowValues && removeIndex < row.rowValues.length) {
+          row.rowValues.splice(removeIndex, 1);
+        }
+      }
+    }
+
+    this.isDirty = true;
+    this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+
+    const tableId = getSectionSelectionId(table) || '';
+    if (!tableId) {
+      return;
+    }
+
+    const nextColIndex = Math.min(removeIndex, columnCount - 2);
+    if (this.selectedTableCell) {
+      if (this.selectedTableCell.isHeader) {
+        const nextHeaderKey = table.header?.[nextColIndex] ?? null;
+        this.onSelectSection({
+          tableId,
+          colIndex: nextColIndex,
+          isHeader: true,
+          key: getTableCellKey(nextHeaderKey)
+        });
+        return;
+      }
+
+      const rowIndex = this.selectedTableCell.rowIndex ?? -1;
+      if (table.rows && rowIndex >= 0 && rowIndex < table.rows.length) {
+        const rowValues = table.rows[rowIndex]?.rowValues ?? [];
+        const nextCell = rowValues[nextColIndex] ?? null;
+        this.onSelectSection({
+          tableId,
+          colIndex: nextColIndex,
+          rowIndex,
+          isHeader: false,
+          key: getTableCellKey(nextCell)
+        });
+        return;
+      }
+    }
+
+    const fallbackHeaderKey = table.header?.[nextColIndex] ?? null;
+    this.onSelectSection({
+      tableId,
+      colIndex: nextColIndex,
+      isHeader: true,
+      key: getTableCellKey(fallbackHeaderKey)
+    });
+  }
+
   private getTableColumnCount(table: HelpTextTable): number {
     let columnCount = table.header?.length ?? 0;
     if (table.rows) {
