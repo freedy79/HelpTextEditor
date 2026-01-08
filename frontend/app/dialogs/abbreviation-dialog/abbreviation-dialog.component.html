@@ -16,7 +16,7 @@
     <select id="reference" [(ngModel)]="referenceAbbreviation" (ngModelChange)="onReferenceChanged($event)">
       <option [ngValue]="''">-- auswählen --</option>
       <option *ngFor="let ab of referenceOptions" [ngValue]="ab.abbreviation">
-        {{ ab.abbreviation }} ({{ ab.shortDescription | qtfTranslate }})
+        {{ ab.abbreviation }} ({{ ab.shortDescription | qtfTranslate | async }})
       </option>
     </select>
     <div class="info-text" *ngIf="referenceAbbreviation">

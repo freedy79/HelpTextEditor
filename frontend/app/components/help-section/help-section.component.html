@@ -1,7 +1,7 @@
 <div [ngClass]="{'selected': isSelected(section)}">
     <p [attr.id]="section.linkId" id="{{getSectionId(section)}}" [class]="'sectionHeader' + sectionLevel"
         (click)="contentClick(getSectionId(section))">
-        {{sectionNumber}} {{section.value | qtfTranslate}}</p>
+        {{sectionNumber}} {{section.value | qtfTranslate | async}}</p>
 </div>
 
 <div *ngFor="let content of section.content">
@@ -9,13 +9,13 @@
         <ng-template [ngSwitchCase]="'INSTRUCTION'">
             <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(getSectionId(content))">
-                <p [innerHTML]="content.value | qtfTranslate" class="help-instruction"></p>
+                <p [innerHTML]="content.value | qtfTranslate | async" class="help-instruction"></p>
             </div>
         </ng-template>
         <ng-template [ngSwitchCase]="'INSTRUCTION_BOLD'">
             <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(getSectionId(content))">
-                <p [innerHTML]="content.value | qtfTranslate" class="help-instruction-bold"></p>
+                <p [innerHTML]="content.value | qtfTranslate | async" class="help-instruction-bold"></p>
             </div>
         </ng-template>
         <ng-template [ngSwitchCase]="'IMAGE'">
@@ -26,7 +26,7 @@
                         [appDefault]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.png'"
                         class="image" [class.image-border]="content.border"
                         [fallback]="'assets/image-fallback.svg'" [style.width]="content.width" [style.height]="content.height">
-                    <figcaption [innerHTML]="content.imageDescription | qtfTranslate" class="imageDesc"></figcaption>
+                    <figcaption [innerHTML]="content.imageDescription | qtfTranslate | async" class="imageDesc"></figcaption>
                 </figure>
             </div>
         </ng-template>
@@ -37,7 +37,7 @@
                     <img [src]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.svg'"
                         [appDefault]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.png'"
                         [fallback]="'assets/image-fallback.svg'" class="image" [class.image-border]="content.border">
-                    <figcaption [innerHTML]="content.imageDescription | qtfTranslate" class="imageDesc"></figcaption>
+                    <figcaption [innerHTML]="content.imageDescription | qtfTranslate | async" class="imageDesc"></figcaption>
                 </figure>
             </div>
         </ng-template>
@@ -47,13 +47,13 @@
                     <div id="{{getSectionId(step)}}" (click)="contentClick(getSectionId(step))" class="Enum_list_item"
                         [ngClass]="{'selected': isSelected(step)}">
                         <div [innerHTML]="(k + 1 ) + '.'" class="Enum_list_numberfield"></div>
-                        <div [innerHTML]="(step.value  | qtfTranslate)"></div>
+                        <div [innerHTML]="step.value | qtfTranslate | async"></div>
                     </div>
                     <ol class="subSecList">
                         <li *ngFor="let substep of step.substeps">
                             <div (click)="contentClick(getSectionId(substep))" id="{{getSectionId(substep)}}"
                                 [ngClass]="{'selected': isSelected(substep)}"
-                                [innerHTML]="substep.value | qtfTranslate">
+                                [innerHTML]="substep.value | qtfTranslate | async">
                             </div>
                         </li>
                     </ol>
@@ -65,7 +65,7 @@
                 <li class="subSecBulletList">
                     <div (click)="contentClick(getSectionId(bulletPoint))" id="{{getSectionId(bulletPoint)}}"
                         [ngClass]="{'selected': isSelected(bulletPoint), 'list_inline_edge': isIeOrEdge()}"
-                        [innerHTML]="bulletPoint.value | qtfTranslate"></div>
+                        [innerHTML]="bulletPoint.value | qtfTranslate | async"></div>
                 </li>
             </div>
         </ng-template>
@@ -86,7 +86,7 @@
                                     [attr.alt]="getTableCellImageAlt(header) | qtfTranslate">
                             </ng-container>
                             <ng-template #headerText>
-                                <span [innerHTML]="getTableCellText(header) | qtfTranslate"></span>
+                                <span [innerHTML]="getTableCellText(header) | qtfTranslate | async"></span>
                             </ng-template>
                         </th>
                     </tr>
@@ -104,7 +104,7 @@
                                     [attr.alt]="getTableCellImageAlt(rowValue) | qtfTranslate">
                             </ng-container>
                             <ng-template #rowText>
-                                <span [innerHTML]="getTableCellText(rowValue) | qtfTranslate"></span>
+                                <span [innerHTML]="getTableCellText(rowValue) | qtfTranslate | async"></span>
                             </ng-template>
                         </td>
                     </tr>
