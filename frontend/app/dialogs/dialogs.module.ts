@@ -15,6 +15,7 @@ import { DeeplSettingsDialogComponent } from './deepl-settings-dialog/deepl-sett
 import { CleanQtfDialogComponent } from './clean-qtf-dialog/clean-qtf-dialog.component';
 import { TranslationIssuesDialogComponent } from './translation-issues-dialog/translation-issues-dialog.component';
 import { AbbreviationDialogComponent } from './abbreviation-dialog/abbreviation-dialog.component';
+import { CoverageDialogComponent } from './coverage-dialog/coverage-dialog.component';
 import { SharedModule } from '~/app/shared/shared.module';
 
 @NgModule({
@@ -26,7 +27,8 @@ import { SharedModule } from '~/app/shared/shared.module';
     DeeplSettingsDialogComponent,
     CleanQtfDialogComponent,
     TranslationIssuesDialogComponent,
-    AbbreviationDialogComponent
+    AbbreviationDialogComponent,
+    CoverageDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +47,8 @@ import { SharedModule } from '~/app/shared/shared.module';
     DeeplSettingsDialogComponent,
     CleanQtfDialogComponent,
     TranslationIssuesDialogComponent,
-    AbbreviationDialogComponent
+    AbbreviationDialogComponent,
+    CoverageDialogComponent
   ],
   providers: [ConfirmDialogService],
   entryComponents: [
@@ -53,7 +56,8 @@ import { SharedModule } from '~/app/shared/shared.module';
     ConfirmationDialogComponent,
     CleanQtfDialogComponent,
     TranslationIssuesDialogComponent,
-    AbbreviationDialogComponent
+    AbbreviationDialogComponent,
+    CoverageDialogComponent
   ],
   bootstrap: []
 })

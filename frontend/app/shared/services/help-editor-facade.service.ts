@@ -31,29 +31,12 @@ import { DeeplTranslationService } from './deepl-translation.service';
 import { HelpTextDataService } from './help-text-data.service';
 import { HelpEditorActionsService } from './help-editor-actions.service';
 import { createNewQtfItem, QtfFile, QtfTextEntry, removeQtfItem, TextKey } from '../../models/qtf-file.model';
-
-interface CoverageReference {
-  kind: 'HelpTextSection' | 'HelpTextStep' | 'Table' | 'Image' | 'Abbreviation';
-  label: string;
-}
-
-interface CoverageKeyUsage {
-  key: string;
-  references: CoverageReference[];
-}
-
-interface CoverageLanguageReport {
-  language: string;
-  missing: CoverageKeyUsage[];
-}
-
-interface CoverageReport {
-  usedKeys: CoverageKeyUsage[];
-  missingKeys: CoverageKeyUsage[];
-  missingTranslations: CoverageLanguageReport[];
-  duplicateKeys: CoverageKeyUsage[];
-  unusedQtfKeys: string[];
-}
+import {
+  CoverageKeyUsage,
+  CoverageLanguageReport,
+  CoverageReference,
+  CoverageReport
+} from '~/app/models/coverage-report.model';
 
 @Injectable({ providedIn: 'root' })
 export class HelpEditorFacade {
@@ -140,6 +123,7 @@ export class HelpEditorFacade {
       items: [
         { text: 'Translation issues', icon: 'translate', clickId: 'translationIssues' },
         { text: 'Clean QTF', icon: 'cleaning_services', clickId: 'cleanQtf' },
+        { text: 'Coverage', icon: 'fact_check', clickId: 'coverage' },
         { separator: true },
         { text: 'Copy', icon: 'content_copy', clickId: 'copy', enabled: false },
         { text: 'Delete', icon: 'delete', clickId: 'delete' }
@@ -414,11 +398,19 @@ export class HelpEditorFacade {
       this.cleanQtf();
     } else if (item.clickId === 'translationIssues') {
       this.openTranslationIssuesDialog();
+    } else if (item.clickId === 'coverage') {
+      this.openCoverageDialog();
     } else if (item.clickId === 'copy') {
       this.copy();
     } else if (item.clickId === 'deeplSettings') {
       this.openDeeplSettingsDialog();
     }
+  }
+
+  openCoverageDialog(): void {
+    this.actionsService.openCoverageDialog({
+      coverageReport: this.coverageReport
+    });
   }
 
   copy() {
