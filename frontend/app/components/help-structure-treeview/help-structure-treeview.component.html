@@ -50,7 +50,7 @@
         <div class="tree-row" [ngStyle]="getMarginLeft(level)" cdkDrag [cdkDragDisabled]="container === 'coversheet'" [cdkDragData]="{ item: section, parent: parent, container: container, index: index }" cdkDragLockAxis="y" [cdkDragConstrainPosition]="constrainY" (cdkDragStarted)="onDragStarted($event)"
             (cdkDragEnded)="onDragEnded($event)" (cdkDragMoved)="onDragMoved($event)" #treeRowEl
             [attr.data-parent-key]="getParentKey(parent)" [attr.data-container]="container" [attr.data-index]="index" [attr.data-item-key]="getItemKey(section)"
-            [class.drop-above]="isDropAbove(section, parent, container, index)" [class.drop-below]="isDropBelow(section, parent, container, index)">
+            [treeDropIndicator]="{ parent: parent, container: container, index: index }">
             <span
                 *ngIf="hasChildren(section)"
                 class="tree-toggle material-icons"
