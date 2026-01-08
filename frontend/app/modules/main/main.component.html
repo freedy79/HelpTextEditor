@@ -237,7 +237,7 @@
             </ng-template>
           </details>
 
-          <details class="coverage-block" [open]="coverage.missingTranslations.some(report => report.missing.length)">
+          <details class="coverage-block" [open]="hasMissingTranslations(coverage)">
             <summary>Missing translations per language</summary>
             <ng-template #noMissingTranslations>
               <p>Keine fehlenden Übersetzungen.</p>
