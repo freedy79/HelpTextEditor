@@ -1,7 +1,7 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
-import { firstValueFrom } from 'rxjs';
+import { take } from 'rxjs/operators';
 import {
   HelpTextRoot,
   MainHelpSection,
@@ -1383,12 +1383,10 @@ export class HelpEditorFacade {
 
     const unusedKeys = this.getUnusedQtfKeys();
 
-    const result = await firstValueFrom(
-      this.actionsService.openCleanQtfDialog({
-        unusedKeys,
-        qtfFile: this.qtfFile
-      })
-    );
+    const result = await this.actionsService.openCleanQtfDialog({
+      unusedKeys,
+      qtfFile: this.qtfFile
+    }).pipe(take(1)).toPromise();
     if (!result || !result.deletedKeys || result.deletedKeys.length === 0) {
       return;
     }
