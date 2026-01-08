@@ -22,8 +22,9 @@
             <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(getSectionId(content))">
                 <figure>
-                    <img [src]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.svg'"
-                        [appDefault]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.png'"
+                    <img [src]="'./media/helpImages/' + content.value + '.svg'"
+                        [appDefault]="'./media/helpImages/' + content.value"
+                        [appLanguage]="language"
                         class="image" [class.image-border]="content.border"
                         [fallback]="'assets/image-fallback.svg'" [style.width]="content.width" [style.height]="content.height">
                     <figcaption [innerHTML]="(content.imageDescription | qtfTranslate | async)" class="imageDesc"></figcaption>
@@ -34,8 +35,9 @@
             <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(getSectionId(content))">
                 <figure>
-                    <img [src]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.svg'"
-                        [appDefault]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.png'"
+                    <img [src]="'./media/helpImages/' + content.value + '.svg'"
+                        [appDefault]="'./media/helpImages/' + content.value"
+                        [appLanguage]="language"
                         [fallback]="'assets/image-fallback.svg'" class="image" [class.image-border]="content.border">
                     <figcaption [innerHTML]="(content.imageDescription | qtfTranslate | async)" class="imageDesc"></figcaption>
                 </figure>
@@ -78,8 +80,9 @@
                             (click)="tableCellClick(header, getSectionId(content), colIndex, undefined, true)"
                             [ngClass]="{'selected': isTableCellSelected(getTableCellImageAlt(header), getSectionId(content), undefined, colIndex, true)}">
                             <ng-container *ngIf="isTableCellImage(header); else headerText">
-                                <img [src]="'./media/helpImages/' + header.value + '_' + (language | uppercase) + '.svg'"
-                                    [appDefault]="'./media/helpImages/' + header.value + '_' + (language | uppercase) + '.png'"
+                                <img [src]="'./media/helpImages/' + header.value + '.svg'"
+                                    [appDefault]="'./media/helpImages/' + header.value"
+                                    [appLanguage]="language"
                                     [fallback]="'assets/image-fallback.svg'" class="table-image"
                                     [class.image-border]="header.border"
                                     [style.width]="header.width" [style.height]="header.height"
@@ -96,8 +99,9 @@
                             (click)="tableCellClick(rowValue, getSectionId(content), colIndex, i)"
                             [ngClass]="{'selected': isTableCellSelected(getTableCellImageAlt(rowValue), getSectionId(content), i, colIndex)}">
                             <ng-container *ngIf="isTableCellImage(rowValue); else rowText">
-                                <img [src]="'./media/helpImages/' + rowValue.value + '_' + (language | uppercase) + '.svg'"
-                                    [appDefault]="'./media/helpImages/' + rowValue.value + '_' + (language | uppercase) + '.png'"
+                                <img [src]="'./media/helpImages/' + rowValue.value + '.svg'"
+                                    [appDefault]="'./media/helpImages/' + rowValue.value"
+                                    [appLanguage]="language"
                                     [fallback]="'assets/image-fallback.svg'" class="table-image"
                                     [class.image-border]="rowValue.border"
                                     [style.width]="rowValue.width" [style.height]="rowValue.height"
