@@ -325,7 +325,7 @@ export class HelpTextTable extends HelpTextSection {
   rows?: RowItem[];
 
   public idExists(key: string): boolean {
-    for (const headerItem of this.header) {
+    for (const headerItem of this.header ?? []) {
       if (getTableCellKey(headerItem) === key) {
         return true;
       }
@@ -817,8 +817,13 @@ export function parseHelpTextTable(obj: any): HelpTextTable {
   const newTable = new HelpTextTable();
 
   newTable.type = obj.type;
-  newTable.header = obj.header;
-  newTable.rows = obj.rows;
+  newTable.header = Array.isArray(obj?.header) ? obj.header : [];
+  newTable.rows = Array.isArray(obj?.rows)
+    ? obj.rows.map((row: any) => ({
+      rowValues: Array.isArray(row?.rowValues) ? row.rowValues : []
+    }))
+    : [];
+  normalizeTableStructure(newTable);
   newTable.linkId = undefined;
   newTable.value = undefined;
   newTable.content = undefined;
@@ -827,6 +832,22 @@ export function parseHelpTextTable(obj: any): HelpTextTable {
   ensureInternalId(newTable);
 
   return newTable;
+}
+
+function normalizeTableStructure(table: HelpTextTable): void {
+  if (!Array.isArray(table.header)) {
+    table.header = [];
+  }
+
+  if (!Array.isArray(table.rows)) {
+    table.rows = [];
+  }
+
+  for (const row of table.rows) {
+    if (!Array.isArray(row.rowValues)) {
+      row.rowValues = [];
+    }
+  }
 }
 
 export function collectStructureIssues(root: HelpTextRoot | null | undefined): StructureIssue[] {
