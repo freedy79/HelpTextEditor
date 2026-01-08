@@ -42,7 +42,7 @@ describe('HelpEditorFacade', () => {
     facade.onSplitterMouseDown({ clientX: 100, preventDefault: () => {} } as MouseEvent);
     facade.onWindowMouseMove({ clientX: 200 } as MouseEvent);
 
-    expect(facade.isDraggingSplitter).toBeTrue();
+    expect(facade.isDraggingSplitter).toBeTruthy();
     expect(facade.leftColumnWidth).toBe(400);
   });
 
@@ -53,7 +53,7 @@ describe('HelpEditorFacade', () => {
 
     facade.onWindowMouseUp();
 
-    expect(facade.isDraggingSplitter).toBeFalse();
+    expect(facade.isDraggingSplitter).toBeFalsy();
     expect((facade as any).persistSplitterWidth).toHaveBeenCalled();
   });
 });
