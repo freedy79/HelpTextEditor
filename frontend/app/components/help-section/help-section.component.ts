@@ -28,6 +28,7 @@ export class HelpSectionComponent implements OnChanges {
   @Input() selectedLanguage: String;
 
   @Input() language: String;
+  @Input() translationEnabled = true;
 
 
   constructor() {

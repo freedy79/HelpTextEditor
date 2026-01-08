@@ -1,7 +1,7 @@
 <div [ngClass]="{'selected': isSelected(section)}">
     <p [attr.id]="section.linkId" id="{{getSectionId(section)}}" [class]="'sectionHeader' + sectionLevel"
         (click)="contentClick(getSectionId(section))">
-        {{sectionNumber}} {{section.value | qtfTranslate | async}}</p>
+        {{sectionNumber}} {{translationEnabled ? (section.value | qtfTranslate | async) : section.value}}</p>
 </div>
 
 <div *ngFor="let content of section.content">
@@ -9,13 +9,13 @@
         <ng-template [ngSwitchCase]="'INSTRUCTION'">
             <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(getSectionId(content))">
-                <p [innerHTML]="content.value | qtfTranslate | async" class="help-instruction"></p>
+                <p [innerHTML]="translationEnabled ? (content.value | qtfTranslate | async) : content.value" class="help-instruction"></p>
             </div>
         </ng-template>
         <ng-template [ngSwitchCase]="'INSTRUCTION_BOLD'">
             <div id="{{getSectionId(content)}}" [ngClass]="{'selected': isSelected(content)}"
                 (click)="contentClick(getSectionId(content))">
-                <p [innerHTML]="content.value | qtfTranslate | async" class="help-instruction-bold"></p>
+                <p [innerHTML]="translationEnabled ? (content.value | qtfTranslate | async) : content.value" class="help-instruction-bold"></p>
             </div>
         </ng-template>
         <ng-template [ngSwitchCase]="'IMAGE'">
@@ -26,7 +26,7 @@
                         [appDefault]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.png'"
                         class="image" [class.image-border]="content.border"
                         [fallback]="'assets/image-fallback.svg'" [style.width]="content.width" [style.height]="content.height">
-                    <figcaption [innerHTML]="content.imageDescription | qtfTranslate | async" class="imageDesc"></figcaption>
+                    <figcaption [innerHTML]="translationEnabled ? (content.imageDescription | qtfTranslate | async) : content.imageDescription" class="imageDesc"></figcaption>
                 </figure>
             </div>
         </ng-template>
@@ -37,7 +37,7 @@
                     <img [src]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.svg'"
                         [appDefault]="'./media/helpImages/' + content.value + '_' + (language | uppercase) + '.png'"
                         [fallback]="'assets/image-fallback.svg'" class="image" [class.image-border]="content.border">
-                    <figcaption [innerHTML]="content.imageDescription | qtfTranslate | async" class="imageDesc"></figcaption>
+                    <figcaption [innerHTML]="translationEnabled ? (content.imageDescription | qtfTranslate | async) : content.imageDescription" class="imageDesc"></figcaption>
                 </figure>
             </div>
         </ng-template>
@@ -47,13 +47,13 @@
                     <div id="{{getSectionId(step)}}" (click)="contentClick(getSectionId(step))" class="Enum_list_item"
                         [ngClass]="{'selected': isSelected(step)}">
                         <div [innerHTML]="(k + 1 ) + '.'" class="Enum_list_numberfield"></div>
-                        <div [innerHTML]="step.value | qtfTranslate | async"></div>
+                        <div [innerHTML]="translationEnabled ? (step.value | qtfTranslate | async) : step.value"></div>
                     </div>
                     <ol class="subSecList">
                         <li *ngFor="let substep of step.substeps">
                             <div (click)="contentClick(getSectionId(substep))" id="{{getSectionId(substep)}}"
                                 [ngClass]="{'selected': isSelected(substep)}"
-                                [innerHTML]="substep.value | qtfTranslate | async">
+                                [innerHTML]="translationEnabled ? (substep.value | qtfTranslate | async) : substep.value">
                             </div>
                         </li>
                     </ol>
@@ -65,7 +65,7 @@
                 <li class="subSecBulletList">
                     <div (click)="contentClick(getSectionId(bulletPoint))" id="{{getSectionId(bulletPoint)}}"
                         [ngClass]="{'selected': isSelected(bulletPoint), 'list_inline_edge': isIeOrEdge()}"
-                        [innerHTML]="bulletPoint.value | qtfTranslate | async"></div>
+                        [innerHTML]="translationEnabled ? (bulletPoint.value | qtfTranslate | async) : bulletPoint.value"></div>
                 </li>
             </div>
         </ng-template>
@@ -83,10 +83,10 @@
                                     [fallback]="'assets/image-fallback.svg'" class="table-image"
                                     [class.image-border]="header.border"
                                     [style.width]="header.width" [style.height]="header.height"
-                                    [attr.alt]="getTableCellImageAlt(header) | qtfTranslate">
+                                    [attr.alt]="translationEnabled ? (getTableCellImageAlt(header) | qtfTranslate) : getTableCellImageAlt(header)">
                             </ng-container>
                             <ng-template #headerText>
-                                <span [innerHTML]="getTableCellText(header) | qtfTranslate | async"></span>
+                                <span [innerHTML]="translationEnabled ? (getTableCellText(header) | qtfTranslate | async) : getTableCellText(header)"></span>
                             </ng-template>
                         </th>
                     </tr>
@@ -101,10 +101,10 @@
                                     [fallback]="'assets/image-fallback.svg'" class="table-image"
                                     [class.image-border]="rowValue.border"
                                     [style.width]="rowValue.width" [style.height]="rowValue.height"
-                                    [attr.alt]="getTableCellImageAlt(rowValue) | qtfTranslate">
+                                    [attr.alt]="translationEnabled ? (getTableCellImageAlt(rowValue) | qtfTranslate) : getTableCellImageAlt(rowValue)">
                             </ng-container>
                             <ng-template #rowText>
-                                <span [innerHTML]="getTableCellText(rowValue) | qtfTranslate | async"></span>
+                                <span [innerHTML]="translationEnabled ? (getTableCellText(rowValue) | qtfTranslate | async) : getTableCellText(rowValue)"></span>
                             </ng-template>
                         </td>
                     </tr>
@@ -122,5 +122,6 @@
     <app-help-section [section]="subSection" [sectionNumber]="(sectionNumber + '.') + (i + 1)"
         [sectionLevel]="(sectionLevel + 1)" (selectContent)="forwardSectionClick($event)"
         [selectedHelpSection]="selectedHelpSection" [selectedContentKey]="selectedContentKey"
-        [selectedTableCell]="selectedTableCell" [language]="language"></app-help-section>
+        [selectedTableCell]="selectedTableCell" [language]="language"
+        [translationEnabled]="translationEnabled"></app-help-section>
 </div>
