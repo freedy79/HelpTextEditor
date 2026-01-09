@@ -161,6 +161,7 @@ export class HelpEditorFacade {
       this.deeplAuthKey = storedKey;
     }
     this.loadStoredSplitterWidth();
+    this.onLoadFromAsset();
   }
 
   setPreviewContainer(container: ElementRef<HTMLDivElement> | null): void {
