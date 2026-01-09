@@ -64,7 +64,7 @@ describe('HelpTextSerializer', () => {
     const serialized = serializeHelpTextRoot(root) as { content: unknown[] };
     expect(Array.isArray(serialized.content)).toBe(true);
     expect(serialized.content[0]).toEqual(
-      expect.objectContaining({
+      jasmine.objectContaining({
         type: HelpContentType.INTRODUCTION,
         value: 'INTRO_KEY'
       })
