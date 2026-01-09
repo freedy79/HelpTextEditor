@@ -168,7 +168,11 @@ export const HELP_TEXT_ROOT_KEYS = [
   'HELP_TEXT_JOB_MANAGEMENT'
 ] as const;
 
-export type HelpTextRootKey = typeof HELP_TEXT_ROOT_KEYS[number];
+export type HelpTextRootKey = string;
+
+export type HelpTextRootFormat = 'keyed' | 'standalone-array' | 'standalone-content';
+
+export const STANDALONE_SECTION_KEY = 'HELP_TEXT_STANDALONE';
 
 type SectionCollection = HelpTextSection[] | undefined;
 
@@ -486,18 +490,23 @@ export class MainHelpSection {
 
 export class HelpTextRoot {
   [key: string]: unknown;
+  private standaloneSections?: HelpTextSection[];
+  private format: HelpTextRootFormat = 'keyed';
 
   constructor(initialSections: Partial<Record<HelpTextRootKey, MainHelpSection>> = {}) {
     Object.assign(this, initialSections);
   }
 
   public getSectionKeys(): HelpTextRootKey[] {
-    return HELP_TEXT_ROOT_KEYS.filter(key => !!(this as any)[key]);
+    const keys = Object.keys(this).filter(key => this.getSection(key) instanceof MainHelpSection);
+    const knownKeys = HELP_TEXT_ROOT_KEYS.filter(key => keys.includes(key));
+    const extraKeys = keys.filter(key => !HELP_TEXT_ROOT_KEYS.includes(key));
+    return [...knownKeys, ...extraKeys];
   }
 
   public getSections(): MainHelpSection[] {
     return this.getSectionKeys()
-      .map(key => (this as any)[key] as MainHelpSection)
+      .map(key => this.getSection(key) as MainHelpSection)
       .filter((section): section is MainHelpSection => !!section);
   }
 
@@ -512,6 +521,26 @@ export class HelpTextRoot {
     }
 
     (this as any)[key] = section;
+    if (key === STANDALONE_SECTION_KEY && section.content) {
+      this.setStandaloneSections(section.content, this.format === 'standalone-array' ? 'standalone-array' : 'standalone-content');
+    }
+  }
+
+  public setStandaloneSections(sections: HelpTextSection[], format: HelpTextRootFormat = 'standalone-content'): void {
+    this.standaloneSections = sections;
+    this.format = format;
+  }
+
+  public getStandaloneSections(): HelpTextSection[] | undefined {
+    return this.standaloneSections;
+  }
+
+  public getFormat(): HelpTextRootFormat {
+    return this.format;
+  }
+
+  public isStandalone(): boolean {
+    return this.format !== 'keyed';
   }
 
   public forEachSection(handler: (section: MainHelpSection, key: HelpTextRootKey) => void): void {
@@ -524,7 +553,16 @@ export class HelpTextRoot {
   }
 
   public idExists(key: string): boolean {
-    return this.getSections().some(section => section?.idExists(key));
+    const existsInMainSections = this.getSections().some(section => section?.idExists(key));
+    if (existsInMainSections) {
+      return true;
+    }
+
+    if (this.standaloneSections?.length) {
+      return this.standaloneSections.some(section => section?.idExists(key));
+    }
+
+    return false;
   }
 }
 

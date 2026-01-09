@@ -465,7 +465,7 @@ export class HelpEditorFacade {
 
   getRootKeys(): string[] {
     if (!this.helpTextRoot) { return []; }
-    return Object.keys(this.helpTextRoot);
+    return this.helpTextRoot.getSectionKeys();
   }
 
   getSelectedItem(): MainHelpSection | null {

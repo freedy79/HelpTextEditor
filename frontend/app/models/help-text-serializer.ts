@@ -7,6 +7,8 @@ import {
   HelpTextSection,
   HelpTextStep,
   HelpTextTable,
+  HelpTextRootFormat,
+  STANDALONE_SECTION_KEY,
   createHelpNodeId,
   isImageContentType,
   isTableContentType,
@@ -16,17 +18,35 @@ import {
 
 export function parseHelpTextRoot(json: any): HelpTextRoot {
   const root = new HelpTextRoot();
+  if (Array.isArray(json)) {
+    const sections = json.map(parseHelpTextSection);
+    root.setStandaloneSections(sections, 'standalone-array');
+    root.setSection(STANDALONE_SECTION_KEY, createStandaloneMainSection(sections));
+    return root;
+  }
 
-  HELP_TEXT_ROOT_KEYS.forEach(key => {
-    if (json && json[key]) {
+  const parsedKeys = extractMainSectionKeys(json);
+  if (parsedKeys.length > 0) {
+    parsedKeys.forEach(key => {
       root.setSection(key, parseMainHelpSection(json[key]));
-    }
-  });
+    });
+    return root;
+  }
+
+  if (Array.isArray(json?.content)) {
+    const sections = json.content.map(parseHelpTextSection);
+    root.setStandaloneSections(sections, 'standalone-content');
+    root.setSection(STANDALONE_SECTION_KEY, createStandaloneMainSection(sections));
+  }
 
   return root;
 }
 
-export function serializeHelpTextRoot(root: HelpTextRoot): Record<HelpTextRootKey, unknown> {
+export function serializeHelpTextRoot(root: HelpTextRoot): Record<HelpTextRootKey, unknown> | unknown[] {
+  if (root.isStandalone()) {
+    return serializeStandaloneRoot(root);
+  }
+
   const serialized: Partial<Record<HelpTextRootKey, unknown>> = {};
 
   root.forEachSection((section, key) => {
@@ -243,4 +263,52 @@ function normalizeTableStructure(table: HelpTextTable): void {
       row.rowValues = [];
     }
   }
+}
+
+function createStandaloneMainSection(sections: HelpTextSection[]): MainHelpSection {
+  const mainSection = new MainHelpSection();
+  mainSection.content = sections;
+  return mainSection;
+}
+
+function extractMainSectionKeys(json: any): HelpTextRootKey[] {
+  if (!json || typeof json !== 'object') {
+    return [];
+  }
+
+  const keys = Object.keys(json);
+  const found = new Set<HelpTextRootKey>();
+  for (const key of HELP_TEXT_ROOT_KEYS) {
+    if (json[key]) {
+      found.add(key);
+    }
+  }
+
+  keys.forEach(key => {
+    const value = json[key];
+    if (!value || typeof value !== 'object' || Array.isArray(value)) {
+      return;
+    }
+
+    const hasSectionShape = Array.isArray(value.content)
+      || Array.isArray(value.coversheet)
+      || Array.isArray(value.abbreviations);
+    if (hasSectionShape) {
+      found.add(key);
+    }
+  });
+
+  return Array.from(found);
+}
+
+function serializeStandaloneRoot(root: HelpTextRoot): Record<string, unknown> | unknown[] {
+  const sections = root.getStandaloneSections() ?? [];
+  const serializedSections = sections.map(serializeHelpTextSection);
+  const format = root.getFormat();
+
+  if (format === 'standalone-array') {
+    return serializedSections;
+  }
+
+  return { content: serializedSections };
 }
