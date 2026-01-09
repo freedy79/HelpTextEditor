@@ -12,6 +12,14 @@ body {
   font-family: sans-serif;
 }
 
+.mat-dialog-container {
+  border-radius: 0;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 0;
+}
+
 .section_header {
   font-size: 0.6em;
   border-bottom: #666666 solid 1px;
