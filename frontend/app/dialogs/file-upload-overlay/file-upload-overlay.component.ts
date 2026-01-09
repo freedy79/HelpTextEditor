@@ -50,12 +50,19 @@ export class FileUploadOverlayComponent {
 
       this.jsonFileName = jsonFile.name;
       this.qtfFileName = qtfFile.name;
+
+      if (!this.areFileNamesMatching(jsonFile, qtfFile)) {
+        this.errorMessage = 'Die Dateinamen der JSON- und QTF-Datei müssen übereinstimmen.';
+        return;
+      }
+
       this.errorMessage = '';
 
       Promise.all([this.readFile(jsonFile), this.readFile(qtfFile)])
         .then(([jsonData, qtfData]) => {
           this.jsonData = jsonData;
           this.qtfData = qtfData;
+          this.onOk();
         })
         .catch(err => {
           console.error('Fehler beim Lesen der Dateien:', err);
@@ -122,5 +129,11 @@ export class FileUploadOverlayComponent {
       };
       reader.readAsText(file);
     });
+  }
+
+  private areFileNamesMatching(jsonFile: File, qtfFile: File): boolean {
+    const jsonBaseName = jsonFile.name.replace(/\.json$/i, '');
+    const qtfBaseName = qtfFile.name.replace(/\.qtf$/i, '');
+    return jsonBaseName === qtfBaseName;
   }
 }
