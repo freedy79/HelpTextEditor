@@ -126,6 +126,12 @@
   word-break: break-word;
 }
 
+.file-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
 .status-dot {
   width: 10px;
   height: 10px;
