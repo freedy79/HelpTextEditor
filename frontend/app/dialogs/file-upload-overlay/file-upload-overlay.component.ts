@@ -11,8 +11,7 @@ export class FileUploadOverlayComponent {
     files?: { jsonData: any; qtfData: any };
   }>();
 
-  @ViewChild('jsonFileInput', { static: true }) jsonFileInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('qtfFileInput', { static: true }) qtfFileInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('fileInput', { static: true }) fileInput!: ElementRef<HTMLInputElement>;
 
   // Gespeicherte Daten (nach dem Einlesen)
   private jsonData: any | null = null;
@@ -26,45 +25,42 @@ export class FileUploadOverlayComponent {
 
   constructor() {}
 
-  selectJsonFile() {
-    this.jsonFileInput.nativeElement.click();
+  selectFiles() {
+    this.fileInput.nativeElement.value = '';
+    this.fileInput.nativeElement.click();
   }
 
-  selectQtfFile() {
-    this.qtfFileInput.nativeElement.click();
-  }
-
-  onJsonFileSelected(event: Event) {
+  onFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      this.jsonFileName = file.name;  // Dateiname merken
+      const files = Array.from(input.files);
+      const { jsonFile, qtfFile, hasDuplicateJson, hasDuplicateQtf } = this.pickFiles(files);
+
+      this.resetFileState();
+
+      if (hasDuplicateJson || hasDuplicateQtf) {
+        this.errorMessage = 'Bitte wählen Sie genau eine JSON- und eine QTF-Datei aus.';
+        return;
+      }
+
+      if (!jsonFile || !qtfFile) {
+        this.errorMessage = 'Bitte wählen Sie sowohl die JSON- als auch die QTF-Datei aus.';
+        return;
+      }
+
+      this.jsonFileName = jsonFile.name;
+      this.qtfFileName = qtfFile.name;
       this.errorMessage = '';
-      this.readFile(file)
-        .then(parsedData => {
-          this.jsonData = parsedData;
+
+      Promise.all([this.readFile(jsonFile), this.readFile(qtfFile)])
+        .then(([jsonData, qtfData]) => {
+          this.jsonData = jsonData;
+          this.qtfData = qtfData;
         })
         .catch(err => {
-          console.error('Fehler beim Lesen der JSON-Datei:', err);
-          this.errorMessage = 'Die ausgewählte JSON-Datei konnte nicht gelesen werden.';
+          console.error('Fehler beim Lesen der Dateien:', err);
+          this.errorMessage = 'Die ausgewählten Dateien konnten nicht gelesen werden.';
           this.jsonData = null;
-        });
-    }
-  }
-
-  onQtfFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      this.qtfFileName = file.name;  // Dateiname merken
-      this.errorMessage = '';
-      this.readFile(file)
-        .then(parsedData => {
-          this.qtfData = parsedData;
-        })
-        .catch(err => {
-          console.error('Fehler beim Lesen der QTF-Datei:', err);
-          this.errorMessage = 'Die ausgewählte QTF-Datei konnte nicht gelesen werden.';
           this.qtfData = null;
         });
     }
@@ -88,6 +84,25 @@ export class FileUploadOverlayComponent {
 
   isOkEnabled(): boolean {
     return this.jsonData !== null && this.qtfData !== null;
+  }
+
+  private resetFileState() {
+    this.jsonData = null;
+    this.qtfData = null;
+    this.jsonFileName = '';
+    this.qtfFileName = '';
+  }
+
+  private pickFiles(files: File[]) {
+    const jsonFiles = files.filter(file => file.name.toLowerCase().endsWith('.json'));
+    const qtfFiles = files.filter(file => file.name.toLowerCase().endsWith('.qtf'));
+
+    return {
+      jsonFile: jsonFiles[0],
+      qtfFile: qtfFiles[0],
+      hasDuplicateJson: jsonFiles.length > 1,
+      hasDuplicateQtf: qtfFiles.length > 1
+    };
   }
 
   private readFile(file: File): Promise<any> {

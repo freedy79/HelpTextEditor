@@ -5,53 +5,38 @@
     <header class="panel-header">
       <h2>Dateien hochladen</h2>
       <p class="panel-description">
-        Bitte wählen Sie die Dateien für Struktur und Inhalte aus. Beide Dateien werden benötigt,
-        bevor der Import gestartet werden kann.
+        Bitte wählen Sie die Helptext.json und Helptext.qtf in einem Schritt aus. Beide Dateien
+        werden benötigt, bevor der Import gestartet werden kann.
       </p>
     </header>
 
     <div class="upload-grid">
       <section class="upload-card">
         <div class="upload-card__header">
-          <div class="upload-icon" aria-hidden="true">📁</div>
+          <div class="upload-icon" aria-hidden="true">📂</div>
           <div>
-            <h3>Helptext.json</h3>
-            <p>Struktur-Definition hochladen</p>
+            <h3>Helptext.json + Helptext.qtf</h3>
+            <p>Struktur und Inhalte gemeinsam auswählen</p>
           </div>
         </div>
-        <button class="select-button" (click)="selectJsonFile()">Datei auswählen</button>
+        <button class="select-button" (click)="selectFiles()">Dateien auswählen</button>
         <input
-          #jsonFileInput
+          #fileInput
           type="file"
-          accept=".json"
+          accept=".json,.qtf"
+          multiple
           class="hidden-input"
-          (change)="onJsonFileSelected($event)"
+          (change)="onFilesSelected($event)"
         />
-        <div class="file-name" *ngIf="jsonFileName">
-          <span class="status-dot status-dot--ready"></span>
-          {{ jsonFileName }}
-        </div>
-      </section>
-
-      <section class="upload-card">
-        <div class="upload-card__header">
-          <div class="upload-icon" aria-hidden="true">📄</div>
-          <div>
-            <h3>Helptext.qtf</h3>
-            <p>Inhalts-Datei hochladen</p>
+        <div class="file-summary" *ngIf="jsonFileName || qtfFileName">
+          <div class="file-name" *ngIf="jsonFileName">
+            <span class="status-dot status-dot--ready"></span>
+            {{ jsonFileName }}
           </div>
-        </div>
-        <button class="select-button" (click)="selectQtfFile()">Datei auswählen</button>
-        <input
-          #qtfFileInput
-          type="file"
-          accept=".qtf"
-          class="hidden-input"
-          (change)="onQtfFileSelected($event)"
-        />
-        <div class="file-name" *ngIf="qtfFileName">
-          <span class="status-dot status-dot--ready"></span>
-          {{ qtfFileName }}
+          <div class="file-name" *ngIf="qtfFileName">
+            <span class="status-dot status-dot--ready"></span>
+            {{ qtfFileName }}
+          </div>
         </div>
       </section>
     </div>
