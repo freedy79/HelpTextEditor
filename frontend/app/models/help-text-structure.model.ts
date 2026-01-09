@@ -155,7 +155,9 @@ export function matchesSectionId(section: HelpTextSection, contentId: string): b
   return section.id === contentId || section.value === contentId;
 }
 
-export const HELP_TEXT_ROOT_KEYS = [
+export type HelpTextRootKey = string;
+
+export const HELP_TEXT_ROOT_KEYS: HelpTextRootKey[] = [
   'HELP_TEXT_DEVICE_CONCEPT',
   'HELP_TEXT_TASKS_CONCEPT',
   'HELP_TEXT_PRINT_CONCEPT',
@@ -166,9 +168,7 @@ export const HELP_TEXT_ROOT_KEYS = [
   'HELP_TEXT_DEVICE_CLEANING',
   'HELP_TEXT_DEVICE_MAINTENANCE',
   'HELP_TEXT_JOB_MANAGEMENT'
-] as const;
-
-export type HelpTextRootKey = string;
+];
 
 export type HelpTextRootFormat = 'keyed' | 'standalone-array' | 'standalone-content';
 
