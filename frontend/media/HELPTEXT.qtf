@@ -1,3 +1,5 @@
+{
+  "TEXTS": {
     "DEMO_APP_TITLE": {
       "group": "HELP_TITLE",
       "topic": "HELPTEXT",
@@ -141,5 +143,6 @@
         "PORTUGUESE": true,
         "KOREAN": true
       }
-    },
+    }
+  }
 }
