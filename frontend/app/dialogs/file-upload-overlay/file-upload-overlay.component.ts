@@ -134,6 +134,6 @@ export class FileUploadOverlayComponent {
   private areFileNamesMatching(jsonFile: File, qtfFile: File): boolean {
     const jsonBaseName = jsonFile.name.replace(/\.json$/i, '');
     const qtfBaseName = qtfFile.name.replace(/\.qtf$/i, '');
-    return jsonBaseName === qtfBaseName;
+    return jsonBaseName === "helpTexts" && qtfBaseName === "HELPTEXT";
   }
 }
