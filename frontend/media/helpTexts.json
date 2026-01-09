@@ -5,45 +5,19 @@
     "content": [
       {
         "linkId": "DEMO_MAIN_SECTION",
-        "value": "Demo: Getting Started",
+        "value": "DEMO_APP_TITLE",
         "content": [
           {
-            "value": "Use the tree to select a section and edit its properties.",
+            "value": "DEMO_APP_STEP_SELECT",
             "type": "INSTRUCTION"
           },
           {
-            "value": "Right-click a section to add subsections or instructions.",
+            "value": "DEMO_APP_STEP_EDIT",
             "type": "INSTRUCTION"
-          }
-        ],
-        "subsections": [
-          {
-            "linkId": "DEMO_SUBSECTION_ONE",
-            "value": "Create content",
-            "content": [
-              {
-                "value": "Add instructions in the middle column to see them render.",
-                "type": "INSTRUCTION"
-              },
-              {
-                "value": "Use bold instructions for emphasis.",
-                "type": "INSTRUCTION_BOLD"
-              }
-            ]
           },
           {
-            "linkId": "DEMO_SUBSECTION_TWO",
-            "value": "Export & organize",
-            "content": [
-              {
-                "value": "Drag sections in the tree to reorder them.",
-                "type": "INSTRUCTION"
-              },
-              {
-                "value": "Use the menu to download your help text JSON.",
-                "type": "INSTRUCTION"
-              }
-            ]
+            "value": "DEMO_APP_STEP_EXPORT",
+            "type": "INSTRUCTION"
           }
         ]
       }
