@@ -66,7 +66,7 @@ export class FileUploadOverlayComponent {
         })
         .catch(err => {
           console.error('Fehler beim Lesen der Dateien:', err);
-          this.errorMessage = 'Die ausgewählten Dateien konnten nicht gelesen werden.';
+          this.errorMessage = 'Die ausgewählten Dateien konnten nicht gelesen werden. ' + err.message;
           this.jsonData = null;
           this.qtfData = null;
         });
