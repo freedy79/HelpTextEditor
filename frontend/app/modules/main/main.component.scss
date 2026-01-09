@@ -1,4 +1,9 @@
 $statusbar-height: 48px;
+$surface-background: #f6f6f6;
+$panel-background: #ffffff;
+$border-color: #d0d0d0;
+$divider-color: #c5c5c5;
+$focus-color: #fadd37;
 
 .editor {
     display: flex;
@@ -7,6 +12,7 @@ $statusbar-height: 48px;
     min-height: 0;
     box-sizing: border-box;
     overflow: hidden;
+    background-color: $surface-background;
 }
 
 .header {
@@ -20,26 +26,28 @@ $statusbar-height: 48px;
     height: calc(100vh - 68px - #{$statusbar-height});
     width: 100vw;
     overflow: hidden;
+    background-color: $surface-background;
 
     .column {
-        padding: 10px;
+        padding: 16px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
         min-height: 0;
         flex: 0 0 auto;
+        background-color: $panel-background;
     }
 
     .left {
-        border-right: 1px solid #ccc;
-        background-color: #eeeeee;
+        border-right: 1px solid $border-color;
 
         .structure-header {
             flex: 0 0 auto;
         }
 
         .structure-treeview {
-            border: 1px solid #888;
+            border: 1px solid $border-color;
+            background-color: $panel-background;
             flex: 1 1 auto;
             overflow: hidden;
             min-height: 0;
@@ -49,46 +57,53 @@ $statusbar-height: 48px;
     .main {
         flex: 1 1 auto;
         min-width: 320px;
-        border-right: 1px solid #ccc;
+        border-right: 1px solid $border-color;
     }
 
     .right {
         flex: 0 0 22%;
         min-width: 260px;
         max-width: 420px;
+        border-left: 1px solid $border-color;
     }
 
     .vertical-splitter {
         width: 8px;
         cursor: col-resize;
-        background-color: #e0e0e0;
-        border-left: 1px solid #ccc;
-        border-right: 1px solid #ccc;
+        background-color: $divider-color;
+        border-left: 1px solid $border-color;
+        border-right: 1px solid $border-color;
         flex: 0 0 auto;
         transition: background-color 0.2s ease-in-out;
 
         &:hover, &.active {
-            background-color: #d0d0d0;
+            background-color: $border-color;
         }
     }
 }
 
 .previewHtmlBox {
-    border: 1px solid #aaa;
-    padding: 10px;
+    border: 1px solid $border-color;
+    padding: 12px;
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
+    background-color: $panel-background;
 }
 
 input {
     width: 98%;
     margin-top: 2px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid $border-color;
+    background-color: $panel-background;
+    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
 
     &:focus {
-        outline: #fadd37 solid 2px;
+        outline: $focus-color solid 2px;
         outline-offset: 1px;
-        border: none;
+        border-color: $focus-color;
         margin-top: 3px;
         margin-bottom: 2px;
         padding-top: 2px;
@@ -99,11 +114,16 @@ input {
 textarea {
     width: 98%;
     margin-top: 2px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid $border-color;
+    background-color: $panel-background;
+    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
 
     &:focus {
-        outline: #fadd37 solid 2px;
+        outline: $focus-color solid 2px;
         outline-offset: 1px;
-        border: none;
+        border-color: $focus-color;
         margin-top: 3px;
         padding-top: 2px;
         padding-left: 3px;
@@ -114,12 +134,12 @@ textarea {
 .PageOutline__Button {
     position: fixed;
     //display: inline-block;
-    background-color: #FFFFFF;
+    background-color: $panel-background;
     border-radius: 3px;
     overflow: hidden auto;
     max-height: calc(-217px + 100vh);
     transform: translateX(0px);
-    border: 1px solid #f1f1f1;
+    border: 1px solid $border-color;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
     right: 0px;
     z-index: 98;
@@ -141,7 +161,7 @@ textarea {
     cursor: pointer;
 
     &:hover {
-        background-color: #DDDDDD;
+        background-color: #e7e7e7;
     }
 }
 
