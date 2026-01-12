@@ -36,6 +36,6 @@ open_terminal() {
   return 1
 }
 
-open_terminal "backend" "cd backend && npm start" &
-open_terminal "frontend" "cd frontend && npm start" &
-wait
+open_terminal "backend" "cd backend && $ echo "$PWD" && npm start" &
+open_terminal "frontend" "cd frontend && $ echo "$PWD" && npm start"
+#wait
