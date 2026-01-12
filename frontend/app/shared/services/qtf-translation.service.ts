@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, merge } from 'rxjs';
+import { distinctUntilChanged, mapTo, startWith, switchMap } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class QtfTranslationService {
-  constructor(private translateService: TranslateService) {}
+  constructor(private translateService: TranslateService) { }
 
   get(key: string): Observable<string> {
-    if (!key) {
-      return of('');
-    }
+    if (!key) return of('');
 
-    return this.translateService.stream(key);
+    const trigger$ = merge(
+      this.translateService.onTranslationChange.pipe(mapTo(null)),
+      this.translateService.onLangChange.pipe(mapTo(null))
+    ).pipe(startWith(null));
+
+    return trigger$.pipe(
+      switchMap(() => this.translateService.get(key)),
+      distinctUntilChanged()
+    );
   }
 }

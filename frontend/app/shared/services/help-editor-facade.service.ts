@@ -145,7 +145,7 @@ export class HelpEditorFacade {
     private confirmDialog: ConfirmDialogService,
     private dataService: HelpTextDataService,
     private actionsService: HelpEditorActionsService
-  ) {}
+  ) { }
 
   get coverageReport(): CoverageReport | null {
     if (!this.helpTextRoot || !this.qtfFile) {
@@ -734,7 +734,6 @@ export class HelpEditorFacade {
 
   private afterSectionMoved(item: HelpTextSection | HelpTextStep | undefined) {
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-    this.saveCurrentSectionText();
     this.isDirty = true;
 
     const selectionId = getSectionSelectionId(item as HelpTextSection | HelpTextStep);
@@ -753,7 +752,6 @@ export class HelpEditorFacade {
       return;
     }
 
-    this.saveCurrentSectionText();
     this.autoTranslationMessage = '';
 
     console.log('Selection: ', contentId);
@@ -853,12 +851,17 @@ export class HelpEditorFacade {
     this.selectedTextContent = translation;
   }
 
-  saveCurrentSectionText() {
-    if (!this.selectedSection || !this.qtfFile) { return; }
+  saveCurrentSectionText(newText: string | null = null) {
+    if (!this.selectedSection || !this.qtfFile || newText === null) {
+      console.log("saveCurrentSectionText - No section, QTF file, or new text.");
+      return;
+    }
 
     const key = this.getSelectedTranslationKey();
-    // console.log("saving: ", key, " - ", this.selectedTextContent);
-    if (!key) { return; }
+    if (!key) {
+      console.log("saveCurrentSectionText - No translation key for current selection.");
+      return;
+    }
 
     this.isDirty = true;
     if (!this.qtfFile.TEXTS[key]) {
@@ -879,10 +882,15 @@ export class HelpEditorFacade {
     if (!this.qtfFile.TEXTS[key].VERIFIED) {
       this.qtfFile.TEXTS[key].VERIFIED = {};
     }
-    if (this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] !== this.selectedTextContent) {
-      this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] = this.selectedTextContent;
+    if (this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] !== newText) {
+      this.qtfFile.TEXTS[key].TRANSLATIONS[this.selectedLanguage] = newText;
       this.ensureTranslationBucket(this.selectedLanguage);
-      this.translateService.set(key, this.selectedTextContent, this.selectedLanguage);
+      //this.translateService.set(key, newText, this.selectedLanguage);
+      this.translateService.setTranslation(
+        this.selectedLanguage,
+        { [key]: newText },
+        true
+      );
 
       if (this.selectedLanguage === 'GERMAN') {
         this.languages.forEach(language => {
@@ -892,6 +900,7 @@ export class HelpEditorFacade {
           }
         });
       }
+      console.log("saving: ", key, " - ", newText);
     }
   }
 
@@ -929,7 +938,6 @@ export class HelpEditorFacade {
       console.warn('Cannot add subsections for content type: ', this.selectedSection.type);
       return;
     }
-    this.saveCurrentSectionText();
 
     const createAsSibling = isInstructionContentType(this.selectedSection.type)
       || isEnumerationContentType(this.selectedSection.type);
@@ -974,7 +982,6 @@ export class HelpEditorFacade {
     if (!this.currentMainHelpSection || !this.selectedSection) {
       return;
     }
-    this.saveCurrentSectionText();
 
     console.log('Create step near by ', this.getSelectedSectionId());
 
@@ -1001,7 +1008,6 @@ export class HelpEditorFacade {
         parentSection.addStep(newStepId);
         console.log('Step created ');
         this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-        this.saveCurrentSectionText();
         this.onTopLevelChange(this.selectedTopLevelKey);
         this.onSelectSection(newStepId);
       } else {
@@ -1050,7 +1056,6 @@ export class HelpEditorFacade {
       : getSectionSelectionId(parentSection);
 
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-    this.saveCurrentSectionText();
     this.onTopLevelChange(this.selectedTopLevelKey);
     this.isDirty = true;
 
@@ -1137,7 +1142,6 @@ export class HelpEditorFacade {
           this.selectedTextContent = translatedText;
         }
 
-        this.saveCurrentSectionText();
         this.onTopLevelChange(this.selectedTopLevelKey);
         this.onSelectSection(newId);
       }
@@ -1321,7 +1325,7 @@ export class HelpEditorFacade {
       this.selectedSection.linkId = newLink;
       console.log('New link id: ', newLink, ' for section: ', this.selectedSection.value);
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-      this.saveCurrentSectionText();
+      this.saveCurrentSectionText(this.selectedTextContent);
       this.onTopLevelChange(this.selectedTopLevelKey);
       if (currentValue) {
         this.onSelectSection(currentValue);
@@ -1332,7 +1336,7 @@ export class HelpEditorFacade {
   onTranslationChanged(newText: string) {
     this.selectedTextContent = newText;
     this.autoTranslationMessage = '';
-    this.saveCurrentSectionText();
+    this.saveCurrentSectionText(newText);
   }
 
   canAutoTranslateCurrentSelection(): boolean {
@@ -1424,7 +1428,6 @@ export class HelpEditorFacade {
       console.log('Image changed: ', changed, ' new: ', newImageFile);
       if (changed) {
         this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-        this.saveCurrentSectionText();
         this.onTopLevelChange(this.selectedTopLevelKey);
         this.onSelectSection(newImageFile);
       }
@@ -1485,8 +1488,6 @@ export class HelpEditorFacade {
     if (!data || data.cancelled || !data.type || !data.insertPosition) {
       return;
     }
-
-    this.saveCurrentSectionText(); // Änderungen des aktuellen Editors sichern
 
     console.log('Creating new for parent: ', this.getSelectedSectionId());
 
@@ -1554,7 +1555,7 @@ export class HelpEditorFacade {
     }
 
     this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-    this.saveCurrentSectionText();
+    this.saveCurrentSectionText(this.selectedTextContent);
     this.onTopLevelChange(this.selectedTopLevelKey);
     const selectionId = getSectionSelectionId(newItem);
     if (selectionId) {
@@ -1841,7 +1842,7 @@ export class HelpEditorFacade {
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
     }
     this.isDirty = true;
-    this.saveCurrentSectionText();
+    this.saveCurrentSectionText(this.selectedTextContent);
     if (this.selectedTopLevelKey) {
       this.onTopLevelChange(this.selectedTopLevelKey);
       if (selectedId) {
@@ -1931,7 +1932,6 @@ export class HelpEditorFacade {
       return;
     }
 
-    this.saveCurrentSectionText();
     const table = this.selectedSection as HelpTextTable;
     if (!table.rows) {
       table.rows = [];
@@ -1980,7 +1980,6 @@ export class HelpEditorFacade {
       return;
     }
 
-    this.saveCurrentSectionText();
     const table = this.selectedSection as HelpTextTable;
     const rowIndex = this.selectedTableCell?.rowIndex ?? -1;
     if (!table.rows || rowIndex < 0 || rowIndex >= table.rows.length) {
@@ -2017,7 +2016,6 @@ export class HelpEditorFacade {
       return;
     }
 
-    this.saveCurrentSectionText();
     const table = this.selectedSection as HelpTextTable;
     if (!table.header) {
       table.header = [];
@@ -2066,8 +2064,6 @@ export class HelpEditorFacade {
     if (removeIndex < 0 || removeIndex >= columnCount) {
       return;
     }
-
-    this.saveCurrentSectionText();
 
     if (table.header && removeIndex < table.header.length) {
       table.header.splice(removeIndex, 1);
@@ -2389,7 +2385,7 @@ export class HelpEditorFacade {
       textArea.selectionEnd = start + boldWrappedText.length;
       textArea.focus();
 
-      this.saveCurrentSectionText();
+      this.saveCurrentSectionText(this.selectedTextContent);
     }
   }
 
@@ -2464,7 +2460,6 @@ export class HelpEditorFacade {
     if (isImageContentType(this.selectedSection.type) && (newWidth !== 'undefined')) {
       this.selectedSection.width = newWidth;
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-      this.saveCurrentSectionText();
       this.onTopLevelChange(this.selectedTopLevelKey);
       this.onSelectSection(imageValue);
     }
@@ -2477,7 +2472,6 @@ export class HelpEditorFacade {
     if (isImageContentType(this.selectedSection.type) && (newWidth !== 'undefined')) {
       this.selectedSection.pdfWidth = newWidth;
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-      this.saveCurrentSectionText();
       this.onTopLevelChange(this.selectedTopLevelKey);
       this.onSelectSection(imageValue);
     }
@@ -2489,7 +2483,6 @@ export class HelpEditorFacade {
     if (isImageContentType(this.selectedSection.type)) {
       this.selectedSection.border = newBorder;
       this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
-      this.saveCurrentSectionText();
       this.onTopLevelChange(this.selectedTopLevelKey);
       this.onSelectSection(imageValue);
     }

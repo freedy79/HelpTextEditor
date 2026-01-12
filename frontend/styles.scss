@@ -2,6 +2,21 @@
 @import "@angular/material/_theming.scss";
 @import './material-icons.scss'; // url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
+@font-face {
+    font-family: 'Roboto';
+        src: url('/assets/fonts/Roboto+DroidFallback-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto Medium';
+    src: url('/assets/fonts/Roboto+DroidFallback-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto Bold';
+    src: url('/assets/fonts/Roboto+DroidFallback-Bold.ttf') format('truetype');
+    }
+
 html, body {
   height: 100%;
   overflow: hidden;
@@ -9,7 +24,7 @@ html, body {
 
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: Roboto, sans-serif;
 }
 
 .mat-dialog-container {
