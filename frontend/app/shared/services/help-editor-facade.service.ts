@@ -1296,6 +1296,18 @@ export class HelpEditorFacade {
       return false;
     }
 
+    if (this.selectedSection && isImageContentType(this.selectedSection.type)) {
+      if (this.selectedSection.imageDescription !== oldId) {
+        return false;
+      }
+
+      this.selectedSection.imageDescription = newId;
+      if (this.selectedSection.id === oldId) {
+        this.selectedSection.id = newId;
+      }
+      return true;
+    }
+
     return this.currentMainHelpSection.changeValueId(oldId, newId);
   }
 
