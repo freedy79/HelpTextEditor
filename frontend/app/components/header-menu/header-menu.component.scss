@@ -36,6 +36,7 @@
 
     .submenu .menu-item {
         width: 100%;
+        display: flex;
         justify-content: space-between;
     }
 
@@ -79,7 +80,8 @@
     }
 
     .menu-shortcut {
-        margin-left: 24px;
+        margin-left: auto;
+        padding-left: 24px;
         font-size: 12px;
         color: rgba(0, 0, 0, 0.6);
     }
