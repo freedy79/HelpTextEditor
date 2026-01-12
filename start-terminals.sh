@@ -5,6 +5,15 @@ open_terminal() {
   local title="$1"
   local command="$2"
 
+  if grep -qi microsoft /proc/version 2>/dev/null && command -v wt.exe >/dev/null 2>&1; then
+    if [[ -n "${WSL_DISTRO_NAME:-}" ]]; then
+      wt.exe -w 0 new-tab --title "$title" wsl.exe -d "$WSL_DISTRO_NAME" -- bash -lc "$command"
+    else
+      wt.exe -w 0 new-tab --title "$title" wsl.exe -- bash -lc "$command"
+    fi
+    return 0
+  fi
+
   if command -v gnome-terminal >/dev/null 2>&1; then
     gnome-terminal --title="$title" -- bash -lc "$command"
     return 0
@@ -24,5 +33,6 @@ open_terminal() {
   return 1
 }
 
-open_terminal "backend" "cd backend && npm start"
-open_terminal "frontend" "cd frontend && npm start"
+open_terminal "backend" "cd backend && npm start" &
+open_terminal "frontend" "cd frontend && npm start" &
+wait
