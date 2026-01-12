@@ -34,6 +34,11 @@
         list-style: none;
     }
 
+    .submenu .menu-item {
+        width: 100%;
+        justify-content: space-between;
+    }
+
     .menu-item {
         cursor: pointer;
         position: relative;
@@ -71,6 +76,12 @@
     .menu-label {
         display: inline-flex;
         align-items: center;
+    }
+
+    .menu-shortcut {
+        margin-left: 24px;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
     }
 
     .menu-separator {

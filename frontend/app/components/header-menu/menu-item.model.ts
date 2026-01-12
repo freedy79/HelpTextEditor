@@ -5,4 +5,5 @@ export interface MenuItemModel {
     separator?: boolean;
     clickId?: string;
     enabled?: boolean;
+    shortcut?: string;
 }

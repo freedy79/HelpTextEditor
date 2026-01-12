@@ -104,9 +104,9 @@ export class HelpEditorFacade {
       text: 'File',
       icon: 'description',
       items: [
-        { text: 'Open', icon: 'folder_open', clickId: 'openfile' },
-        { text: 'Open asset', icon: 'image', clickId: 'openasset' },
-        { text: 'Save', icon: 'save', clickId: 'savefile' },
+        { text: 'Open', icon: 'folder_open', clickId: 'openfile', shortcut: 'Strg+O' },
+        { text: 'Open asset', icon: 'image', clickId: 'openasset', shortcut: 'Strg+Shift+O' },
+        { text: 'Save', icon: 'save', clickId: 'savefile', shortcut: 'Strg+S' },
         { separator: true },
         { text: 'DeepL Einstellungen', icon: 'settings', clickId: 'deeplSettings' }
       ]
@@ -413,6 +413,31 @@ export class HelpEditorFacade {
     } else if (item.clickId === 'deeplSettings') {
       this.openDeeplSettingsDialog();
     }
+  }
+
+  public handleKeyboardShortcut(event: KeyboardEvent): boolean {
+    if (event.altKey || !(event.ctrlKey || event.metaKey)) {
+      return false;
+    }
+
+    const key = event.key.toLowerCase();
+
+    if (key === 's' && !event.shiftKey) {
+      this.onSave();
+      return true;
+    }
+
+    if (key === 'o' && !event.shiftKey) {
+      this.openOverlayFileOpen();
+      return true;
+    }
+
+    if (key === 'o' && event.shiftKey) {
+      this.onLoadFromAsset();
+      return true;
+    }
+
+    return false;
   }
 
   openCoverageDialog(): void {
