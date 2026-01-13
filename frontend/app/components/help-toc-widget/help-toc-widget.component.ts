@@ -4,10 +4,9 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
   OnInit,
-  OnChanges,
-  HostListener
+  OnChanges
 } from '@angular/core';
-import { Observable, Subject, Subscription, of } from 'rxjs';
+import { Observable, Subject, Subscription, fromEvent, of } from 'rxjs';
 import { map, shareReplay, takeUntil } from 'rxjs/operators';
 import { HelpTocService } from './help-toc.service';
 import { HelpTocItem } from './help-toc.model';
@@ -28,6 +27,12 @@ export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
   /** Optional: custom translation function instead of template pipe */
   @Input() translateFn?: (key: string) => string;
 
+  /** Optional: element to listen for scrolling (defaults to window). */
+  @Input() scrollContainer?: HTMLElement | null;
+
+  /** Optional: selector for scroll container if element reference isn't available. */
+  @Input() scrollContainerSelector?: string;
+
   tocItems$!: Observable<HelpTocItem[]>;
 
   isCollapsed = false;
@@ -35,9 +40,12 @@ export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
   activeLinkId: string | null = null;
 
+  private activeScrollTarget: HTMLElement | Window = window;
   private readonly destroy$ = new Subject<void>();
   private intersectionObserver?: IntersectionObserver;
   private tocSubscription?: Subscription;
+  private scrollSubscription?: Subscription;
+  private latestItems: HelpTocItem[] = [];
 
   // Behavior thresholds
   private readonly topExpandThresholdPx = 10;
@@ -47,12 +55,14 @@ export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.buildToc();
+    this.updateScrollTarget();
     // Initial state
-    this.applyScrollRules(window.scrollY || 0);
+    this.applyScrollRules(this.getScrollTop());
   }
 
   ngOnChanges(): void {
     this.buildToc();
+    this.updateScrollTarget();
   }
 
   ngOnDestroy(): void {
@@ -65,6 +75,10 @@ export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
     if (this.tocSubscription) {
       this.tocSubscription.unsubscribe();
       this.tocSubscription = undefined;
+    }
+    if (this.scrollSubscription) {
+      this.scrollSubscription.unsubscribe();
+      this.scrollSubscription = undefined;
     }
   }
 
@@ -91,9 +105,25 @@ export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
     return this.getLabel(key, translation) !== key;
   }
 
-  @HostListener('window:scroll')
-  onWindowScroll(): void {
-    this.applyScrollRules(window.scrollY || 0);
+  private updateScrollTarget(): void {
+    const resolved = this.resolveScrollContainer();
+    const nextTarget = resolved ?? window;
+    const shouldRebind = this.activeScrollTarget !== nextTarget || !this.scrollSubscription;
+    if (!shouldRebind) return;
+
+    this.activeScrollTarget = nextTarget;
+
+    if (this.scrollSubscription) {
+      this.scrollSubscription.unsubscribe();
+    }
+
+    this.scrollSubscription = fromEvent(this.activeScrollTarget, 'scroll')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.applyScrollRules(this.getScrollTop()));
+
+    if (this.latestItems.length) {
+      this.setupIntersectionObserver(this.latestItems);
+    }
   }
 
   private applyScrollRules(scrollTop: number): void {
@@ -116,6 +146,22 @@ export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
     // Auto collapse when scrolling down
     this.isCollapsed = scrollTop >= this.autoCollapseThresholdPx;
+  }
+
+  private getScrollTop(): number {
+    if (this.activeScrollTarget === window) {
+      return window.scrollY || 0;
+    }
+
+    return (this.activeScrollTarget as HTMLElement).scrollTop || 0;
+  }
+
+  private resolveScrollContainer(): HTMLElement | null {
+    if (this.scrollContainer) return this.scrollContainer;
+    if (this.scrollContainerSelector) {
+      return document.querySelector(this.scrollContainerSelector);
+    }
+    return null;
   }
 
   private setupIntersectionObserver(items: HelpTocItem[]): void {
@@ -142,7 +188,7 @@ export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
         }
       },
       {
-        root: null,
+        root: this.activeScrollTarget === window ? null : (this.activeScrollTarget as HTMLElement),
         rootMargin: '0px 0px -70% 0px',
         threshold: [0, 0.1, 0.5, 1]
       }
@@ -200,6 +246,9 @@ export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
     this.tocSubscription = this.tocItems$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((items) => this.setupIntersectionObserver(items));
+      .subscribe((items) => {
+        this.latestItems = items;
+        this.setupIntersectionObserver(items);
+      });
   }
 }
