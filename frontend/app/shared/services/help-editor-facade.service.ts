@@ -1986,6 +1986,63 @@ export class HelpEditorFacade {
     });
   }
 
+  public canRemoveTableRow(): boolean {
+    if (!isTableSection(this.selectedSection)) {
+      return false;
+    }
+
+    const table = this.selectedSection as HelpTextTable;
+    const rowCount = table.rows?.length ?? 0;
+    if (rowCount <= 1) {
+      return false;
+    }
+
+    const removeIndex = (this.selectedTableCell && !this.selectedTableCell.isHeader)
+      ? (this.selectedTableCell.rowIndex ?? -1)
+      : rowCount - 1;
+
+    return removeIndex >= 0 && removeIndex < rowCount;
+  }
+
+  public removeTableRow(): void {
+    if (!this.canRemoveTableRow()) {
+      return;
+    }
+
+    const table = this.selectedSection as HelpTextTable;
+    const rowCount = table.rows?.length ?? 0;
+    const removeIndex = (this.selectedTableCell && !this.selectedTableCell.isHeader)
+      ? (this.selectedTableCell.rowIndex ?? -1)
+      : rowCount - 1;
+
+    if (!table.rows || removeIndex < 0 || removeIndex >= rowCount) {
+      return;
+    }
+
+    table.rows.splice(removeIndex, 1);
+    this.isDirty = true;
+    this.helpTextRoot[this.selectedTopLevelKey as HelpTextRootKey] = this.currentMainHelpSection;
+
+    const tableId = getSectionSelectionId(table) || '';
+    if (!tableId || table.rows.length === 0) {
+      return;
+    }
+
+    const nextRowIndex = Math.min(removeIndex, table.rows.length - 1);
+    const columnCount = this.getTableColumnCount(table);
+    const selectedColIndex = this.selectedTableCell?.colIndex ?? 0;
+    const nextColIndex = Math.min(Math.max(selectedColIndex, 0), Math.max(columnCount - 1, 0));
+    const nextCellValue = table.rows[nextRowIndex]?.rowValues?.[nextColIndex] ?? null;
+
+    this.onSelectSection({
+      tableId,
+      rowIndex: nextRowIndex,
+      colIndex: nextColIndex,
+      isHeader: false,
+      key: getTableCellKey(nextCellValue)
+    });
+  }
+
   public canMoveTableRow(direction: 'up' | 'down'): boolean {
     if (!isTableSection(this.selectedSection) || !this.selectedTableCell || this.selectedTableCell.isHeader) {
       return false;
