@@ -70,6 +70,16 @@ $row-alt-color: #f3f3f3;
   cursor: pointer;
 }
 
+.toc-item-label {
+  display: block;
+}
+
+.toc-item-key {
+  display: block;
+  font-size: 0.78rem;
+  color: $muted-color;
+}
+
 .toc-item a:hover {
   background: #f0f0f0;
 }

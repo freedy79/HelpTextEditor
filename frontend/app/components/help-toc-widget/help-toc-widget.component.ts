@@ -82,8 +82,13 @@ export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  getLabel(key: string): string {
-    return this.translateFn ? this.translateFn(key) : key;
+  getLabel(key: string, translation?: string | null): string {
+    const value = (translation ?? '').trim();
+    return value ? value : key;
+  }
+
+  shouldShowKey(key: string, translation?: string | null): boolean {
+    return this.getLabel(key, translation) !== key;
   }
 
   @HostListener('window:scroll')
