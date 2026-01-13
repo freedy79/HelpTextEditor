@@ -1,5 +1,5 @@
 <div [ngClass]="{'selected': isSelected(section)}">
-    <p [attr.id]="section.linkId" id="{{getSectionId(section)}}" [class]="'sectionHeader' + sectionLevel"
+    <p [attr.id]="section.linkId || getSectionId(section)" [class]="'sectionHeader' + sectionLevel"
         (click)="contentClick(getSectionId(section))">
         {{sectionNumber}} {{(section.value | qtfTranslate | async)}}</p>
 </div>
