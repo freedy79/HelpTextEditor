@@ -10,7 +10,20 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      require('@angular-devkit/build-angular/plugins/karma'),
+      {
+        'middleware:fixRequestHeaders': [
+          'factory',
+          function () {
+            return function (req, res, next) {
+              if (!req.headers) {
+                req.headers = {};
+              }
+              next();
+            };
+          }
+        ]
+      }
     ],
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
@@ -32,6 +45,7 @@ module.exports = function (config) {
         base: 'ChromeHeadless',
         flags: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage']
       }
-    }
+    },
+    beforeMiddleware: ['fixRequestHeaders']
   });
 };
