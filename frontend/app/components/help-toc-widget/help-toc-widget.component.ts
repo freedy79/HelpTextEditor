@@ -4,12 +4,14 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
   OnInit,
+  OnChanges,
   HostListener
 } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription, of } from 'rxjs';
 import { map, shareReplay, takeUntil } from 'rxjs/operators';
 import { HelpTocService } from './help-toc.service';
 import { HelpTocItem } from './help-toc.model';
+import { MainHelpSection } from '../../models/help-text-structure.model';
 
 type UserOverride = 'none' | 'expanded' | 'collapsed';
 
@@ -19,12 +21,9 @@ type UserOverride = 'none' | 'expanded' | 'collapsed';
   styleUrls: ['./help-toc-widget.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HelpTocWidgetComponent implements OnInit, OnDestroy {
-  /** e.g. "HELP_TEXT_DEVICE_CONCEPT" */
-  @Input() helpKey!: string;
-
-  /** e.g. "assets/helpTexts.json" */
-  @Input() structureUrl = 'assets/helpTexts.json';
+export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
+  /** Current selected help section structure. */
+  @Input() section: MainHelpSection | null = null;
 
   /** Optional: custom translation function instead of template pipe */
   @Input() translateFn?: (key: string) => string;
@@ -38,6 +37,7 @@ export class HelpTocWidgetComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
   private intersectionObserver?: IntersectionObserver;
+  private tocSubscription?: Subscription;
 
   // Behavior thresholds
   private readonly topExpandThresholdPx = 10;
@@ -46,27 +46,13 @@ export class HelpTocWidgetComponent implements OnInit, OnDestroy {
   constructor(private tocService: HelpTocService) {}
 
   ngOnInit(): void {
-    if (!this.helpKey) {
-      // fail-safe: component is useless without helpKey
-      this.tocItems$ = new Observable<HelpTocItem[]>((sub) => {
-        sub.next([]);
-        sub.complete();
-      });
-      return;
-    }
-
-    this.tocItems$ = this.tocService.loadStructure(this.structureUrl).pipe(
-      map((root) => this.tocService.buildTocFromHelpKey(root, this.helpKey)),
-      map((items) => this.normalize(items)),
-      shareReplay(1)
-    );
-
-    this.tocItems$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((items) => this.setupIntersectionObserver(items));
-
+    this.buildToc();
     // Initial state
     this.applyScrollRules(window.scrollY || 0);
+  }
+
+  ngOnChanges(): void {
+    this.buildToc();
   }
 
   ngOnDestroy(): void {
@@ -75,6 +61,10 @@ export class HelpTocWidgetComponent implements OnInit, OnDestroy {
     if (this.intersectionObserver) {
       this.intersectionObserver.disconnect();
       this.intersectionObserver = undefined;
+    }
+    if (this.tocSubscription) {
+      this.tocSubscription.unsubscribe();
+      this.tocSubscription = undefined;
     }
   }
 
@@ -184,5 +174,27 @@ export class HelpTocWidgetComponent implements OnInit, OnDestroy {
     };
 
     return clean(items);
+  }
+
+  private buildToc(): void {
+    if (!this.section) {
+      // fail-safe: component is useless without section
+      this.tocItems$ = of([]);
+      return;
+    }
+
+    this.tocItems$ = of(this.section).pipe(
+      map((section) => this.tocService.buildTocFromSection(section)),
+      map((items) => this.normalize(items)),
+      shareReplay(1)
+    );
+
+    if (this.tocSubscription) {
+      this.tocSubscription.unsubscribe();
+    }
+
+    this.tocSubscription = this.tocItems$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((items) => this.setupIntersectionObserver(items));
   }
 }
