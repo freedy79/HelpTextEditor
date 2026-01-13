@@ -26,8 +26,18 @@
             [class.level4]="item.level >= 4">
           <a (click)="navigateTo(item.linkId)">
             <!-- Prefer your translation pipe; fallback available via translateFn -->
-            <span *ngIf="!translateFn">{{ item.key | cubisTranslate }}</span>
-            <span *ngIf="translateFn">{{ getLabel(item.key) }}</span>
+            <ng-container *ngIf="!translateFn">
+              <ng-container *ngIf="(item.key | qtfTranslate | async) as translated">
+                <span class="toc-item-label">{{ getLabel(item.key, translated) }}</span>
+                <span class="toc-item-key" *ngIf="shouldShowKey(item.key, translated)">{{ item.key }}</span>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="translateFn">
+              <ng-container *ngIf="translateFn(item.key) as translated">
+                <span class="toc-item-label">{{ getLabel(item.key, translated) }}</span>
+                <span class="toc-item-key" *ngIf="shouldShowKey(item.key, translated)">{{ item.key }}</span>
+              </ng-container>
+            </ng-container>
           </a>
 
           <ul class="toc-list" *ngIf="item.children?.length">
