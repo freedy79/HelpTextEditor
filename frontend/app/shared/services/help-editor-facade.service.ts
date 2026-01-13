@@ -350,6 +350,16 @@ export class HelpEditorFacade {
     return !!value && value.toString().trim() !== '';
   }
 
+  private hasTranslationsOutsideGerman(entry: QtfTextEntry): boolean {
+    return this.languages.some(language => {
+      if (language === 'GERMAN') {
+        return false;
+      }
+      return this.isNonEmptyTranslation(entry.TRANSLATIONS?.[language])
+        || this.isNonEmptyTranslation(entry.AUTOTRANSLATIONS?.[language]);
+    });
+  }
+
   onSplitterMouseDown(event: MouseEvent) {
     this.isDraggingSplitter = true;
     this.dragStartX = event.clientX;
@@ -949,12 +959,20 @@ export class HelpEditorFacade {
       );
 
       if (this.selectedLanguage === 'GERMAN') {
-        this.languages.forEach(language => {
-          if (language !== 'GERMAN') {
-            this.qtfFile.TEXTS[key].TRANSLATIONS[language] = '';
-            this.qtfFile.TEXTS[key].AUTOTRANSLATIONS[language] = undefined;
-          }
-        });
+        const currentEntry = this.qtfFile.TEXTS[key];
+        const hasOtherTranslations = this.hasTranslationsOutsideGerman(currentEntry);
+        const shouldClearTranslations = !hasOtherTranslations
+          ? false
+          : confirm('Es sind bereits Übersetzungen vorhanden. Sollen diese gelöscht werden?');
+
+        if (shouldClearTranslations) {
+          this.languages.forEach(language => {
+            if (language !== 'GERMAN') {
+              this.qtfFile.TEXTS[key].TRANSLATIONS[language] = '';
+              this.qtfFile.TEXTS[key].AUTOTRANSLATIONS[language] = undefined;
+            }
+          });
+        }
       }
       console.log("saving: ", key, " - ", newText);
     }
@@ -2447,6 +2465,16 @@ export class HelpEditorFacade {
     const key = this.getSelectedTranslationKey();
     const entry = this.getTranslationEntryForSelection(key);
     return !!(entry && !this.hasExistingTranslation(entry));
+  }
+
+  getMissingTranslationsForSelection(): string[] {
+    const key = this.getSelectedTranslationKey();
+    const entry = this.getTranslationEntryForSelection(key);
+    if (!entry) {
+      return [];
+    }
+
+    return this.languages.filter(language => this.isTranslationMissing(entry, language));
   }
 
   private getSourceTranslation(entry: QtfTextEntry | null): { text: string; languageCode?: string } | null {
