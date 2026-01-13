@@ -28,6 +28,8 @@ export class HelpTocWidgetComponent implements OnInit, OnChanges, OnDestroy {
   /** Optional: custom translation function instead of template pipe */
   @Input() translateFn?: (key: string) => string;
 
+  @Input() title: string = 'HELP_TOC_TITLE';
+
   tocItems$!: Observable<HelpTocItem[]>;
 
   isCollapsed = false;

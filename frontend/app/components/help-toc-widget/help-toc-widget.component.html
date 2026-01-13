@@ -1,7 +1,7 @@
 <div class="toc-widget" [class.collapsed]="isCollapsed">
   <div class="toc-header" (click)="toggleCollapsed()">
     <div class="toc-title">
-      <span class="toc-title-text">Inhalt</span>
+      <span class="toc-title-text">{{title | qtfTranslate | async}}</span>
     </div>
 
     <button type="button" class="toc-toggle" (click)="toggleCollapsed(); $event.stopPropagation()">
@@ -32,7 +32,6 @@
                   <span class="toc-item-number" *ngIf="item.number">{{ item.number }}</span>
                   {{ getLabel(item.key, translated) }}
                 </span>
-                <!-- <span class="toc-item-key" *ngIf="shouldShowKey(item.key, translated)">{{ item.key }}</span> -->
               </ng-container>
             </ng-container>
             <ng-container *ngIf="translateFn">
