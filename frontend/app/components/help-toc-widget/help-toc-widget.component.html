@@ -32,7 +32,7 @@
                   <span class="toc-item-number" *ngIf="item.number">{{ item.number }}</span>
                   {{ getLabel(item.key, translated) }}
                 </span>
-                <span class="toc-item-key" *ngIf="shouldShowKey(item.key, translated)">{{ item.key }}</span>
+                <!-- <span class="toc-item-key" *ngIf="shouldShowKey(item.key, translated)">{{ item.key }}</span> -->
               </ng-container>
             </ng-container>
             <ng-container *ngIf="translateFn">
