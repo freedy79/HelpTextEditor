@@ -118,7 +118,7 @@ export class HelpEditorFacade {
         { text: 'Help file', icon: 'help_outline', clickId: 'addHelpFile' },
         { text: 'Main section', icon: 'view_agenda', clickId: 'addMainSection' },
         { separator: true },
-        { text: 'Subsection', icon: 'format_indent_increase', clickId: 'addSubsection' },
+        { text: 'Subsection', icon: 'format_indent_increase', clickId: 'addSubsection', shortcut: 'Num +' },
         { text: 'Content', icon: 'article', clickId: 'addContent' },
         { text: 'Step', icon: 'format_list_numbered', clickId: 'addStep' },
       ]
@@ -416,25 +416,56 @@ export class HelpEditorFacade {
   }
 
   public handleKeyboardShortcut(event: KeyboardEvent): boolean {
-    if (event.altKey || !(event.ctrlKey || event.metaKey)) {
+    const target = event.target as HTMLElement | null;
+    const isEditableTarget = target
+      && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+    const hasModifier = event.ctrlKey || event.metaKey;
+    if (event.altKey) {
       return false;
     }
 
     const key = event.key.toLowerCase();
+    const code = event.code;
 
-    if (key === 's' && !event.shiftKey) {
-      this.onSave();
-      return true;
+    if (hasModifier) {
+      if (key === 's' && !event.shiftKey) {
+        this.onSave();
+        return true;
+      }
+
+      if (key === 'o' && !event.shiftKey) {
+        this.openOverlayFileOpen();
+        return true;
+      }
+
+      if (key === 'o' && event.shiftKey) {
+        this.onLoadFromAsset();
+        return true;
+      }
+
+      return false;
     }
 
-    if (key === 'o' && !event.shiftKey) {
-      this.openOverlayFileOpen();
-      return true;
+    if (isEditableTarget) {
+      return false;
     }
 
-    if (key === 'o' && event.shiftKey) {
-      this.onLoadFromAsset();
-      return true;
+    if (code === 'NumpadAdd' || key === '+') {
+      if (!this.selectedSection) {
+        return false;
+      }
+      if (this.canAddSubsectionForSection(this.selectedSection)) {
+        this.createNewSubsection();
+        return true;
+      }
+      if (this.isEnumerationType(this.selectedSection.type)) {
+        this.createNewStep();
+        return true;
+      }
+      if (this.canAddContentToSection(this.selectedSection)) {
+        this.openOverlayAddContent();
+        return true;
+      }
     }
 
     return false;

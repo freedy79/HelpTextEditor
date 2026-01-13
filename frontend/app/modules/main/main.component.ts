@@ -41,14 +41,6 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:keydown', ['$event'])
   onWindowKeydown(event: KeyboardEvent) {
-    const target = event.target as HTMLElement | null;
-    const isEditableTarget = target
-      && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
-
-    if (isEditableTarget) {
-      return;
-    }
-
     if (this.facade.handleKeyboardShortcut(event)) {
       event.preventDefault();
     }
