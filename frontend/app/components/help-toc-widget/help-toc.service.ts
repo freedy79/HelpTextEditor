@@ -8,11 +8,11 @@ export class HelpTocService {
     const topSections: HelpTextSection[] = section?.content || [];
 
     return topSections
-      .map((s) => this.mapSectionToTocItem(s, 1))
+      .map((s, index) => this.mapSectionToTocItem(s, 1, `${index + 1}`))
       .filter((x) => !!x) as HelpTocItem[];
   }
 
-  private mapSectionToTocItem(section: HelpTextSection, level: number): HelpTocItem | null {
+  private mapSectionToTocItem(section: HelpTextSection, level: number, number: string): HelpTocItem | null {
     if (!section) return null;
 
     const linkId = (section.linkId || '').trim();
@@ -20,15 +20,18 @@ export class HelpTocService {
 
     const subs: HelpTextSection[] = section.subsections || [];
     const children = subs
-      .map((x) => this.mapSectionToTocItem(x, level + 1))
+      .map((x, index) => {
+        const childNumber = number ? `${number}.${index + 1}` : `${index + 1}`;
+        return this.mapSectionToTocItem(x, level + 1, childNumber);
+      })
       .filter((x) => !!x) as HelpTocItem[];
 
     // only include navigable nodes (need linkId + key),
     // but keep children in case parent is empty
     if (!linkId || !key) {
-      return children.length ? { linkId: '', key: '', level, children } : null;
+      return children.length ? { linkId: '', key: '', level, number: '', children } : null;
     }
 
-    return { linkId, key, level, children };
+    return { linkId, key, level, number, children };
   }
 }

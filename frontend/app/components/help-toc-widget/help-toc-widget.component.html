@@ -27,14 +27,20 @@
           <a (click)="navigateTo(item.linkId)">
             <!-- Prefer your translation pipe; fallback available via translateFn -->
             <ng-container *ngIf="!translateFn">
-              <ng-container *ngIf="(item.key | qtfTranslate | async) as translated">
-                <span class="toc-item-label">{{ getLabel(item.key, translated) }}</span>
+            <ng-container *ngIf="(item.key | qtfTranslate | async) as translated">
+                <span class="toc-item-label">
+                  <span class="toc-item-number" *ngIf="item.number">{{ item.number }}</span>
+                  {{ getLabel(item.key, translated) }}
+                </span>
                 <span class="toc-item-key" *ngIf="shouldShowKey(item.key, translated)">{{ item.key }}</span>
               </ng-container>
             </ng-container>
             <ng-container *ngIf="translateFn">
               <ng-container *ngIf="translateFn(item.key) as translated">
-                <span class="toc-item-label">{{ getLabel(item.key, translated) }}</span>
+                <span class="toc-item-label">
+                  <span class="toc-item-number" *ngIf="item.number">{{ item.number }}</span>
+                  {{ getLabel(item.key, translated) }}
+                </span>
                 <span class="toc-item-key" *ngIf="shouldShowKey(item.key, translated)">{{ item.key }}</span>
               </ng-container>
             </ng-container>
