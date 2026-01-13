@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HelpTocItem } from './help-toc.model';
-import { HelpTextSection, MainHelpSection } from '../../models/help-text-structure.model';
+import { HelpTextSection, MainHelpSection, getSectionSelectionId } from '../../models/help-text-structure.model';
 
 @Injectable({ providedIn: 'root' })
 export class HelpTocService {
@@ -15,7 +15,7 @@ export class HelpTocService {
   private mapSectionToTocItem(section: HelpTextSection, level: number, number: string): HelpTocItem | null {
     if (!section) return null;
 
-    const linkId = (section.linkId || '').trim();
+    const linkId = (section.linkId || getSectionSelectionId(section) || '').trim();
     const key = (section.value || '').trim();
 
     const subs: HelpTextSection[] = section.subsections || [];
