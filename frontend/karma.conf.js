@@ -47,6 +47,9 @@ module.exports = function (config) {
         flags: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage']
       }
     },
-    beforeMiddleware: ['fixRequestHeaders']
+    beforeMiddleware: ['fixRequestHeaders'],
+    proxies: {
+      '/assets/': '/base/src/assets/'
+    }
   });
 };
