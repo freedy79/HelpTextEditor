@@ -1,0 +1,94 @@
+$text-color: #2a2a2a;
+$muted-color: #4a4a4a;
+$link-color: #008796;
+$highlight-color: #fadd37;
+$border-color: #d0d0d0;
+$row-alt-color: #f3f3f3;
+
+.toc-widget {
+  position: fixed;
+  top: 72px;       // an euren Header anpassen
+  right: 24px;
+  width: 320px;
+  max-height: 70vh;
+  z-index: 50;
+
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  overflow: hidden;
+
+  font-size: 0.95rem;
+}
+
+.toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 12px;
+  background: #f7f7f7;
+  border-bottom: 1px solid #e6e6e6;
+  cursor: pointer;
+}
+
+.toc-title-text {
+  font-weight: 600;
+}
+
+.toc-toggle {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px 6px;
+  line-height: 1;
+}
+
+.toc-body {
+  padding: 8px 10px;
+  overflow: auto;
+  max-height: calc(70vh - 44px);
+}
+
+.toc-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.toc-item {
+  margin: 2px 0;
+}
+
+.toc-item a {
+  display: block;
+  padding: 4px 6px;
+  text-decoration: none;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.toc-item a:hover {
+  background: #f0f0f0;
+}
+
+.toc-item.active > a {
+  background: #ffffbe; // analog zu eurer "selected"-Markierung
+  font-weight: 600;
+}
+
+.toc-item.level2 > a { padding-left: 14px; }
+.toc-item.level3 > a { padding-left: 24px; }
+.toc-item.level4 > a { padding-left: 34px; }
+
+.toc-widget.collapsed {
+  width: 220px;
+}
+
+@media (max-width: 1100px) {
+  .toc-widget {
+    display: none; // optional: auf kleinen Screens ausblenden
+  }
+}

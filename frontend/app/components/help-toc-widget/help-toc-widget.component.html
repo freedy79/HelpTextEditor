@@ -1,0 +1,42 @@
+<div class="toc-widget" [class.collapsed]="isCollapsed">
+  <div class="toc-header" (click)="toggleCollapsed()">
+    <div class="toc-title">
+      <span class="toc-title-text">Inhalt</span>
+    </div>
+
+    <button type="button" class="toc-toggle" (click)="toggleCollapsed(); $event.stopPropagation()">
+      <span *ngIf="isCollapsed">▸</span>
+      <span *ngIf="!isCollapsed">▾</span>
+    </button>
+  </div>
+
+  <div class="toc-body" *ngIf="!isCollapsed">
+    <ng-container *ngIf="tocItems$ | async as items">
+      <ul class="toc-list">
+        <ng-container *ngFor="let item of items">
+          <ng-container [ngTemplateOutlet]="node" [ngTemplateOutletContext]="{ item: item }"></ng-container>
+        </ng-container>
+      </ul>
+
+      <ng-template #node let-item="item">
+        <li class="toc-item"
+            [class.active]="activeLinkId === item.linkId"
+            [class.level2]="item.level === 2"
+            [class.level3]="item.level === 3"
+            [class.level4]="item.level >= 4">
+          <a (click)="navigateTo(item.linkId)">
+            <!-- Prefer your translation pipe; fallback available via translateFn -->
+            <span *ngIf="!translateFn">{{ item.key | cubisTranslate }}</span>
+            <span *ngIf="translateFn">{{ getLabel(item.key) }}</span>
+          </a>
+
+          <ul class="toc-list" *ngIf="item.children?.length">
+            <ng-container *ngFor="let child of item.children">
+              <ng-container [ngTemplateOutlet]="node" [ngTemplateOutletContext]="{ item: child }"></ng-container>
+            </ng-container>
+          </ul>
+        </li>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

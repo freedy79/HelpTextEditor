@@ -11,6 +11,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from '../shared/shared.module';
 import { StatusbarComponent } from './statusbar/statusbar.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HelpTocWidgetComponent } from './help-toc-widget/help-toc-widget.component';
+import { HelpTocService } from './help-toc-widget/help-toc.service';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     HelpSectionComponent,
     HelpStructureTreeviewComponent,
     TreeDropIndicatorDirective,
-    StatusbarComponent
+    StatusbarComponent,
+    HelpTocWidgetComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,10 +37,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     HelpSectionComponent,
     HelpStructureTreeviewComponent,
     TreeDropIndicatorDirective,
-    StatusbarComponent
+    StatusbarComponent,
+    HelpTocWidgetComponent,
   ],
   providers: [
-
+    HelpTocService
   ],
   entryComponents: [ContextMenuComponent],
   bootstrap: []

@@ -38,6 +38,9 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
+        background-color: #ffffff;
+        box-sizing: border-box;
+        padding: 0 12px;
     }
 
     .menu-item {
@@ -49,7 +52,6 @@
         height: 42px;
         line-height: 42px;
         padding: 0 12px;
-        padding-right: 12px;
         vertical-align: top;
         white-space: nowrap;
 

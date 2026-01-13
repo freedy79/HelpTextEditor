@@ -48,6 +48,11 @@
     <div class="column main">
       <h3>Output</h3>
 
+      <app-help-toc-widget
+        [helpKey]="facade.selectedSection"
+        [structureUrl]="'assets/helpTexts.json'">
+      </app-help-toc-widget>
+
       <select [(ngModel)]="facade.selectedLanguage" (ngModelChange)="facade.onLanguageChange($event)" style="margin-bottom: 10px;">
         <option *ngFor="let lang of facade.languages" [value]="lang">
           {{ lang }}
